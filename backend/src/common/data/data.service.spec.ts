@@ -6,7 +6,7 @@ import { MockProductModel } from 'src/__base-code__/mock/entity/product.mock';
 
 describe('DataService', () => {
   let service: DataService;
-  let product: ProductModel;
+  let products: ProductModel[];
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -14,11 +14,11 @@ describe('DataService', () => {
     }).compile();
 
     service = module.get<DataService>(DataService);
-    product = new MockProductModel().product;
+    products = new MockProductModel().products;
   });
 
   describe('Pagination', () => {
-    const findAndCount: [ProductModel[], number] = [[product], 1];
+    const findAndCount: [ProductModel[], number] = [products, 2];
     const [take, skip, page] = [1, 0, 1];
 
     it('Return | {array: [], arrayCount: number, nextPage: number | boolean}', () => {
