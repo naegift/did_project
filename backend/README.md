@@ -15,6 +15,6 @@
 # Dependencies
 
 ```sh
-npm i @nestjs/config @nestjs/swagger @nestjs/typeorm typeorm pg multer uuid class-transformer class-validator
-npm i -D @types/multer
+npm i @nestjs/config @nestjs/serve-static @nestjs/swagger @nestjs/typeorm typeorm pg multer uuid class-transformer class-validator
+npm i -D @types/multer @types/uuid
 ```
