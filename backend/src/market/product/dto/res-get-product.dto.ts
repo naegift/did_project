@@ -15,7 +15,7 @@ export class ResGetProduct {
   image: string;
 
   @ApiProperty({ example: MockProductModel.swaggerProduct.price })
-  price: number;
+  price: string;
 
   @ApiProperty({ example: MockProductModel.swaggerProduct.seller })
   seller: string;

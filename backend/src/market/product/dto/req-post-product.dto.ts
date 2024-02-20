@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
+import { IsNotEmpty, IsString, Length } from 'class-validator';
 import { MockProductModel } from 'src/__base-code__/mock/entity/product.mock';
 
 export class ReqPostProduct {
@@ -19,9 +19,9 @@ export class ReqPostProduct {
   image: string;
 
   @ApiProperty({ example: MockProductModel.swaggerProduct.price })
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  price: number;
+  price: string;
 
   @ApiProperty({ example: MockProductModel.swaggerProduct.seller })
   @IsString()
