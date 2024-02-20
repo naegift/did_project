@@ -72,6 +72,12 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "lines": 90
+      }
+    },
     "collectCoverageFrom": [
       "**/*.(controller|service).(t|j)s"
     ],
