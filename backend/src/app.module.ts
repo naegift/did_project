@@ -7,6 +7,7 @@ import { CommonModule } from './common/common.module';
 import { ProductModel } from './__base-code__/entity/product.entity';
 import { GiftModel } from './__base-code__/entity/gift.entity';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -20,6 +21,10 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
       database: process.env.DB_DATABASE,
       entities: [ProductModel, GiftModel],
       synchronize: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: `${process.cwd()}/public`,
+      serveRoot: '/public',
     }),
     AccountModule,
     MarketModule,
