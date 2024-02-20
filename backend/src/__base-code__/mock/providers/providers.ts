@@ -6,6 +6,7 @@ import { MarketService } from 'src/market/market.service';
 import { ProductService } from 'src/market/product/product.service';
 import { StoreService } from 'src/market/store/store.service';
 import { MockProductModel } from '../entity/product.mock';
+import { DataService } from 'src/common/data/data.service';
 
 export const providers = [
   GiftService,
@@ -13,6 +14,7 @@ export const providers = [
   MarketService,
   ProductService,
   StoreService,
+  DataService,
   {
     provide: getRepositoryToken(ProductModel),
     useClass: MockProductModel,
