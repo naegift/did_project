@@ -5,7 +5,7 @@ import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { MockProductModel } from 'src/__base-code__/mock/entity/product.mock';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
-import { BadRequestException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { ResPostProduct } from './dto/res-post-product.dto';
 
 describe('ProductService', () => {
@@ -42,7 +42,7 @@ describe('ProductService', () => {
 
     it('Error | Cannot find product.', async () => {
       result = service.getProduct(-1);
-      await expect(result).rejects.toThrow(BadRequestException);
+      await expect(result).rejects.toThrow(NotFoundException);
     });
   });
 
