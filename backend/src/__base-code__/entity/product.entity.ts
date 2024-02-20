@@ -14,7 +14,7 @@ export class ProductModel extends BaseModel {
   image: string;
 
   @Column()
-  price: number;
+  price: string;
 
   @Column()
   seller: string;

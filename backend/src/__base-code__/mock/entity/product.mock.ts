@@ -6,7 +6,7 @@ export class MockProductModel {
     title: 'title',
     content: 'content',
     image: 'http://example.com',
-    price: 0.1,
+    price: `${10 ** 16}`,
     seller: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
     gifts: Promise.resolve([]),
   };
@@ -18,7 +18,7 @@ export class MockProductModel {
     title: 'title',
     content: 'content',
     image: 'http://example.com',
-    price: 0.1,
+    price: `${10 ** 16}`,
     seller: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
     gifts: Promise.resolve([]),
   };
