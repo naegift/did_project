@@ -13,6 +13,8 @@ export class MockProductModel {
 
   constructor() {}
 
+  contract: string = '0xDD4C2588B1E3a5b4D4e7531cF39CCD4aB3375832';
+
   product: ProductModel = {
     id: 0,
     title: 'title',

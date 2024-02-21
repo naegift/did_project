@@ -5,6 +5,10 @@ import { ResPostProduct } from './dto/res-post-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { Repository } from 'typeorm';
+import { ResGetState } from './dto/res-get-state.dto';
+import { ethers } from 'ethers';
+import { escrowABI } from './abi/escrow';
+import { stateCode } from 'src/__base-code__/enum/state.enum';
 
 @Injectable()
 export class ProductService {
@@ -13,6 +17,12 @@ export class ProductService {
     private readonly productRepo: Repository<ProductModel>,
   ) {}
 
+  async postProduct(reqPostProduct: ReqPostProduct): Promise<ResPostProduct> {
+    const product = await this.productRepo.save({ ...reqPostProduct });
+
+    return { id: product.id };
+  }
+
   async getProduct(id: number): Promise<ResGetProduct> {
     const product = await this.productRepo.findOne({ where: { id } });
     if (!product) throw new NotFoundException('Cannot find product.');
@@ -20,9 +30,14 @@ export class ProductService {
     return { ...product };
   }
 
-  async postProduct(reqPostProduct: ReqPostProduct): Promise<ResPostProduct> {
-    const product = await this.productRepo.save({ ...reqPostProduct });
+  async getState(contract: string): Promise<ResGetState> {
+    const provider = new ethers.JsonRpcProvider(
+      process.env.NETWORK_RPC || 'https://rpc.sepolia.org',
+    );
+    const escrow = new ethers.Contract(contract, escrowABI, provider);
 
-    return { id: product.id };
+    const code = Number(await escrow.getBalanceOfContract());
+
+    return { state: stateCode[code] };
   }
 }

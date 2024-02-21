@@ -7,10 +7,13 @@ import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
 import { NotFoundException } from '@nestjs/common';
 import { ResPostProduct } from './dto/res-post-product.dto';
+import { stateCode } from 'src/__base-code__/enum/state.enum';
+import { ResGetState } from './dto/res-get-state.dto';
 
 describe('ProductService', () => {
   let service: ProductService;
   let product: ProductModel;
+  const contract: string = new MockProductModel().contract;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -62,6 +65,17 @@ describe('ProductService', () => {
       result = await service.postProduct(reqPostProduct);
       const keys = Object.keys(result);
       const required = Object.keys(resPostProduct);
+      expect(keys).toEqual(expect.arrayContaining(required));
+    });
+  });
+
+  describe('Get State', () => {
+    it('Return | ResGetState', async () => {
+      const resGetState: ResGetState = { state: stateCode[0] };
+
+      const result = await service.getState(contract);
+      const keys = Object.keys(result);
+      const required = Object.keys(resGetState);
       expect(keys).toEqual(expect.arrayContaining(required));
     });
   });
