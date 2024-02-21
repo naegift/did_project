@@ -5,7 +5,7 @@ import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { MockProductModel } from 'src/__base-code__/mock/entity/product.mock';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ResPostProduct } from './dto/res-post-product.dto';
 import { stateCode } from 'src/__base-code__/enum/state.enum';
 import { ResGetState } from './dto/res-get-state.dto';
@@ -73,6 +73,11 @@ describe('ProductService', () => {
       const keys = Object.keys(result);
       const required = Object.keys(resGetState);
       expect(keys).toEqual(expect.arrayContaining(required));
+    });
+
+    it('Error | Required escrow contract address.', async () => {
+      const result = service.getState('Not escrow contract');
+      await expect(result).rejects.toThrow(BadRequestException);
     });
   });
 });

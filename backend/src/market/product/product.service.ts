@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
 import { ResPostProduct } from './dto/res-post-product.dto';
@@ -36,8 +40,11 @@ export class ProductService {
     );
     const escrow = new ethers.Contract(contract, escrowABI, provider);
 
-    const code = Number(await escrow.getBalanceOfContract());
-
-    return { state: stateCode[code] };
+    try {
+      const code = Number(await escrow.getBalanceOfContract());
+      return { state: stateCode[code] };
+    } catch {
+      throw new BadRequestException('Required escrow contract address.');
+    }
   }
 }
