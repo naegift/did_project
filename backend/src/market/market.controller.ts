@@ -11,7 +11,7 @@ export class MarketController {
 
   @Get()
   @ApiOkResponse({ type: ResGetProducts })
-  @ApiOperation({ summary: 'Get Products' })
+  @ApiOperation({ summary: '모든 상품 목록' })
   async getProducts(
     @Query('page', ParseIntPipe) page: number,
   ): Promise<ResGetProducts> {
