@@ -3,7 +3,7 @@ pragma solidity ^0.8.4;
 
 import "./nagift_escrow.sol";
 
-contract NagiftEscrowFactory {
+contract NaegiftEscrowFactory {
     address[] public deployedEscrows;
 
     event EscrowCreated(address escrowAddress);
