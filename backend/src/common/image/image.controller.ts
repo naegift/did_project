@@ -23,7 +23,7 @@ export class ImageController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  @ApiOperation({ summary: 'Upload Image' })
+  @ApiOperation({ summary: '이미지 업로드' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {

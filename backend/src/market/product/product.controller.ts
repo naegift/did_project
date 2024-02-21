@@ -31,7 +31,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Post Product' })
+  @ApiOperation({ summary: '상품 등록' })
   @ApiCreatedResponse({ type: ResPostProduct })
   async postProduct(
     @Body() reqPostProduct: ReqPostProduct,
@@ -43,7 +43,7 @@ export class ProductController {
   @Get(':id')
   @ApiOkResponse({ type: ResGetProduct })
   @ApiNotFoundResponse(notFound('Cannot find product.'))
-  @ApiOperation({ summary: 'Get Product' })
+  @ApiOperation({ summary: '상품 정보 조회' })
   async getProduct(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ResGetProduct> {
@@ -52,14 +52,14 @@ export class ProductController {
   }
 
   @Post(':id/pay')
-  @ApiOperation({ summary: '[작업중] Pay Product' })
+  @ApiOperation({ summary: '[작업중] 선물하기' })
   async payProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqPayProduct: ReqPayProduct,
   ) {}
 
   @Get(':id/verified')
-  @ApiOperation({ summary: '[작업중] Verified Products' })
+  @ApiOperation({ summary: '[작업중] 수령 대기중인 상품 목록' })
   async verifiedProducts(
     @Param('id', ParseIntPipe) id: number,
     @Query('page', ParseIntPipe) page: number,
@@ -68,7 +68,9 @@ export class ProductController {
   @Get(':id/state/:contract')
   @ApiOkResponse({ type: ResGetState })
   @ApiBadRequestResponse(badRequest('Required escrow contract address.'))
-  @ApiOperation({ summary: 'Get State' })
+  @ApiOperation({
+    summary: '상품 상태',
+  })
   async getState(@Param('contract') contract: string): Promise<ResGetState> {
     const result = await this.productService.getState(contract);
     return plainToInstance(ResGetState, result);

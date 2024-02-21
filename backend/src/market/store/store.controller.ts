@@ -8,7 +8,7 @@ export class StoreController {
   constructor(private readonly storeService: StoreService) {}
 
   @Get()
-  @ApiOperation({ summary: '[작업중] Get Products' })
+  @ApiOperation({ summary: '[작업중] 판매자가 등록한 상품 목록' })
   async getProducts(
     @Query('seller') seller: string,
     @Query('page', ParseIntPipe) page: number,
