@@ -49,7 +49,7 @@ export class ProductController {
     return plainToInstance(ResGetProduct, result);
   }
 
-  @Get(':id/:contract')
+  @Get(':id/state/:contract')
   @ApiOkResponse({ type: ResGetState })
   @ApiBadRequestResponse(badRequest('Required escrow contract address.'))
   @ApiOperation({ summary: 'Get State' })

@@ -14,13 +14,16 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOSTNAME,
+      host: process.env.DB_HOSTNAME || process.env.DB_AWS_HOSTNAME,
       port: parseInt(process.env.DB_PORT),
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: [ProductModel, GiftModel],
       synchronize: true,
+      ssl: process.env.DB_AWS_HOSTNAME && {
+        rejectUnauthorized: false,
+      },
     }),
     ServeStaticModule.forRoot({
       rootPath: `${process.cwd()}/public`,
