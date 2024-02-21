@@ -28,11 +28,10 @@ describe('ImageService', () => {
   });
 
   describe('Upload Image', () => {
-    const resUploadImage: ResUploadImage = { link: '' };
-    let result = {};
-
     it('Return | ResUploadImage', async () => {
-      result = await service.uploadImage(emptyFile);
+      const resUploadImage: ResUploadImage = { link: '' };
+
+      const result = service.uploadImage(emptyFile);
       const keys = Object.keys(result);
       const required = Object.keys(resUploadImage);
       expect(keys).toEqual(expect.arrayContaining(required));

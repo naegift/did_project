@@ -18,10 +18,13 @@ describe('DataService', () => {
   });
 
   describe('Pagination', () => {
-    const findAndCount: [ProductModel[], number] = [products, 2];
-    const [take, skip, page] = [1, 0, 1];
-
     it('Return | {array: [], arrayCount: number, nextPage: number | boolean}', () => {
+      const findAndCount: [ProductModel[], number] = [
+        products,
+        products.length,
+      ];
+      const [take, skip, page] = [1, 0, 1];
+
       const result = service.pagination(findAndCount, skip, take, page);
       const { array, arrayCount, nextPage } = result;
 
