@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
-
-pragma solidity 0.8.4;
+pragma solidity ^0.8.4;
 
 contract nagift_escrow {
     address public immutable buyer;
@@ -86,6 +85,11 @@ contract nagift_escrow {
         uint256 depositBalance = address(this).balance;
         payable(buyer).transfer(depositBalance);
         ContractState = ContractStateChoices.DEPLOYED;
+    }
+
+    // 컨트랙트 상태 조회
+    function escrowStatus() external view returns(ContractStateChoices) {
+        return ContractState;
     }
 
     // 계정의 이더리움 잔액 조회

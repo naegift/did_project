@@ -10,6 +10,7 @@ describe('ProductController', () => {
   let controller: ProductController;
   let service: ProductService;
   let product: ProductModel;
+  const contract: string = new MockProductModel().contract;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -43,6 +44,14 @@ describe('ProductController', () => {
       service.postProduct = jest.fn();
       await controller.postProduct(reqPostProduct);
       expect(service.postProduct).toHaveBeenCalled();
+    });
+  });
+
+  describe('Get State', () => {
+    it('Use | getState', async () => {
+      service.getState = jest.fn();
+      await controller.getState(contract);
+      expect(service.getState).toHaveBeenCalled();
     });
   });
 });

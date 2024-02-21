@@ -19,8 +19,6 @@ describe('MarketService', () => {
   });
 
   describe('Get Products', () => {
-    let result = {};
-
     it('Return | ResGetProducts', async () => {
       const resGetProducts: ResGetProducts = {
         products,
@@ -28,7 +26,7 @@ describe('MarketService', () => {
         nextPage: false,
       };
 
-      result = await service.getProducts(1);
+      const result = await service.getProducts(1);
       const keys = Object.keys(result);
       const required = Object.keys(resGetProducts);
       expect(keys).toEqual(expect.arrayContaining(required));
