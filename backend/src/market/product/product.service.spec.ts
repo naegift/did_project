@@ -25,8 +25,6 @@ describe('ProductService', () => {
   });
 
   describe('Get Product', () => {
-    let result = {};
-
     it('Return | ResGetProduct', async () => {
       const resGetProduct: ResGetProduct = {
         id: product.id,
@@ -37,21 +35,19 @@ describe('ProductService', () => {
         seller: product.seller,
       };
 
-      result = await service.getProduct(product.id);
+      const result = await service.getProduct(product.id);
       const keys = Object.keys(result);
       const required = Object.keys(resGetProduct);
       expect(keys).toEqual(expect.arrayContaining(required));
     });
 
     it('Error | Cannot find product.', async () => {
-      result = service.getProduct(-1);
+      const result = service.getProduct(-1);
       await expect(result).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('Post Product', () => {
-    let result = {};
-
     it('Return | ResPostProduct', async () => {
       const reqPostProduct: ReqPostProduct = {
         title: product.title,
@@ -62,7 +58,7 @@ describe('ProductService', () => {
       };
       const resPostProduct: ResPostProduct = { id: product.id };
 
-      result = await service.postProduct(reqPostProduct);
+      const result = await service.postProduct(reqPostProduct);
       const keys = Object.keys(result);
       const required = Object.keys(resPostProduct);
       expect(keys).toEqual(expect.arrayContaining(required));
