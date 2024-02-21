@@ -1,6 +1,6 @@
 import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { MarketService } from './market.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResGetProducts } from './dto/res-get-products.dto';
 import { plainToInstance } from 'class-transformer';
 
@@ -10,6 +10,8 @@ export class MarketController {
   constructor(private readonly marketService: MarketService) {}
 
   @Get()
+  @ApiOkResponse({ type: ResGetProducts })
+  @ApiOperation({ summary: 'Get Products' })
   async getProducts(
     @Query('page', ParseIntPipe) page: number,
   ): Promise<ResGetProducts> {
