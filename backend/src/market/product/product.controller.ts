@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import {
+  ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -20,6 +21,7 @@ import { ResGetProduct } from './dto/res-get-product.dto';
 import { ResPostProduct } from './dto/res-post-product.dto';
 import { notFound } from 'src/__base-code__/error/not-found';
 import { ResGetState } from './dto/res-get-state.dto';
+import { badRequest } from 'src/__base-code__/error/bad-request';
 
 @ApiTags('Market | Product')
 @Controller('product')
@@ -48,6 +50,9 @@ export class ProductController {
   }
 
   @Get(':id/:contract')
+  @ApiOkResponse({ type: ResGetState })
+  @ApiBadRequestResponse(badRequest('Required escrow contract address.'))
+  @ApiOperation({ summary: 'Get State' })
   async getState(@Param('contract') contract: string): Promise<ResGetState> {
     const result = await this.productService.getState(contract);
     return plainToInstance(ResGetState, result);
