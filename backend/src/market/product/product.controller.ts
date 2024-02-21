@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import {
@@ -22,6 +23,7 @@ import { ResPostProduct } from './dto/res-post-product.dto';
 import { notFound } from 'src/__base-code__/error/not-found';
 import { ResGetState } from './dto/res-get-state.dto';
 import { badRequest } from 'src/__base-code__/error/bad-request';
+import { ReqPayProduct } from './dto/req-pay-product.dto';
 
 @ApiTags('Market | Product')
 @Controller('product')
@@ -48,6 +50,20 @@ export class ProductController {
     const result = await this.productService.getProduct(id);
     return plainToInstance(ResGetProduct, result);
   }
+
+  @Post(':id/pay')
+  @ApiOperation({ summary: '[작업중] Pay Product' })
+  async payProduct(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() reqPayProduct: ReqPayProduct,
+  ) {}
+
+  @Get(':id/verified')
+  @ApiOperation({ summary: '[작업중] Verified Products' })
+  async verifiedProducts(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('page', ParseIntPipe) page: number,
+  ) {}
 
   @Get(':id/state/:contract')
   @ApiOkResponse({ type: ResGetState })
