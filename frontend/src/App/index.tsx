@@ -1,7 +1,18 @@
-import React from 'react';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+
+import Header from "../components/organisms/Header";
+import Main from "../pages/Main";
 
 const App: React.FC = () => {
-  return <div></div>;
+  return (
+    <>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Main />} />
+      </Routes>
+    </>
+  );
 };
 
 export default App;
