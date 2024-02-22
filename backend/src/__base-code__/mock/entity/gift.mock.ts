@@ -16,6 +16,9 @@ export class MockGiftModel {
 
   constructor() {}
 
+  signature: string =
+    '0x545420f6a302e5ecd10ce5aeac3ff51fd10a9bb6609a5c3c2f439a68bd14e6ec5615fbe282bebcf35dde189a1ea0bfb662c2849129b1a923ab542fe7e92a835c1b';
+
   gift: GiftModel = {
     id: 0,
     buyer: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89e',

@@ -9,7 +9,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('NaeGift')
     .setDescription('KGA DID project.')
-    .setVersion('0.3.1')
+    .setVersion('0.3.2')
     .addTag('Market')
     .addTag('Market | Product')
     .addTag('Market | Store')

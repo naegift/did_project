@@ -11,6 +11,7 @@ import { GiftService } from './gift.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ReqReceiveGift } from './dto/req-receive-gift.dto';
 import { ReqUseGift } from './dto/req-use-gift.dto';
+import { ReqConfirmGift } from './dto/req-confirm-gift.dto';
 
 @ApiTags('Account | Gift')
 @Controller('gift')
@@ -40,7 +41,10 @@ export class GiftController {
 
   @Patch(':id/confirm')
   @ApiOperation({
-    summary: '[작업중] 선물 수령확인 | 대납 컨트랙트 구현 후 작성',
+    summary: '[작업중] 선물 수령확인',
   })
-  async confirmGift() {}
+  async confirmGift(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() reqConfirmGift: ReqConfirmGift,
+  ) {}
 }
