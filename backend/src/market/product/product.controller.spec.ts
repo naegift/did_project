@@ -39,7 +39,6 @@ describe('ProductController', () => {
         content: product.content,
         image: product.image,
         price: product.price,
-        seller: product.seller,
         signature,
       };
 
@@ -52,7 +51,7 @@ describe('ProductController', () => {
   describe('Get State', () => {
     it('Use | getState', async () => {
       service.getState = jest.fn();
-      await controller.getState(contract);
+      await controller.getState(product.id, contract);
       expect(service.getState).toHaveBeenCalled();
     });
   });

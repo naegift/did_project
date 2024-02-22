@@ -16,7 +16,7 @@ export class MockProductModel {
 
   contract: string = '0xDD4C2588B1E3a5b4D4e7531cF39CCD4aB3375832';
   signature: string =
-    '0x545420f6a302e5ecd10ce5aeac3ff51fd10a9bb6609a5c3c2f439a68bd14e6ec5615fbe282bebcf35dde189a1ea0bfb662c2849129b1a923ab542fe7e92a835c1b';
+    '0x3c528e3419941d3f7e6c293c7e900959de1d40a75d0241d54fcdfe836a0579831cad5c4ec69727fe985d95ecb5bf6185e1fdfba0e152a8fbea11457eccb3063d1b';
 
   product: ProductModel = {
     id: 0,

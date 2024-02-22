@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, Length } from 'class-validator';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 
-export class ReqReceiveGift {
+export class ReqConfirmGift {
   @ApiProperty({ example: new MockGiftModel().signature })
   @IsString()
   @Length(132)
