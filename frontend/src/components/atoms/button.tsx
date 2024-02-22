@@ -21,9 +21,9 @@ export const ButtonVariants = cva(
       size: {
         default: "",
         sm: "w-[40px] h-[40px] text-[16px] rounded-md",
-        md: " w-[105px] h-[40px] text-[16px] rounded-xl",
-        mdl: " w-[120px] h-[40px] text-[16px] rounded-xl",
-        lg: " w-[240rem] h-[50px] text-[24px] rounded-xl",
+        md: "w-[105px] h-[40px] text-[16px] rounded-xl",
+        mdl: "w-[120px] h-[40px] text-[16px] rounded-xl",
+        lg: "w-[300px] h-[50px] text-[20px] rounded-xl",
       },
     },
     defaultVariants: {
