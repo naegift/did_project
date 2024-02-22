@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, Children, FC } from "react";
+import { ButtonHTMLAttributes, FC } from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 
@@ -11,18 +11,19 @@ export const ButtonVariants = cva(
   {
     variants: {
       variant: {
-        temp: "bg-slate-200 text-slate-600 ",
-        temp1: "bg-[#ff4400]",
-        temp2: "bg-gradient-to-r from-[#c33603] to-[#ff4400]",
-        temp3: "bg-gradient-to-r from-[#ec4609] to-[#facabb]",
-        temp4: "bg-gradient-to-r from-[#ec4609] to-[#fd6d38]",
-        default: " shadow-none active:scale-100",
+        default: "",
+        iconBtn: "border border-slate-400 text-slate-600",
+        iconTextBtn: "border border-slate-400 text-slate-600",
+        sendBtn1: "bg-[#ff4400]",
+        sendBtn2: "bg-gradient-to-r from-[#ec4609] to-[#FFA787]",
+        topBtn: "",
       },
       size: {
         default: "",
-        sm: "w-[4.5rem] h-[2rem] text-[1rem] rounded-xl",
-        md: " w-[6.5rem] h-[2.5rem] text-[1rem] rounded-2xl",
-        lg: " w-[15rem] h-[3.2rem] text-[1.5rem] rounded-2xl",
+        sm: "w-[40px] h-[40px] text-[16px] rounded-md",
+        md: " w-[105px] h-[40px] text-[16px] rounded-xl",
+        mdl: " w-[120px] h-[40px] text-[16px] rounded-xl",
+        lg: " w-[240rem] h-[50px] text-[24px] rounded-xl",
       },
     },
     defaultVariants: {
