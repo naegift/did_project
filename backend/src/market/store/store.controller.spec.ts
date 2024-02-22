@@ -21,11 +21,11 @@ describe('StoreController', () => {
     product = new MockProductModel().product;
   });
 
-  describe('Get Products', () => {
-    it('Use | getProducts', async () => {
-      service.getProducts = jest.fn();
-      await controller.getProducts(product.seller, 1);
-      expect(service.getProducts).toHaveBeenCalled();
+  describe('Get Seller Products', () => {
+    it('Use | getSellerProducts', async () => {
+      service.getSellerProducts = jest.fn();
+      await controller.getSellerProducts(product.seller, 1);
+      expect(service.getSellerProducts).toHaveBeenCalled();
     });
   });
 });
