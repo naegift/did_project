@@ -5,11 +5,7 @@ import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { MockProductModel } from 'src/__base-code__/mock/entity/product.mock';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
-import {
-  BadRequestException,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ResPostProduct } from './dto/res-post-product.dto';
 import { stateCode } from 'src/__base-code__/enum/state.enum';
 import { ResGetState } from './dto/res-get-state.dto';
@@ -59,7 +55,6 @@ describe('ProductService', () => {
         content: product.content,
         image: product.image,
         price: product.price,
-        seller: product.seller,
         signature,
       };
       const resPostProduct: ResPostProduct = { id: product.id };
@@ -68,20 +63,6 @@ describe('ProductService', () => {
       const keys = Object.keys(result);
       const required = Object.keys(resPostProduct);
       expect(keys).toEqual(expect.arrayContaining(required));
-    });
-
-    it('Error | Signer is not seller', async () => {
-      const reqPostProduct: ReqPostProduct = {
-        title: product.title,
-        content: product.content,
-        image: product.image,
-        price: product.price,
-        seller: new MockProductModel().otherProduct.seller,
-        signature,
-      };
-
-      const result = service.postProduct(reqPostProduct);
-      await expect(result).rejects.toThrow(UnauthorizedException);
     });
   });
 

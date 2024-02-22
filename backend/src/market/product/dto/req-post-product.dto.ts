@@ -23,11 +23,6 @@ export class ReqPostProduct {
   @IsNotEmpty()
   price: string;
 
-  @ApiProperty({ example: MockProductModel.swaggerProduct.seller })
-  @IsString()
-  @Length(42)
-  seller: string;
-
   @ApiProperty({ example: new MockProductModel().signature })
   @IsString()
   @Length(132)
