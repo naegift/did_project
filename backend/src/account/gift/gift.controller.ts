@@ -4,7 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Post,
+  Patch,
   Query,
 } from '@nestjs/common';
 import { GiftService } from './gift.service';
@@ -24,21 +24,21 @@ export class GiftController {
     @Query('page', ParseIntPipe) page: number,
   ) {}
 
-  @Post(':id/receive')
+  @Patch(':id/receive')
   @ApiOperation({ summary: '[작업중] 선물받기' })
   async receiveGift(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqReceiveGift: ReqReceiveGift,
   ) {}
 
-  @Post(':id/use')
+  @Patch(':id/use')
   @ApiOperation({ summary: '[작업중] 선물 사용하기' })
   async useGift(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqUseGift: ReqUseGift,
   ) {}
 
-  @Post(':id/confirm')
+  @Patch(':id/confirm')
   @ApiOperation({
     summary: '[작업중] 선물 수령확인 | 대납 컨트랙트 구현 후 작성',
   })
