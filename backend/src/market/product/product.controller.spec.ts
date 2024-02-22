@@ -11,6 +11,7 @@ describe('ProductController', () => {
   let service: ProductService;
   let product: ProductModel;
   const contract: string = new MockProductModel().contract;
+  const signature: string = new MockProductModel().signature;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -39,6 +40,7 @@ describe('ProductController', () => {
         image: product.image,
         price: product.price,
         seller: product.seller,
+        signature,
       };
 
       service.postProduct = jest.fn();

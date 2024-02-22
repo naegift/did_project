@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
@@ -22,6 +23,15 @@ export class ProductService {
   ) {}
 
   async postProduct(reqPostProduct: ReqPostProduct): Promise<ResPostProduct> {
+    const { title, content, image, price, seller, signature } = reqPostProduct;
+    const data = JSON.stringify({ title, content, image, price, seller });
+
+    const signer = ethers.utils.verifyMessage(data, signature);
+    const signerIsSeller = signer.toLowerCase() === seller.toLowerCase();
+    if (!signerIsSeller) {
+      throw new UnauthorizedException('Signer is not seller.');
+    }
+
     const product = await this.productRepo.save({ ...reqPostProduct });
 
     return { id: product.id };
@@ -35,7 +45,7 @@ export class ProductService {
   }
 
   async getState(contract: string): Promise<ResGetState> {
-    const provider = new ethers.JsonRpcProvider(
+    const provider = new ethers.providers.JsonRpcProvider(
       process.env.NETWORK_RPC || 'https://rpc.sepolia.org',
     );
     const escrow = new ethers.Contract(contract, escrowABI, provider);

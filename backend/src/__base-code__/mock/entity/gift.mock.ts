@@ -1,5 +1,6 @@
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockProductModel } from './product.mock';
+import { State } from 'src/__base-code__/enum/state.enum';
 
 const product = new MockProductModel().product;
 
@@ -9,6 +10,7 @@ export class MockGiftModel {
     buyer: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89e',
     receiver: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89f',
     contract: '0xDD4C2588B1E3a5b4D4e7531cF39CCD4aB3375832',
+    state: State.DEPLOYED,
     product: Promise.resolve(product),
   };
 
@@ -19,6 +21,7 @@ export class MockGiftModel {
     buyer: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89e',
     receiver: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89f',
     contract: '0xDD4C2588B1E3a5b4D4e7531cF39CCD4aB3375832',
+    state: State.ACTIVE,
     product: Promise.resolve(product),
   };
 
@@ -27,6 +30,7 @@ export class MockGiftModel {
     buyer: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89e',
     receiver: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89f',
     contract: '0xDD4C2588B1E3a5b4D4e7531cF39CCD4aB3375832',
+    state: State.ACTIVE,
     product: Promise.resolve(product),
   };
 
