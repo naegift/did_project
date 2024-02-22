@@ -68,13 +68,16 @@ export class ProductController {
     @Query('page', ParseIntPipe) page: number,
   ) {}
 
-  @Get(':id/state/:contract')
+  @Get(':id/state')
   @ApiOkResponse({ type: ResGetState })
   @ApiBadRequestResponse(badRequest('Required escrow contract address.'))
   @ApiOperation({
     summary: '상품 상태',
   })
-  async getState(@Param('contract') contract: string): Promise<ResGetState> {
+  async getState(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('contract') contract: string,
+  ): Promise<ResGetState> {
     const result = await this.productService.getState(contract);
     return plainToInstance(ResGetState, result);
   }
