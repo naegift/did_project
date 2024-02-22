@@ -27,4 +27,9 @@ export class ReqPostProduct {
   @IsString()
   @Length(42)
   seller: string;
+
+  @ApiProperty({ example: new MockProductModel().signature })
+  @IsString()
+  @Length(132)
+  signature: string;
 }

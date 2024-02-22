@@ -15,6 +15,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { plainToInstance } from 'class-transformer';
@@ -24,6 +25,7 @@ import { notFound } from 'src/__base-code__/error/not-found';
 import { ResGetState } from './dto/res-get-state.dto';
 import { badRequest } from 'src/__base-code__/error/bad-request';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
+import { unauthorized } from 'src/__base-code__/error/unauthorized';
 
 @ApiTags('Market | Product')
 @Controller('product')
@@ -33,6 +35,7 @@ export class ProductController {
   @Post()
   @ApiOperation({ summary: '상품 등록' })
   @ApiCreatedResponse({ type: ResPostProduct })
+  @ApiUnauthorizedResponse(unauthorized('Signer is not seller.'))
   async postProduct(
     @Body() reqPostProduct: ReqPostProduct,
   ): Promise<ResPostProduct> {
