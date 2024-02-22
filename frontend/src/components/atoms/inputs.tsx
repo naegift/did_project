@@ -4,7 +4,7 @@ import { cn } from "../../utils/cn";
 
 export const InputVariants = cva(
   `
-  block rounded-xl italic focus:outline-none focus:border-sky-300 py-2 pl-9 pr-20 shadow-sm
+  border rounded-xl italic focus:outline-none focus:border-sky-300 py-2 pl-9 pr-20 shadow-sm
     `,
   {
     variants: {
@@ -18,6 +18,7 @@ export const InputVariants = cva(
         md: "w-64 text-sm",
         lg: "w-80 text-base",
         xlg: "w-96 text-base",
+        xxlg: "w-[30rem] text-base",
       },
     },
     defaultVariants: {
@@ -31,7 +32,7 @@ export interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size">,
     VariantProps<typeof InputVariants> {
   placeholder?: string;
-  size?: "default" | "sm" | "md" | "lg" | "xlg";
+  size?: "default" | "sm" | "md" | "lg" | "xlg" | "xxlg";
 }
 
 const Inputs: FC<InputProps> = ({ variant, size, placeholder, ...props }) => {
