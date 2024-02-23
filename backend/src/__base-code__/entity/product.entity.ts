@@ -19,6 +19,6 @@ export class ProductModel extends BaseModel {
   @Column()
   seller: string;
 
-  @OneToMany(() => GiftModel, (gift) => gift.product)
-  gifts: Promise<GiftModel[]>;
+  @OneToMany(() => GiftModel, (gift) => gift.product, { nullable: true })
+  gifts?: Promise<GiftModel[]>;
 }

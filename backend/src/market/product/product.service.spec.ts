@@ -5,13 +5,18 @@ import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { MockProductModel } from 'src/__base-code__/mock/entity/product.mock';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ResPostProduct } from './dto/res-post-product.dto';
 import { stateCode } from 'src/__base-code__/enum/state.enum';
 import { ResGetState } from './dto/res-get-state.dto';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
+import { ResPayProduct } from './dto/res-pay-product.dto';
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -72,13 +77,26 @@ describe('ProductService', () => {
   });
 
   describe('Pay Product', () => {
-    it('Error | Not enough values.', async () => {
+    it('Return | ResPayProduct', async () => {
       const reqPayProduct: ReqPayProduct = {
         buyer: gift.buyer,
         receiver: gift.receiver,
       };
+      const resPayProduct: ResPayProduct = { giftID: gift.id };
+
+      const result = await service.payProduct(product.id, reqPayProduct);
+      const keys = Object.keys(result);
+      const required = Object.keys(resPayProduct);
+      expect(keys).toEqual(expect.arrayContaining(required));
+    });
+
+    it('Error | Not enough values or gas.', async () => {
+      const reqPayProduct: ReqPayProduct = {
+        buyer: 'gift.buyer',
+        receiver: gift.receiver,
+      };
       const result = service.payProduct(product.id, reqPayProduct);
-      await expect(result).rejects.toThrow(BadRequestException);
+      await expect(result).rejects.toThrow(NotAcceptableException);
     });
   });
 

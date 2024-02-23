@@ -1,4 +1,4 @@
-export const escrowABI = [
+export const ESCROW_ABI = [
   {
     inputs: [
       {
@@ -31,32 +31,89 @@ export const escrowABI = [
     type: 'constructor',
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'buyer',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'DepositConfirmed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'market',
+        type: 'address',
+      },
+    ],
+    name: 'FulfillmentConfirmed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'market',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'marketShare',
+        type: 'uint256',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'seller',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'sellerShare',
+        type: 'uint256',
+      },
+    ],
+    name: 'FundsDistributed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'receiver',
+        type: 'address',
+      },
+    ],
+    name: 'ProductUsedConfirmed',
+    type: 'event',
+  },
+  {
     inputs: [],
     name: 'ContractState',
     outputs: [
       {
-        internalType: 'enum nagift_escrow.ContractStateChoices',
+        internalType: 'enum naegift_escrow.ContractStateChoices',
         name: '',
         type: 'uint8',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'balanceOf',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -77,13 +134,6 @@ export const escrowABI = [
   },
   {
     inputs: [],
-    name: 'confirmDeposit',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'confirmFulfillment',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -92,13 +142,6 @@ export const escrowABI = [
   {
     inputs: [],
     name: 'confirmProductUsed',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'confirmReturn',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -121,7 +164,7 @@ export const escrowABI = [
     name: 'escrowStatus',
     outputs: [
       {
-        internalType: 'enum nagift_escrow.ContractStateChoices',
+        internalType: 'enum naegift_escrow.ContractStateChoices',
         name: '',
         type: 'uint8',
       },
@@ -131,57 +174,22 @@ export const escrowABI = [
   },
   {
     inputs: [],
-    name: 'executionTimestamp',
+    name: 'getBuyerAndReceiverAndPrice',
     outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getBalanceOfContract',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getCurrentTimestamp',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
       {
         internalType: 'address',
-        name: '_address',
+        name: '',
         type: 'address',
       },
-    ],
-    name: 'isContract',
-    outputs: [
       {
-        internalType: 'bool',
+        internalType: 'address',
         name: '',
-        type: 'bool',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -227,16 +235,7 @@ export const escrowABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'version',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: 'payable',
+    type: 'receive',
   },
 ];
