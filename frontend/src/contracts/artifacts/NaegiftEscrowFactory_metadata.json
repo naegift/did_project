@@ -1,0 +1,119 @@
+{
+	"compiler": {
+		"version": "0.8.13+commit.abaa5c0e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "escrowAddress",
+						"type": "address"
+					}
+				],
+				"name": "EscrowCreated",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_buyer",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_seller",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_market",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_contractPrice",
+						"type": "uint256"
+					}
+				],
+				"name": "createEscrow",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "escrowAddress",
+						"type": "address"
+					}
+				],
+				"name": "existEscrow",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"frontend/src/contracts/naegift_escrow_factory.sol": "NaegiftEscrowFactory"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"frontend/src/contracts/naegift_escrow.sol": {
+			"keccak256": "0x516a52e76f0a35c4b776b6e67689b3e84a6ea56799ffab339b79cb92b17b4417",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c095c05deae76e0ab778156953a7003de65acef06a237380b54fedf2773826ee",
+				"dweb:/ipfs/QmRhj2MRyFTByoBAyoFVcmvJBN1mLyB3jV8ARBwvf8rS1S"
+			]
+		},
+		"frontend/src/contracts/naegift_escrow_factory.sol": {
+			"keccak256": "0x5fd97740ae7fcf0c96cafcc7ed642172b5e6ec4a27500cde57b5f69b045a13b8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6eba60e2bc450dd00625286631e623ba9c49db7de5a3599ef4411fb68c7e71d2",
+				"dweb:/ipfs/QmU2JhdiZAq1StZZwcq9YqtVJaDmMZLoh1bRDrn5VWnN7Z"
+			]
+		}
+	},
+	"version": 1
+}
