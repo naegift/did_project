@@ -17,7 +17,10 @@ const Header: React.FC = () => {
         <Button variant="iconBtn" size="sm" label="">
           <img src={menuIcon} alt="" />
         </Button>
-        <Button variant="sendBtn2" size="mdl" label="상품등록하기" />
+        <Link to="/product">
+          <Button variant="sendBtn2" size="mdl" label="상품등록하기" />
+        </Link>
+
         <Button variant="iconTextBtn" size="md" label="Login">
           <img src={userIcon} alt="" className="mr-2" />
         </Button>
