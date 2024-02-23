@@ -2,11 +2,11 @@
 pragma solidity ^0.8.20;
 
 contract naegift_escrow {
-    address public immutable buyer;
-    address public immutable seller;
-    address public immutable receiver;
-    address public immutable market;
-    uint256 public immutable contractPrice;
+    address public buyer;
+    address public seller;
+    address public receiver;
+    address public market;
+    uint256 public contractPrice;
     enum ContractStateChoices {
         DEPLOYED,
         ACTIVE,
@@ -16,27 +16,34 @@ contract naegift_escrow {
     }
     ContractStateChoices public ContractState;
 
-    constructor(
+    event DepositConfirmed(address indexed buyer, uint256 amount);
+    event FulfillmentConfirmed(address indexed market);
+    event ProductUsedConfirmed(address indexed receiver);
+    event FundsDistributed(address indexed market, uint256 marketShare, address indexed seller, uint256 sellerShare);
+    
+    
+    constructor() {
+        ContractState = ContractStateChoices.DEPLOYED;
+    }
+
+    function initialize(
         address _buyer,
         address _seller,
         address _receiver,
         address _market,
         uint256 _contractPrice
-    ) payable {
+    ) public {
         require(_buyer != _seller &&  
         _buyer != _market && 
         _seller != _receiver && 
         _seller != _market && 
         _receiver != _market, 'e001');
-        require(msg.sender == _buyer || 
-        msg.sender == _seller || 
-        msg.sender == _receiver, 'e003');
         require(_contractPrice > 0, 'e006');
-        contractPrice = _contractPrice;
         buyer = _buyer;
         seller = _seller;
         receiver = _receiver;
         market = _market;
+        contractPrice = _contractPrice;
         ContractState = ContractStateChoices.DEPLOYED;
     }
 
@@ -46,6 +53,7 @@ contract naegift_escrow {
         require(ContractState == ContractStateChoices.DEPLOYED, 'e013');
         require(address(this).balance >= contractPrice, 'e002');
         ContractState = ContractStateChoices.ACTIVE;
+        emit DepositConfirmed(msg.sender, msg.value);
     }
 
     // 상품 판매 확인
@@ -53,13 +61,15 @@ contract naegift_escrow {
         require(msg.sender == market, 'e024');
         require(ContractState == ContractStateChoices.ACTIVE, 'e013');
         ContractState = ContractStateChoices.FULFILLED;
+        emit FulfillmentConfirmed(msg.sender);
     }
 
-    // 상품 수령 확인
+    // 상품 수령 완료
     function confirmProductUsed() external {
         require(msg.sender == receiver, 'e020'); 
         require(ContractState == ContractStateChoices.FULFILLED, 'e021');
         ContractState = ContractStateChoices.PRODUCT_USED;
+        emit ProductUsedConfirmed(msg.sender);
         distributeFunds(); 
     }
 
@@ -70,17 +80,9 @@ contract naegift_escrow {
         uint256 sellerShare = contractPrice - marketShare; 
         payable(market).transfer(marketShare);
         payable(seller).transfer(sellerShare);
+        emit FundsDistributed(market, marketShare, seller, sellerShare);
         ContractState = ContractStateChoices.EXECUTED;
     }
-
-    // 환불요청 이후 자금반환
-    // function confirmReturn() external {
-    //     require(msg.sender == market, 'e003');
-    //     require(ContractState == ContractStateChoices.FULFILLED, "e026"); 
-    //     uint256 depositBalance = address(this).balance;
-    //     payable(buyer).transfer(depositBalance);
-    //     ContractState = ContractStateChoices.DEPLOYED;
-    // }
 
     // 컨트랙트 상태 조회
     function escrowStatus() external view returns(ContractStateChoices) {
