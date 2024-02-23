@@ -1,32 +1,33 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
-
-import "./nagift_escrow.sol";
+pragma solidity ^0.8.20;
+import "./naegift_escrow.sol";
 
 contract NaegiftEscrowFactory {
-    address[] public deployedEscrows;
+    mapping(address => bool) private escrowList;
 
     event EscrowCreated(address escrowAddress);
-
+    
     function createEscrow(
         address _buyer, 
         address _seller, 
         address _receiver, 
         address _market, 
-        uint256 _contractPrice) public {
-        address newEscrow = address(new nagift_escrow(
-            _buyer, 
-            _seller, 
-            _receiver, 
-            _market, 
-            _contractPrice));
-        deployedEscrows.push(newEscrow);
-
-        emit EscrowCreated(newEscrow);
+        uint256 _contractPrice) public payable returns(address) {
+        require(msg.value >= _contractPrice, 'e002');
+        require(msg.sender == _buyer, 'e003');
+        address newEscrowAddress = address(new naegift_escrow(
+        _buyer,
+        _seller, 
+        _receiver, 
+        _market, 
+        _contractPrice));
+        escrowList[newEscrowAddress] = true;
+        payable(newEscrowAddress).transfer(msg.value);
+        emit EscrowCreated(newEscrowAddress);  
+        return newEscrowAddress;    
     }
 
-    function getDeployedEscrows() public view returns (address[] memory) {
-        return deployedEscrows;
+    function existEscrow(address escrowAddress) public view returns(bool){
+        return escrowList[escrowAddress];
     }
 }
-

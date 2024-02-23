@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.20;
 
 import "./naegift_escrow_factory.sol";
 
@@ -29,13 +29,10 @@ contract NagiftEscrowProxy {
     function _delegate(address _implementation) internal {
         require(_implementation != address(0), "Implementation address is not set");
         assembly {
-            // calldata를 구현 계약으로 전달
             calldatacopy(0, 0, calldatasize())
 
-            // 구현 계약을 대리 호출
             let result := delegatecall(gas(), _implementation, 0, calldatasize(), 0, 0)
 
-            // 반환 데이터를 반환
             returndatacopy(0, 0, returndatasize())
 
             switch result

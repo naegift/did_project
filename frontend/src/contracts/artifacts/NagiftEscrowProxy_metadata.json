@@ -1,0 +1,133 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_factoryImplementation",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "newImplementation",
+						"type": "address"
+					}
+				],
+				"name": "FactoryImplementationUpdated",
+				"type": "event"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "fallback"
+			},
+			{
+				"inputs": [],
+				"name": "factoryImplementation",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "latestEscrow",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_newFactoryImplementation",
+						"type": "address"
+					}
+				],
+				"name": "updateFactoryImplementation",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"frontend/src/contracts/escrow.proxy.sol": "NagiftEscrowProxy"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"frontend/src/contracts/escrow.proxy.sol": {
+			"keccak256": "0xaa00cd83201a4fa3b729be18f284caa207318958a85540ea018eebea21cf92db",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0bb4cffa6f83644f4e7c64e12e8853b94202d228684e91bba7ff96e267b85f3d",
+				"dweb:/ipfs/QmdvA5Wom2oyAZnBwPNqVizfNmcPYFVKWRKVR6T7TcB5T1"
+			]
+		},
+		"frontend/src/contracts/naegift_escrow.sol": {
+			"keccak256": "0xbd15fecc1421a503561337bddb816d76d93d97f33f2c2f7407bb7bbb9f9878bb",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fba5bc9c121ca4c5113ae2798da3211aad7b7cba86acae3e3b466a62e6dcecec",
+				"dweb:/ipfs/QmQZc929NEKNfgB6vF9dvHCRPDzeiUnSVvzvKFnmRX8DNB"
+			]
+		},
+		"frontend/src/contracts/naegift_escrow_factory.sol": {
+			"keccak256": "0x3cdb412707067bfcb390f055d5ce213594c76adca6e27c7056a6cd247a7a8f39",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://07fc5c9437b38fdac60f323b52b386e44dbc1a8942b37fcf89c83a246a4bc016",
+				"dweb:/ipfs/QmR4R22LHFUEokg4wbtNSV66neGx9UqBsRoeoBJQvm3bQy"
+			]
+		}
+	},
+	"version": 1
+}

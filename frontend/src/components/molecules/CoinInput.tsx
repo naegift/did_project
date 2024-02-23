@@ -1,15 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import Inputs, { InputProps } from "../atoms/inputs";
 import { iconsCoin1 } from "../../images/Icon";
 
-const CoinInput = () => {
+interface CoinPriceInput {
+  onChange: (value: string) => void;
+}
+
+const CoinInput: React.FC<CoinPriceInput> = ({ onChange }) => {
+  const [value, setValue] = useState<string>("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const numericValue = e.target.value.replace(/\D/g, "");
+    setValue(numericValue);
+    onChange(numericValue);
+  };
+
   const inputProps: InputProps = {
     variant: "default",
     size: "lg",
     placeholder: "시작가를 입력해주세요 ",
-    // onChange: (e) => {
-    //   console.log(e.target.value);
-    // },
+    value: value,
+    onChange: handleChange,
   };
   return (
     <div style={{ position: "relative" }}>
