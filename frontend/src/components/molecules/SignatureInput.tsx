@@ -1,16 +1,16 @@
 import React from "react";
 import Inputs, { InputProps } from "../atoms/inputs";
-import { iconsTag1 } from "../../images/Icon";
+import { iconProfile1 } from "../../images/Icon";
 
-interface NftNameInputProps {
+interface SignatureInputProps {
   onChange: (value: string) => void;
 }
 
-const NftNameInput: React.FC<NftNameInputProps> = ({ onChange }) => {
+const SignatureInput: React.FC<SignatureInputProps> = ({ onChange }) => {
   const inputProps: InputProps = {
     variant: "default",
     size: "lg",
-    placeholder: "Product Name",
+    placeholder: "Signature",
     onChange: (e) => {
       onChange(e.target.value);
     },
@@ -20,7 +20,7 @@ const NftNameInput: React.FC<NftNameInputProps> = ({ onChange }) => {
       <Inputs
         {...inputProps}
         style={{
-          backgroundImage: `url(${iconsTag1})`,
+          backgroundImage: `url(${iconProfile1})`,
           backgroundPosition: "10px center",
           backgroundRepeat: "no-repeat",
           backgroundSize: "7%",
@@ -30,4 +30,4 @@ const NftNameInput: React.FC<NftNameInputProps> = ({ onChange }) => {
   );
 };
 
-export default NftNameInput;
+export default SignatureInput;

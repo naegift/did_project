@@ -42,12 +42,23 @@ const RegistSellNft: React.FC = () => {
   );
 
   const handleSave = () => {
+    if (
+      !productData.title ||
+      !productData.content ||
+      !productData.image ||
+      !productData.price ||
+      !productData.signature
+    ) {
+      alert("모든 입력 필드를 채워주세요.");
+      return;
+    }
     saveProductData.mutate(productData, {
       onSuccess: (id: string) => {
         navigate(`/product/${id}`);
       },
     });
-    console.log("저장되는 데이터:", saveProductData);
+
+    console.log(productData);
   };
 
   const handleNftDataChange = (newData: ProductData) => {
