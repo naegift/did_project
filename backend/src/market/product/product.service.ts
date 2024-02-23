@@ -59,7 +59,7 @@ export class ProductService {
       );
       const contract = new ethers.Contract(
         process.env.PROXY_CONTRACT ||
-          '0xDDaf9856F9b983c554B9c245d29bf6A7D89bb838',
+          '0x85B05Eb0eA7A8E090F6AEE10eaf8DA2ceB5A8deE',
         FACTORY_ABI,
         provider,
       );
