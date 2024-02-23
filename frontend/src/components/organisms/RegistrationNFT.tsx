@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import NftNameInput from "../molecules/NftNameInput";
 import CoinInput from "../molecules/CoinInput";
 
 const RegistrationNFT: React.FC = () => {
+  const [image, setImage] = useState<string | null>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   return (
     <div
       className={`w-full h-[100vh] mx-auto my-auto mt-10 ${
@@ -10,7 +22,25 @@ const RegistrationNFT: React.FC = () => {
       }`}
     >
       <div className="border w-full h-[200px] py-[70px]">
-        <p className=" w-[50px] mx-[auto]">NFT</p>
+        {image ? (
+          <img
+            src={image}
+            alt="NFT"
+            className="w-[100px] h-[100px] object-cover mx-auto"
+          />
+        ) : (
+          <p className="w-[50px] mx-[auto]">Product</p>
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="hidden"
+          id="image-upload"
+        />
+        <label htmlFor="image-upload" className="cursor-pointer">
+          Choose Image
+        </label>
       </div>
       <div>
         <div>
