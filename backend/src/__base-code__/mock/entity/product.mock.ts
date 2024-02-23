@@ -8,7 +8,6 @@ export class MockProductModel {
     image: 'http://example.com',
     price: `${10 ** 16}`,
     seller: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
-    market: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89e',
     gifts: Promise.resolve([]),
   };
 
@@ -25,7 +24,6 @@ export class MockProductModel {
     image: 'http://example.com',
     price: `${10 ** 16}`,
     seller: '0x0b6411C390c28D7e7c9D5147d6c7c52f6B89cD8E',
-    market: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89e',
     gifts: Promise.resolve([]),
   };
 
@@ -36,7 +34,6 @@ export class MockProductModel {
     image: 'http://example.com',
     price: `${10 ** 16}`,
     seller: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
-    market: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89e',
     gifts: Promise.resolve([]),
   };
 

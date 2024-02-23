@@ -19,9 +19,6 @@ export class ProductModel extends BaseModel {
   @Column()
   seller: string;
 
-  @Column({ default: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d' })
-  market: string;
-
   @OneToMany(() => GiftModel, (gift) => gift.product)
   gifts: Promise<GiftModel[]>;
 }
