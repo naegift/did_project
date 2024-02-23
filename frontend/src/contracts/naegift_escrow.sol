@@ -34,8 +34,6 @@ contract naegift_escrow {
         _seller != _market && 
         _receiver != _market, 'e001');
         buyer = _buyer;
-        require(_contractPrice <= msg.value, 'e002');
-        require(msg.sender == buyer, "e003");
         seller = _seller;
         receiver = _receiver;
         market = _market;
@@ -43,7 +41,7 @@ contract naegift_escrow {
         ContractState = ContractStateChoices.ACTIVE;
     }
 
-    // 상품 판매 확인
+    // 상품 판매 완료
     function confirmFulfillment() external {
         require(msg.sender == market, 'e024');
         require(ContractState == ContractStateChoices.ACTIVE, 'e013');
@@ -51,7 +49,7 @@ contract naegift_escrow {
         emit FulfillmentConfirmed(msg.sender);
     }
 
-    // 상품 수령 완료
+    // 상품 사용 완료
     function confirmProductUsed() external {
         require(msg.sender == receiver, 'e020'); 
         require(ContractState == ContractStateChoices.FULFILLED, 'e021');
@@ -75,4 +73,6 @@ contract naegift_escrow {
     function escrowStatus() external view returns(ContractStateChoices) {
         return ContractState;
     }
+
+    receive() external payable {}
 }
