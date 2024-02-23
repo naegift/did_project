@@ -7,15 +7,6 @@ import Modal from "./Modal";
 interface viewBoxData {
   product: Product[];
 }
-interface ViewBoxProps {
-  productDetails: {
-    title: string;
-    content: string;
-    image: string;
-    price: string;
-    signature: string;
-  };
-}
 
 const ViewBox: React.FC<viewBoxData> = ({ product }) => {
   const [modalOpen, setModalOpen] = useState(false);
