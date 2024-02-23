@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Header from "../components/organisms/Header";
 import Main from "../pages/Main";
 import View from "../pages/View";
+import ProductWrite from "../pages/ProductWrite";
 
 const App: React.FC = () => {
   return (
@@ -12,6 +13,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/product/:id" element={<View />} />
+        <Route path="/product" element={<ProductWrite />} />
       </Routes>
     </>
   );
