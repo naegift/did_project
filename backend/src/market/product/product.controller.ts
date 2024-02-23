@@ -11,6 +11,7 @@ import { ProductService } from './product.service';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNotAcceptableResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -25,6 +26,7 @@ import { ResGetState } from './dto/res-get-state.dto';
 import { badRequest } from 'src/__base-code__/error/bad-request';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
+import { notAcceptable } from 'src/__base-code__/error/not-acceptable';
 
 @ApiTags('Market | Product')
 @Controller('product')
@@ -54,6 +56,7 @@ export class ProductController {
 
   @Post(':id/pay')
   @ApiOperation({ summary: '선물하기' })
+  @ApiNotAcceptableResponse(notAcceptable('Not enough values or gas.'))
   async payProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqPayProduct: ReqPayProduct,

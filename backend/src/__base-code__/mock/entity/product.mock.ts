@@ -7,15 +7,11 @@ export class MockProductModel {
     content: 'content',
     image: 'http://example.com',
     price: `${10 ** 16}`,
-    seller: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
+    seller: '0xeF3010D076f62A91A774016E5eBAf58A1BFe1bD6',
     gifts: Promise.resolve([]),
   };
 
   constructor() {}
-
-  contract: string = '0xDD4C2588B1E3a5b4D4e7531cF39CCD4aB3375832';
-  signature: string =
-    '0x3c528e3419941d3f7e6c293c7e900959de1d40a75d0241d54fcdfe836a0579831cad5c4ec69727fe985d95ecb5bf6185e1fdfba0e152a8fbea11457eccb3063d1b';
 
   product: ProductModel = {
     id: 0,
@@ -23,7 +19,7 @@ export class MockProductModel {
     content: 'content',
     image: 'http://example.com',
     price: `${10 ** 16}`,
-    seller: '0x0b6411C390c28D7e7c9D5147d6c7c52f6B89cD8E',
+    seller: '0xeF3010D076f62A91A774016E5eBAf58A1BFe1bD6',
     gifts: Promise.resolve([]),
   };
 
@@ -33,7 +29,7 @@ export class MockProductModel {
     content: 'other content',
     image: 'http://example.com',
     price: `${10 ** 16}`,
-    seller: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
+    seller: '0xeF3010D076f62A91A774016E5eBAf58A1BFe1bD6',
     gifts: Promise.resolve([]),
   };
 
@@ -51,4 +47,8 @@ export class MockProductModel {
   save() {
     return this.product;
   }
+
+  contract: string = '0x48C3c64484d95Ed3fb854922460BEf9fb05d4487';
+  signature: string =
+    '0x3c528e3419941d3f7e6c293c7e900959de1d40a75d0241d54fcdfe836a0579831cad5c4ec69727fe985d95ecb5bf6185e1fdfba0e152a8fbea11457eccb3063d1b';
 }

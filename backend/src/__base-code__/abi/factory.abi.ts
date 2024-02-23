@@ -1,17 +1,4 @@
-export const factoryABI = [
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'escrowAddress',
-        type: 'address',
-      },
-    ],
-    name: 'EscrowCreated',
-    type: 'event',
-  },
+export const FACTORY_ABI = [
   {
     inputs: [
       {
@@ -41,19 +28,6 @@ export const factoryABI = [
       },
     ],
     name: 'createEscrow',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'deployedEscrows',
     outputs: [
       {
         internalType: 'address',
@@ -61,17 +35,36 @@ export const factoryABI = [
         type: 'address',
       },
     ],
-    stateMutability: 'view',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'getDeployedEscrows',
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'escrowAddress',
+        type: 'address',
+      },
+    ],
+    name: 'EscrowCreated',
+    type: 'event',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'escrowAddress',
+        type: 'address',
+      },
+    ],
+    name: 'existEscrow',
     outputs: [
       {
-        internalType: 'address[]',
+        internalType: 'bool',
         name: '',
-        type: 'address[]',
+        type: 'bool',
       },
     ],
     stateMutability: 'view',
