@@ -41,8 +41,8 @@ contract naegift_escrow {
         ContractState = ContractStateChoices.ACTIVE;
     }
 
-    function getBuyerAndReceiver() public view returns(address, address) {
-        return (buyer, receiver);
+    function getBuyerAndReceiverAndPrice() public view returns(address, address) {
+        return (buyer, receiver, contractPrice);
     }
     
     // 상품 판매 완료
