@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.13+commit.abaa5c0e"
+		"version": "0.8.20+commit.a1b79de6"
 	},
 	"language": "Solidity",
 	"output": {
@@ -47,8 +47,14 @@
 					}
 				],
 				"name": "createEscrow",
-				"outputs": [],
-				"stateMutability": "nonpayable",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -86,7 +92,7 @@
 		"compilationTarget": {
 			"frontend/src/contracts/naegift_escrow_factory.sol": "NaegiftEscrowFactory"
 		},
-		"evmVersion": "london",
+		"evmVersion": "shanghai",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -99,19 +105,19 @@
 	},
 	"sources": {
 		"frontend/src/contracts/naegift_escrow.sol": {
-			"keccak256": "0x516a52e76f0a35c4b776b6e67689b3e84a6ea56799ffab339b79cb92b17b4417",
+			"keccak256": "0xbd15fecc1421a503561337bddb816d76d93d97f33f2c2f7407bb7bbb9f9878bb",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c095c05deae76e0ab778156953a7003de65acef06a237380b54fedf2773826ee",
-				"dweb:/ipfs/QmRhj2MRyFTByoBAyoFVcmvJBN1mLyB3jV8ARBwvf8rS1S"
+				"bzz-raw://fba5bc9c121ca4c5113ae2798da3211aad7b7cba86acae3e3b466a62e6dcecec",
+				"dweb:/ipfs/QmQZc929NEKNfgB6vF9dvHCRPDzeiUnSVvzvKFnmRX8DNB"
 			]
 		},
 		"frontend/src/contracts/naegift_escrow_factory.sol": {
-			"keccak256": "0x5fd97740ae7fcf0c96cafcc7ed642172b5e6ec4a27500cde57b5f69b045a13b8",
+			"keccak256": "0x3cdb412707067bfcb390f055d5ce213594c76adca6e27c7056a6cd247a7a8f39",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6eba60e2bc450dd00625286631e623ba9c49db7de5a3599ef4411fb68c7e71d2",
-				"dweb:/ipfs/QmU2JhdiZAq1StZZwcq9YqtVJaDmMZLoh1bRDrn5VWnN7Z"
+				"bzz-raw://07fc5c9437b38fdac60f323b52b386e44dbc1a8942b37fcf89c83a246a4bc016",
+				"dweb:/ipfs/QmR4R22LHFUEokg4wbtNSV66neGx9UqBsRoeoBJQvm3bQy"
 			]
 		}
 	},
