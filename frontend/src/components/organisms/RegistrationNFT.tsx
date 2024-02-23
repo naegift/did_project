@@ -17,7 +17,7 @@ const RegistrationNFT: React.FC = () => {
   };
   return (
     <div
-      className={`w-full h-[100vh] mx-auto my-auto mt-10 ${
+      className={`w-full  mx-auto my-auto mt-10 ${
         "mobileTab" ? "flex flex-col" : "flex flex-row justify-around"
       }`}
     >
@@ -38,8 +38,11 @@ const RegistrationNFT: React.FC = () => {
           className="hidden"
           id="image-upload"
         />
-        <label htmlFor="image-upload" className="cursor-pointer">
-          Choose Image
+        <label
+          htmlFor="image-upload"
+          className="cursor-pointer mx-[auto] border"
+        >
+          Choose Product
         </label>
       </div>
       <div>
