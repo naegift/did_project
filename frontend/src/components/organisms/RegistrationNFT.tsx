@@ -2,7 +2,21 @@ import React, { useState } from "react";
 import NftNameInput from "../molecules/NftNameInput";
 import CoinInput from "../molecules/CoinInput";
 
-const RegistrationNFT: React.FC = () => {
+interface RegistrationNFTProps {
+  onChange: (data: {
+    title: string;
+    content: string;
+    image: string;
+    price: string;
+    signature: string;
+  }) => void;
+}
+
+const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
+  const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [price, setPrice] = useState<string>("0");
+  const [signature, setSignature] = useState<string>("");
   const [image, setImage] = useState<string | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,6 +28,10 @@ const RegistrationNFT: React.FC = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleChange = () => {
+    onChange({ title, content, image: image || "", price, signature });
   };
   return (
     <div
@@ -47,15 +65,19 @@ const RegistrationNFT: React.FC = () => {
       </div>
       <div>
         <div>
-          <NftNameInput />
+          <NftNameInput onChange={(value) => setTitle(value)} />
         </div>
         <div>
           <p>Meta</p>
-          <CoinInput />
+          <CoinInput onChange={(value) => setPrice(value)} />
         </div>
         <div>
           <p>내용</p>
-          <textarea className="border w-full h-[200px] resize-none focus:outline-none focus:border-sky-300"></textarea>
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="border w-full h-[200px] resize-none focus:outline-none focus:border-sky-300"
+          ></textarea>
         </div>
       </div>
     </div>

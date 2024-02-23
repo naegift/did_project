@@ -4,7 +4,7 @@ import { cn } from "../../utils/cn";
 
 export const InputVariants = cva(
   `
-  border rounded-xl italic focus:outline-none focus:border-sky-300 py-2 pl-9 pr-20 shadow-sm
+  border rounded-xl italic focus:outline-none focus:border-sky-300 py-2 pl-9 pr-5 shadow-sm
     `,
   {
     variants: {
