@@ -1,7 +1,7 @@
 import React from "react";
 import RegistSellNft from "../components/templates/RegistSellNft";
 
-const ProductWrite = () => {
+const ProductWrite: React.FC = () => {
   return (
     <div>
       <RegistSellNft />

@@ -1,11 +1,11 @@
 import React from "react";
 
-import ViewBox from "../components/molecules/ViewBox";
+import RegistViewNft from "../components/templates/RegistViewNft";
 
 const View: React.FC = () => {
   return (
     <>
-      <ViewBox />
+      <RegistViewNft />
     </>
   );
 };

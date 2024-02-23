@@ -3,7 +3,18 @@ import React from "react";
 import { viewImg1 } from "../../images/Product";
 import Button from "../atoms/button";
 
-const ViewBox: React.FC = () => {
+interface ViewBoxProps {
+  productDetails: {
+    title: string;
+    content: string;
+    image: string;
+    price: string;
+    signature: string;
+  };
+}
+
+const ViewBox: React.FC<ViewBoxProps> = ({ productDetails }) => {
+  const { title, content, image, price } = productDetails;
   return (
     <div className="w-pull px-28 py-10 flex justify-around">
       <div className=" bg-fuchsia-100 ">
@@ -11,9 +22,14 @@ const ViewBox: React.FC = () => {
           <img src={viewImg1} alt="" />
         </div>
       </div>
+
       <div className=" w-[450px]">
-        <p className="text-3xl py-5">생활가전 교환권</p>
-        <p className="text-2xl ">0.75 ETH</p>
+        <div>
+          <span>{image}</span>
+          <span className="text-3xl py-5">{title}</span>
+          <span>{price} Meta</span>
+          <span className="py-7">{content}</span>
+        </div>
         <p className="py-7">
           This hypothetical t-shirt is made of cotton fabric, offering a
           comfortable and breathable feel. Its soft texture makes it an ideal
