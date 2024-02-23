@@ -41,7 +41,7 @@ contract naegift_escrow {
         ContractState = ContractStateChoices.ACTIVE;
     }
 
-    function getBuyerAndReceiverAndPrice() public view returns(address, address) {
+    function getBuyerAndReceiverAndPrice() public view returns(address, address, address) {
         return (buyer, receiver, contractPrice);
     }
     
