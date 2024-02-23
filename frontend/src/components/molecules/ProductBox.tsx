@@ -1,16 +1,38 @@
 import React from "react";
 
-import { productImg1 } from "../../images/Product";
+import { viewImg1 } from "../../images/Product";
+import { Product } from "../../pages/Main";
+import { Link } from "react-router-dom";
 
-const ProductBox: React.FC = () => {
+interface mainData {
+  product: Product[];
+}
+
+const ProductBox: React.FC<mainData> = ({ product }) => {
   return (
-    <div className="w-[214px] h-[240px] p-2 shadow-xl rounded-md bg-slate-200">
-      <div className="rounded-md">
-        <img src={productImg1} alt="" />
-      </div>
-      <p className="py-1">식기세척기 교환권</p>
-      <p className="text-[18px]">1.8 ETH</p>
-    </div>
+    <>
+      {product.map((item, index) => (
+        <Link to={`/product/${item.id}`}>
+          <div
+            key={index}
+            className="w-[214px] h-[270px] p-4 shadow-xl rounded-md bg-slate-200"
+          >
+            <div className="rounded-md">
+              <img
+                src={
+                  item.image && item.image !== "http://example.com"
+                    ? item.image
+                    : viewImg1
+                }
+                alt=""
+              />
+            </div>
+            <p className="py-1">{item.title}</p>
+            <p className="text-[18px]">{item.price}</p>
+          </div>
+        </Link>
+      ))}
+    </>
   );
 };
 
