@@ -5,7 +5,7 @@ const NftNameInput = () => {
   const inputProps: InputProps = {
     variant: "default",
     size: "lg",
-    placeholder: "NFT Name",
+    placeholder: "Product Name",
     // onChange: (e) => {
     //   console.log(e.target.value);
     // },
