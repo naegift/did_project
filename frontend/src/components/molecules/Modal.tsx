@@ -1,6 +1,7 @@
 import React from "react";
 import Inputs from "../atoms/inputs";
 import Button from "../atoms/button";
+import { closeBtn } from "../../images/Icon";
 
 interface ModalProps {
   onClose: () => void;
@@ -16,7 +17,9 @@ const Modal: React.FC<ModalProps> = ({ onClose }) => {
             <div className="fixed z-10 rounded-xl">
               <div className=" inline-block align-bottom bg-white p-5 rounded-xl text-left overflow-hidden shadow-xl">
                 <div className=" absolute right-6 top-3 text-xl">
-                  <button onClick={onClose}>X</button>
+                  <button onClick={onClose}>
+                    <img src={closeBtn} alt="" />
+                  </button>
                 </div>
                 <div className=" px-4 pt-5 pb-4">
                   <div>
