@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
-
 import "./naegift_escrow.sol";
 
 contract NaegiftEscrowFactory {
@@ -8,13 +7,14 @@ contract NaegiftEscrowFactory {
 
     event EscrowCreated(address escrowAddress);
     
-
     function createEscrow(
         address _buyer, 
         address _seller, 
         address _receiver, 
         address _market, 
-        uint256 _contractPrice) public returns(address) {
+        uint256 _contractPrice) public payable returns(address) {
+        require(msg.value >= _contractPrice, 'e002');
+        require(msg.sender == _buyer, 'e003');
         address newEscrowAddress = address(new naegift_escrow(
         _buyer,
         _seller, 
@@ -22,6 +22,7 @@ contract NaegiftEscrowFactory {
         _market, 
         _contractPrice));
         escrowList[newEscrowAddress] = true;
+        payable(newEscrowAddress).transfer(msg.value);
         emit EscrowCreated(newEscrowAddress);  
         return newEscrowAddress;    
     }
