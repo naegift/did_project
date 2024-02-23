@@ -13,6 +13,8 @@ import { ResGetState } from './dto/res-get-state.dto';
 import { ethers } from 'ethers';
 import { escrowABI } from './abi/escrow';
 import { stateCode } from 'src/__base-code__/enum/state.enum';
+import { ReqPayProduct } from './dto/req-pay-product.dto';
+import { ResPayProduct } from './dto/res-pay-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -37,6 +39,13 @@ export class ProductService {
     if (!product) throw new NotFoundException('Cannot find product.');
 
     return { ...product };
+  }
+
+  async payProduct(
+    id: number,
+    reqPayProduct: ReqPayProduct,
+  ): Promise<ResPayProduct> {
+    return { giftID: 1 };
   }
 
   async getState(contract: string): Promise<ResGetState> {

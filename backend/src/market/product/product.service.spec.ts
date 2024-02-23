@@ -9,10 +9,14 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ResPostProduct } from './dto/res-post-product.dto';
 import { stateCode } from 'src/__base-code__/enum/state.enum';
 import { ResGetState } from './dto/res-get-state.dto';
+import { ReqPayProduct } from './dto/req-pay-product.dto';
+import { GiftModel } from 'src/__base-code__/entity/gift.entity';
+import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 
 describe('ProductService', () => {
   let service: ProductService;
   let product: ProductModel;
+  let gift: GiftModel;
   const contract: string = new MockProductModel().contract;
   const signature: string = new MockProductModel().signature;
 
@@ -23,6 +27,25 @@ describe('ProductService', () => {
 
     service = module.get<ProductService>(ProductService);
     product = new MockProductModel().product;
+    gift = new MockGiftModel().gift;
+  });
+
+  describe('Post Product', () => {
+    it('Return | ResPostProduct', async () => {
+      const reqPostProduct: ReqPostProduct = {
+        title: product.title,
+        content: product.content,
+        image: product.image,
+        price: product.price,
+        signature,
+      };
+      const resPostProduct: ResPostProduct = { id: product.id };
+
+      const result = await service.postProduct(reqPostProduct);
+      const keys = Object.keys(result);
+      const required = Object.keys(resPostProduct);
+      expect(keys).toEqual(expect.arrayContaining(required));
+    });
   });
 
   describe('Get Product', () => {
@@ -48,21 +71,14 @@ describe('ProductService', () => {
     });
   });
 
-  describe('Post Product', () => {
-    it('Return | ResPostProduct', async () => {
-      const reqPostProduct: ReqPostProduct = {
-        title: product.title,
-        content: product.content,
-        image: product.image,
-        price: product.price,
-        signature,
+  describe('Pay Product', () => {
+    it('Error | Not enough values.', async () => {
+      const reqPayProduct: ReqPayProduct = {
+        buyer: gift.buyer,
+        receiver: gift.receiver,
       };
-      const resPostProduct: ResPostProduct = { id: product.id };
-
-      const result = await service.postProduct(reqPostProduct);
-      const keys = Object.keys(result);
-      const required = Object.keys(resPostProduct);
-      expect(keys).toEqual(expect.arrayContaining(required));
+      const result = service.payProduct(product.id, reqPayProduct);
+      await expect(result).rejects.toThrow(BadRequestException);
     });
   });
 
