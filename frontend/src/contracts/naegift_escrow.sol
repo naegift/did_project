@@ -27,15 +27,15 @@ contract naegift_escrow {
         address _receiver,
         address _market,
         uint256 _contractPrice
-    ) public payable {
+    ) payable {
         require(_buyer != _seller &&  
         _buyer != _market && 
         _seller != _receiver && 
         _seller != _market && 
         _receiver != _market, 'e001');
+        buyer = _buyer;
         require(_contractPrice <= msg.value, 'e002');
         require(msg.sender == buyer, "e003");
-        buyer = _buyer;
         seller = _seller;
         receiver = _receiver;
         market = _market;
@@ -75,6 +75,4 @@ contract naegift_escrow {
     function escrowStatus() external view returns(ContractStateChoices) {
         return ContractState;
     }
-
-    
 }
