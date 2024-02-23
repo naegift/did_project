@@ -41,9 +41,9 @@ export class ProductController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: '상품 정보 조회' })
   @ApiOkResponse({ type: ResGetProduct })
   @ApiNotFoundResponse(notFound('Cannot find product.'))
-  @ApiOperation({ summary: '상품 정보 조회' })
   async getProduct(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ResGetProduct> {
@@ -52,11 +52,13 @@ export class ProductController {
   }
 
   @Post(':id/pay')
-  @ApiOperation({ summary: '[작업중] 선물하기' })
+  @ApiOperation({ summary: '선물하기' })
   async payProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqPayProduct: ReqPayProduct,
-  ) {}
+  ) {
+    const result = await this.productService.payProduct(id, reqPayProduct);
+  }
 
   @Get(':id/verified')
   @ApiOperation({ summary: '[작업중] 상품의 사용된 선물 목록' })
@@ -66,11 +68,9 @@ export class ProductController {
   ) {}
 
   @Get(':id/state')
+  @ApiOperation({ summary: '상품 상태' })
   @ApiOkResponse({ type: ResGetState })
   @ApiBadRequestResponse(badRequest('Required escrow contract address.'))
-  @ApiOperation({
-    summary: '상품 상태',
-  })
   async getState(
     @Param('id', ParseIntPipe) id: number,
     @Query('contract') contract: string,
