@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import Button from "../atoms/button";
 import { viewImg1 } from "../../images/Product";
 import { Product } from "../../pages/View";
@@ -16,19 +15,6 @@ const ViewBox: React.FC<viewBoxData> = ({ product }) => {
     setModalOpen(true);
   };
 
-
-interface ViewBoxProps {
-  productDetails: {
-    title: string;
-    content: string;
-    image: string;
-    price: string;
-    signature: string;
-  };
-}
-
-const ViewBox: React.FC<ViewBoxProps> = ({ productDetails }) => {
-  const { title, content, image, price } = productDetails;
   return (
     <>
       {product.map((item, index) => (
@@ -58,6 +44,8 @@ const ViewBox: React.FC<ViewBoxProps> = ({ productDetails }) => {
             {modalOpen && <Modal onClose={() => setModalOpen(false)} />}
           </div>
         </div>
+      ))}
+    </>
   );
 };
 
