@@ -25,7 +25,7 @@ const RegistSellNft: React.FC = () => {
   const saveProductDataToServer = async (data: ProductData) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/products",
+        "http://localhost:3000/product",
         data
       );
       return response.data.id;
