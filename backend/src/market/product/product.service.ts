@@ -12,13 +12,12 @@ import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { Repository } from 'typeorm';
 import { ResGetState } from './dto/res-get-state.dto';
 import { BigNumber, ethers } from 'ethers';
-import { stateCode } from 'src/__base-code__/enum/state.enum';
+import { State, stateCode } from 'src/__base-code__/enum/state.enum';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { ESCROW_ABI } from 'src/__base-code__/abi/escrow.abi';
-import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 
 @Injectable()
 export class ProductService {
@@ -81,6 +80,7 @@ export class ProductService {
           gift.buyer = buyer;
           gift.receiver = receiver;
           gift.contract = escrowAddress;
+          gift.state = State.ACTIVE;
           gift.product = Promise.resolve(product);
 
           newGift = await this.giftRepo.save(gift);
