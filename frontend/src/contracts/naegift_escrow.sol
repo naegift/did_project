@@ -2,11 +2,11 @@
 pragma solidity ^0.8.20;
 
 contract naegift_escrow {
-    address public buyer;
-    address public seller;
-    address public receiver;
-    address public market;
-    uint256 public contractPrice;
+    address public immutable buyer;
+    address public immutable seller;
+    address public immutable receiver;
+    address public immutable market;
+    uint256 public immutable contractPrice;
     enum ContractStateChoices {
         DEPLOYED,
         ACTIVE,
@@ -20,40 +20,27 @@ contract naegift_escrow {
     event FulfillmentConfirmed(address indexed market);
     event ProductUsedConfirmed(address indexed receiver);
     event FundsDistributed(address indexed market, uint256 marketShare, address indexed seller, uint256 sellerShare);
-    
-    
-    constructor() {
-        ContractState = ContractStateChoices.DEPLOYED;
-    }
 
-    function initialize(
+    constructor(
         address _buyer,
         address _seller,
         address _receiver,
         address _market,
         uint256 _contractPrice
-    ) public {
+    ) public payable {
         require(_buyer != _seller &&  
         _buyer != _market && 
         _seller != _receiver && 
         _seller != _market && 
         _receiver != _market, 'e001');
-        require(_contractPrice > 0, 'e006');
+        require(_contractPrice <= msg.value, 'e002');
+        require(msg.sender == buyer, "e003");
         buyer = _buyer;
         seller = _seller;
         receiver = _receiver;
         market = _market;
         contractPrice = _contractPrice;
-        ContractState = ContractStateChoices.DEPLOYED;
-    }
-
-    // 입금 확인
-    function confirmDeposit() external payable {
-        require(msg.sender == buyer, "e003");
-        require(ContractState == ContractStateChoices.DEPLOYED, 'e013');
-        require(address(this).balance >= contractPrice, 'e002');
         ContractState = ContractStateChoices.ACTIVE;
-        emit DepositConfirmed(msg.sender, msg.value);
     }
 
     // 상품 판매 확인
