@@ -14,17 +14,16 @@ contract NaegiftEscrowFactory {
         address _seller, 
         address _receiver, 
         address _market, 
-        uint256 _contractPrice) public {
-        naegift_escrow newEscrow = new naegift_escrow();
-        newEscrow.initialize(
+        uint256 _contractPrice) public returns(address) {
+        address newEscrowAddress = address(new naegift_escrow(
         _buyer,
         _seller, 
         _receiver, 
         _market, 
-        _contractPrice);
-        address newEscrowAddress = address(newEscrow);
+        _contractPrice));
         escrowList[newEscrowAddress] = true;
-        emit EscrowCreated(newEscrowAddress);      
+        emit EscrowCreated(newEscrowAddress);  
+        return newEscrowAddress;    
     }
 
     function existEscrow(address escrowAddress) public view returns(bool){
