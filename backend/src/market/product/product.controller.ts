@@ -24,6 +24,7 @@ import { notFound } from 'src/__base-code__/error/not-found';
 import { ResGetState } from './dto/res-get-state.dto';
 import { badRequest } from 'src/__base-code__/error/bad-request';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
+import { ResPayProduct } from './dto/res-pay-product.dto';
 
 @ApiTags('Market | Product')
 @Controller('product')
@@ -41,9 +42,9 @@ export class ProductController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: '상품 정보 조회' })
   @ApiOkResponse({ type: ResGetProduct })
   @ApiNotFoundResponse(notFound('Cannot find product.'))
-  @ApiOperation({ summary: '상품 정보 조회' })
   async getProduct(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ResGetProduct> {
@@ -52,25 +53,26 @@ export class ProductController {
   }
 
   @Post(':id/pay')
-  @ApiOperation({ summary: '[작업중] 선물하기' })
+  @ApiOperation({ summary: '선물하기' })
   async payProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqPayProduct: ReqPayProduct,
-  ) {}
+  ): Promise<ResPayProduct> {
+    const result = await this.productService.payProduct(id, reqPayProduct);
+    return plainToInstance(ResPayProduct, result);
+  }
 
   @Get(':id/verified')
-  @ApiOperation({ summary: '[작업중] 수령 대기중인 상품 목록' })
+  @ApiOperation({ summary: '[작업중] 상품의 사용된 선물 목록' })
   async verifiedProducts(
     @Param('id', ParseIntPipe) id: number,
     @Query('page', ParseIntPipe) page: number,
   ) {}
 
   @Get(':id/state')
+  @ApiOperation({ summary: '상품 상태' })
   @ApiOkResponse({ type: ResGetState })
   @ApiBadRequestResponse(badRequest('Required escrow contract address.'))
-  @ApiOperation({
-    summary: '상품 상태',
-  })
   async getState(
     @Param('id', ParseIntPipe) id: number,
     @Query('contract') contract: string,
