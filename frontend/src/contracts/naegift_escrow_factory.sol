@@ -12,7 +12,7 @@ contract NaegiftEscrowFactory {
         address _seller, 
         address _receiver, 
         address _market, 
-        uint256 _contractPrice) public payable returns(address) {
+        uint256 _contractPrice) public payable{
         require(msg.value >= _contractPrice, 'e002');
         require(msg.sender == _buyer, 'e003');
         address newEscrowAddress = address(new naegift_escrow(
@@ -24,7 +24,6 @@ contract NaegiftEscrowFactory {
         escrowList[newEscrowAddress] = true;
         payable(newEscrowAddress).transfer(msg.value);
         emit EscrowCreated(newEscrowAddress);  
-        return newEscrowAddress;    
     }
 
     function existEscrow(address escrowAddress) public view returns(bool){
