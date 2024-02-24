@@ -12,6 +12,7 @@ import {
   ApiBadRequestResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { ReqReceiveGift } from './dto/req-receive-gift.dto';
@@ -29,7 +30,8 @@ export class GiftController {
 
   @Get()
   @ApiOperation({ summary: '선물목록' })
-  @ApiOkResponse({ type: ResGetGifts })
+  @ApiQuery({ name: 'buyer', required: false, type: String })
+  @ApiQuery({ name: 'receiver', required: false, type: String })
   async getGifts(
     @Query('buyer') buyer: string,
     @Query('receiver') receiver: string,
