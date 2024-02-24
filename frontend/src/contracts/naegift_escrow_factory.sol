@@ -5,14 +5,15 @@ import "./naegift_escrow.sol";
 contract NaegiftEscrowFactory {
     mapping(address => bool) private escrowList;
 
-    event EscrowCreated(address escrowAddress);
+    event EscrowCreated(address escrowAddress, bytes64 uuid);
     
     function createEscrow(
         address _buyer, 
         address _seller, 
         address _receiver, 
         address _market, 
-        uint256 _contractPrice) public payable{
+        uint256 _contractPrice,
+        bytes64 uuid) public payable{
         require(msg.value >= _contractPrice, 'e002');
         require(msg.sender == _buyer, 'e003');
         address newEscrowAddress = address(new naegift_escrow(
@@ -23,7 +24,7 @@ contract NaegiftEscrowFactory {
         _contractPrice));
         escrowList[newEscrowAddress] = true;
         payable(newEscrowAddress).transfer(msg.value);
-        emit EscrowCreated(newEscrowAddress);  
+        emit EscrowCreated(newEscrowAddress, uuid);  
     }
 
     function existEscrow(address escrowAddress) public view returns(bool){

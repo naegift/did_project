@@ -40,10 +40,6 @@ contract naegift_escrow {
         contractPrice = _contractPrice;
         ContractState = ContractStateChoices.ACTIVE;
     }
-
-    function getBuyerAndReceiverAndPrice() public view returns(address, address, uint256) {
-        return (buyer, receiver, contractPrice);
-    }
     
     // 상품 판매 완료
     function confirmFulfillment() external {
