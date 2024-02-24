@@ -5,7 +5,10 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    cors: { origin: ['localhost:3000'] },
+    cors: {
+      credentials: true,
+      origin: ['localhost:3000'],
+    },
   });
 
   const config = new DocumentBuilder()
