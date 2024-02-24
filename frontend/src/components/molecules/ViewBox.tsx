@@ -35,13 +35,16 @@ const ViewBox: React.FC<viewBoxData> = ({ product }) => {
             <p className="text-3xl py-5">{item.title}</p>
             <p className="text-2xl ">{item.price}</p>
             <p className="py-7">{item.content}</p>
+
             <Button
               onClick={openModal}
               variant="sendBtn2"
               size="lg"
               label="선물하기"
             />
-            {modalOpen && <Modal onClose={() => setModalOpen(false)} />}
+            {modalOpen && (
+              <Modal product={product} onClose={() => setModalOpen(false)} />
+            )}
           </div>
         </div>
       ))}
