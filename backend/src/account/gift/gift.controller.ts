@@ -34,7 +34,7 @@ export class GiftController {
   ) {}
 
   @Get(':id/state')
-  @ApiOperation({ summary: '상품 상태' })
+  @ApiOperation({ summary: '선물 상태' })
   @ApiOkResponse({ type: ResGetState })
   @ApiBadRequestResponse(badRequest('Required escrow contract address.'))
   async getState(@Param('id', ParseIntPipe) id: number): Promise<ResGetState> {

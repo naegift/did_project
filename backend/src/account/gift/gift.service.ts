@@ -20,6 +20,7 @@ export class GiftService {
 
     return gift;
   }
+
   async getState(id: number): Promise<ResGetState> {
     const gift = await this.getGift(id);
     const provider = new ethers.providers.JsonRpcProvider(
@@ -28,6 +29,7 @@ export class GiftService {
     const escrow = new ethers.Contract(gift.contract, ESCROW_ABI, provider);
 
     const code = Number(await escrow.escrowStatus());
+    await this.giftRepo.update(id, { state: stateCode[code] });
     return { state: stateCode[code] };
   }
 }
