@@ -59,4 +59,6 @@ export class MockGiftModel {
   save() {
     return this.gift;
   }
+
+  update() {}
 }

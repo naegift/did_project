@@ -6,10 +6,10 @@ export enum State {
   EXECUTED = 'executed',
 }
 
-export const stateCode = {
-  0: State.DEPLOYED,
-  1: State.ACTIVE,
-  2: State.FULFILLED,
-  3: State.PRODUCT_USED,
-  4: State.EXECUTED,
-};
+export const stateCode = [
+  State.DEPLOYED,
+  State.ACTIVE,
+  State.FULFILLED,
+  State.PRODUCT_USED,
+  State.EXECUTED,
+];
