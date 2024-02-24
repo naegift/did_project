@@ -14,9 +14,9 @@ contract naegift_escrow {
         PRODUCT_USED,
         EXECUTED
     }
-    ContractStateChoices public ContractState;
+    ContractStateChoices public contractState;
 
-    event DepositConfirmed(address indexed buyer, uint256 amount);
+    event CurrentState(ContractStateChoices state);
     event FulfillmentConfirmed(address indexed market);
     event ProductUsedConfirmed(address indexed receiver);
     event FundsDistributed(address indexed market, uint256 marketShare, address indexed seller, uint256 sellerShare);
@@ -38,40 +38,38 @@ contract naegift_escrow {
         receiver = _receiver;
         market = _market;
         contractPrice = _contractPrice;
-        ContractState = ContractStateChoices.ACTIVE;
+        contractState = ContractStateChoices.ACTIVE;
     }
     
     // 상품 판매 완료
     function confirmFulfillment() external {
         require(msg.sender == market, 'e024');
-        require(ContractState == ContractStateChoices.ACTIVE, 'e013');
-        ContractState = ContractStateChoices.FULFILLED;
+        require(contractState == ContractStateChoices.ACTIVE, 'e013');
+        contractState = ContractStateChoices.FULFILLED;
         emit FulfillmentConfirmed(msg.sender);
+        emit CurrentState(contractState);
     }
 
     // 상품 사용 완료
     function confirmProductUsed() external {
         require(msg.sender == receiver, 'e020'); 
-        require(ContractState == ContractStateChoices.FULFILLED, 'e021');
-        ContractState = ContractStateChoices.PRODUCT_USED;
+        require(contractState == ContractStateChoices.FULFILLED, 'e021');
+        contractState = ContractStateChoices.PRODUCT_USED;
         emit ProductUsedConfirmed(msg.sender);
+        emit CurrentState(contractState);
         distributeFunds(); 
     }
 
     // 판매 대금 정산
     function distributeFunds() private {
-        require(ContractState == ContractStateChoices.PRODUCT_USED, 'e022');
+        require(contractState == ContractStateChoices.PRODUCT_USED, 'e022');
         uint256 marketShare = contractPrice / 10; 
         uint256 sellerShare = contractPrice - marketShare; 
         payable(market).transfer(marketShare);
         payable(seller).transfer(sellerShare);
         emit FundsDistributed(market, marketShare, seller, sellerShare);
-        ContractState = ContractStateChoices.EXECUTED;
-    }
-
-    // 컨트랙트 상태 조회
-    function escrowStatus() external view returns(ContractStateChoices) {
-        return ContractState;
+        contractState = ContractStateChoices.EXECUTED;
+        emit CurrentState(contractState);
     }
 
     receive() external payable {}

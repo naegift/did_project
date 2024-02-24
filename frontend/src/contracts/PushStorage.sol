@@ -3,30 +3,29 @@ pragma solidity ^0.8.20;
 
 contract PushCommStorageV2 {
     /**
-     * @notice User Struct that involves imperative details about
-     * a specific User.
+     * @notice 특정 사용자에 대한 중요한 세부 정보를 포함하는 사용자 구조체입니다.
      **/
     struct User {
-        // @notice Depicts whether or not a user is ACTIVE
+        // @notice 사용자가 활성 상태인지 여부를 나타냅니다.
         bool userActivated;
-        // @notice Will be false until public key is emitted
+        // @notice 공개 키가 발행될 때까지 false입니다.
         bool publicKeyRegistered;
-        // @notice Events should not be polled before this block as user doesn't exist
+        // @notice 이 블록 이전에는 이벤트를 폴링해서는 안 됩니다. 사용자가 존재하지 않기 때문입니다.
         uint256 userStartBlock;
-        // @notice Keep track of subscribers
+        // @notice 구독자 추적
         uint256 subscribedCount;
         /**
-         * Depicts if User subscribed to a Specific Channel Address
-         * 1 -> User is Subscribed
-         * 0 -> User is NOT SUBSCRIBED
+         * 특정 채널 주소에 대해 사용자가 구독했는지 여부를 나타냅니다.
+         * 1 -> 사용자가 구독함
+         * 0 -> 사용자가 구독하지 않음
          **/
         mapping(address => uint8) isSubscribed;
-        // Keeps track of all subscribed channels
+        // 모든 구독된 채널 추적
         mapping(address => uint256) subscribed;
         mapping(uint256 => address) mapAddressSubscribed;
     }
 
-    /** MAPPINGS **/
+    /** 매핑 **/
     mapping(address => User) public users;
     mapping(address => uint256) public nonces;
     mapping(uint256 => address) public mapAddressUsers;
@@ -34,7 +33,25 @@ contract PushCommStorageV2 {
     mapping(address => mapping(address => bool))
         public delegatedNotificationSenders;
 
-    /** STATE VARIABLES **/
+    /**
+     * @notice 판매자가 로그인하고 채널 구독을 처리합니다.
+     * @param _sellerAddress 판매자의 주소
+     * @param _signature 메타마스크 서명
+     */
+    function loginAndSubscribe(address _sellerAddress, bytes memory _signature) public {
+        // 메타마스크 서명 검증 로직 추가 필요
+        // 채널 구독 로직 추가 필요
+    }
+
+    /**
+     * @notice 상품 사용 검증이 완료되면 판매자에게 알림을 보냅니다.
+     * @param _sellerAddress 판매자의 주소
+     */
+    function sendProductUsageVerificationNotification(address _sellerAddress) public {
+        // 판매자에게 알림을 보내는 로직 추가 필요
+    }
+
+    /** 상태 변수 **/
     address public governance;
     address public pushChannelAdmin;
     uint256 public chainID;
@@ -60,7 +77,7 @@ contract PushCommStorageV2 {
         keccak256(
             "SendNotification(address channel,address recipient,bytes identity,uint256 nonce,uint256 expiry)"
         );
-    // New State Variables
+    // 새로운 상태 변수
     address public PUSH_TOKEN_ADDRESS;
 
     struct ChatDetails {
