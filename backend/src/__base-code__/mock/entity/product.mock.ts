@@ -13,6 +13,10 @@ export class MockProductModel {
 
   constructor() {}
 
+  static contract: string = '0x48C3c64484d95Ed3fb854922460BEf9fb05d4487';
+  static signature: string =
+    '0x3c528e3419941d3f7e6c293c7e900959de1d40a75d0241d54fcdfe836a0579831cad5c4ec69727fe985d95ecb5bf6185e1fdfba0e152a8fbea11457eccb3063d1b';
+
   product: ProductModel = {
     id: 0,
     title: 'title',
@@ -47,8 +51,4 @@ export class MockProductModel {
   save() {
     return this.product;
   }
-
-  contract: string = '0x48C3c64484d95Ed3fb854922460BEf9fb05d4487';
-  signature: string =
-    '0x3c528e3419941d3f7e6c293c7e900959de1d40a75d0241d54fcdfe836a0579831cad5c4ec69727fe985d95ecb5bf6185e1fdfba0e152a8fbea11457eccb3063d1b';
 }

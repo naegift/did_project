@@ -11,13 +11,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { Repository } from 'typeorm';
 import { ResGetState } from './dto/res-get-state.dto';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { State, stateCode } from 'src/__base-code__/enum/state.enum';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { ESCROW_ABI } from 'src/__base-code__/abi/escrow.abi';
+import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 
 @Injectable()
 export class ProductService {
@@ -51,31 +52,23 @@ export class ProductService {
     reqPayProduct: ReqPayProduct,
   ): Promise<ResPayProduct> {
     try {
-      const { buyer, receiver } = reqPayProduct;
+      const { buyer, receiver, uuid } = reqPayProduct;
       let newGift: GiftModel;
 
       const provider = new ethers.providers.JsonRpcProvider(
         process.env.NETWORK_RPC || 'https://rpc.sepolia.org',
       );
       const contract = new ethers.Contract(
-        process.env.PROXY_CONTRACT ||
-          '0xDDaf9856F9b983c554B9c245d29bf6A7D89bb838',
+        process.env.PROXY_CONTRACT || MockGiftModel.proxyAddress,
         FACTORY_ABI,
         provider,
       );
 
-      contract.on('EscrowCreated', async (escrowAddress) => {
+      contract.on('EscrowCreated', async (escrowAddress, escrowUUID) => {
         // TODO: Get escrow buyer, receiver
-        const escrow = new ethers.Contract(escrowAddress, ESCROW_ABI, provider);
-        const [_buyer, _receiver, _price]: [string, string, BigNumber] =
-          await escrow.getBuyerAndReceiverAndPrice();
         const product = await this.getProduct(id);
 
-        if (
-          _buyer === buyer &&
-          _receiver === receiver &&
-          _price.toString() === product.price
-        ) {
+        if (uuid === escrowUUID) {
           const gift = this.giftRepo.create();
           gift.buyer = buyer;
           gift.receiver = receiver;
@@ -90,7 +83,8 @@ export class ProductService {
       if (!process.env.PROXY_CONTRACT) {
         contract.emit(
           'EscrowCreated',
-          '0xd94976511BCB8F5167bA13B9A3a942b7D6d6b495',
+          MockGiftModel.proxyAddress,
+          MockGiftModel.uuid,
         );
       }
 
