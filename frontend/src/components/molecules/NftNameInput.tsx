@@ -9,7 +9,7 @@ interface NftNameInputProps {
 const NftNameInput: React.FC<NftNameInputProps> = ({ onChange }) => {
   const inputProps: InputProps = {
     variant: "default",
-    size: "lg",
+    size: "xlg",
     placeholder: "Product Name",
     onChange: (e) => {
       onChange(e.target.value);

@@ -23,37 +23,6 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
   const [image, setImage] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
 
-  // useEffect(() => {
-  //   runEthers();
-  // }, []);
-
-  // const runEthers = async () => {
-  //   try {
-  //     // Frontend
-  //     const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //     const wallets = await window.ethereum.request({
-  //       method: "eth_requestAccounts",
-  //     });
-  //     const address = wallets[0];
-
-  //     const message = {
-  //       title,
-  //       content,
-  //       image: imageUrl || "http://example.com",
-  //       price,
-  //     };
-
-  //     const signer = provider.getSigner(address);
-  //     const signature = await signer.signMessage(JSON.stringify(message));
-
-  //     setSignature(signature);
-
-  //     onChange({ title, content, image: imageUrl || "", price, signature });
-  //   } catch (error) {
-  //     console.error("Error signing message:", error);
-  //   }
-  // };
-
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (file) {
@@ -139,7 +108,7 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
           />
         </div>
         <div>
-          <p>Meta</p>
+          <p>Eth</p>
           <CoinInput
             onChange={(value) => {
               setPrice(value);
