@@ -64,7 +64,7 @@ export class ProductController {
   }
 
   @Get(':id/verified')
-  @ApiOperation({ summary: '[작업중] 상품의 사용된 선물 목록' })
+  @ApiOperation({ summary: '상품의 사용된 선물 목록' })
   async verifiedProducts(
     @Param('id', ParseIntPipe) id: number,
     @Query('page', ParseIntPipe) page: number,
