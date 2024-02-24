@@ -28,7 +28,7 @@ export class GiftController {
   constructor(private readonly giftService: GiftService) {}
 
   @Get()
-  @ApiOperation({ summary: '받은 선물목록' })
+  @ApiOperation({ summary: '선물목록' })
   async getGifts(
     @Query('buyer') buyer: string,
     @Query('receiver') receiver: string,
