@@ -65,6 +65,7 @@ export class ProductController {
 
   @Get(':id/verified')
   @ApiOperation({ summary: '상품의 사용된 선물 목록' })
+  @ApiOkResponse({ type: ResVerifiedProducts })
   async verifiedProducts(
     @Param('id', ParseIntPipe) id: number,
     @Query('page', ParseIntPipe) page: number,
