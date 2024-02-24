@@ -4,12 +4,17 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule, {
+    cors: {
+      credentials: true,
+      origin: ['http://localhost:3000'],
+    },
+  });
 
   const config = new DocumentBuilder()
     .setTitle('NaeGift')
     .setDescription('KGA DID project.')
-    .setVersion('0.7.0')
+    .setVersion('0.8.3')
     .addTag('Market')
     .addTag('Market | Product')
     .addTag('Market | Store')

@@ -4,7 +4,7 @@ import RegistSellNft from "../components/templates/RegistSellNft";
 const ProductWrite: React.FC = () => {
   return (
     <div>
-      <RegistSellNft />
+      <RegistSellNft title="" content="" image="" price="" />
     </div>
   );
 };

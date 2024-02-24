@@ -10,15 +10,19 @@ const CoinInput: React.FC<CoinPriceInput> = ({ onChange }) => {
   const [value, setValue] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const numericValue = e.target.value.replace(/\D/g, "");
+    let numericValue = e.target.value.replace(/[^\d.]/g, "");
+    const decimalCount = (numericValue.match(/\./g) || []).length;
+    if (decimalCount > 1) {
+      numericValue = numericValue.slice(0, -1);
+    }
     setValue(numericValue);
     onChange(numericValue);
   };
 
   const inputProps: InputProps = {
     variant: "default",
-    size: "lg",
-    placeholder: "시작가를 입력해주세요 ",
+    size: "xlg",
+    placeholder: "시작가를 입력해주세요 ex) 0.00001",
     value: value,
     onChange: handleChange,
   };

@@ -24,6 +24,7 @@ import { notFound } from 'src/__base-code__/error/not-found';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { notAcceptable } from 'src/__base-code__/error/not-acceptable';
+import { ResVerifiedProducts } from './dto/res-verified-products.dto';
 
 @ApiTags('Market | Product')
 @Controller('product')
@@ -63,9 +64,13 @@ export class ProductController {
   }
 
   @Get(':id/verified')
-  @ApiOperation({ summary: '[작업중] 상품의 사용된 선물 목록' })
+  @ApiOperation({ summary: '상품의 사용된 선물 목록' })
+  @ApiOkResponse({ type: ResVerifiedProducts })
   async verifiedProducts(
     @Param('id', ParseIntPipe) id: number,
     @Query('page', ParseIntPipe) page: number,
-  ) {}
+  ): Promise<ResVerifiedProducts> {
+    const result = await this.productService.verifiedProducts(id, page);
+    return plainToInstance(ResVerifiedProducts, result);
+  }
 }

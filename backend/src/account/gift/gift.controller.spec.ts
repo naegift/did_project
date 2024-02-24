@@ -21,6 +21,14 @@ describe('GiftController', () => {
     gift = new MockGiftModel().gift;
   });
 
+  describe('Get Gifts', () => {
+    it('Use | getGifts', async () => {
+      service.getGifts = jest.fn();
+      await controller.getGifts(gift.buyer, gift.receiver, 1);
+      expect(service.getGifts).toHaveBeenCalled();
+    });
+  });
+
   describe('Get State', () => {
     it('Use | getState', async () => {
       service.getState = jest.fn();

@@ -6,9 +6,12 @@ import { NotFoundException } from '@nestjs/common';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 import { providers } from 'src/__base-code__/mock/providers/providers';
+import { DataService } from 'src/common/data/data.service';
+import { ResGetGifts } from './dto/res-get-gifts.dto';
 
 describe('GiftService', () => {
   let service: GiftService;
+  let dataService: DataService;
   let gift: GiftModel;
 
   beforeEach(async () => {
@@ -17,7 +20,45 @@ describe('GiftService', () => {
     }).compile();
 
     service = module.get<GiftService>(GiftService);
+    dataService = module.get<DataService>(DataService);
     gift = new MockGiftModel().gift;
+  });
+
+  describe('Get Gift', () => {
+    it('Return | GiftModel', async () => {
+      const result = await service.getGift(gift.id);
+      const keys = Object.keys(result);
+      const required = Object.keys(gift);
+      expect(keys).toEqual(expect.arrayContaining(required));
+    });
+
+    it('Error | Cannot find gift.', async () => {
+      const result = service.getGift(0);
+      await expect(result).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('Get Gifts', () => {
+    it('Use | pagination', async () => {
+      dataService.pagination = jest
+        .fn()
+        .mockReturnValue({ array: [], arrayCount: 0, nextPage: false });
+      await service.getGifts('', gift.receiver, 1);
+      expect(dataService.pagination).toHaveBeenCalled();
+    });
+
+    it('Return | ResGetGifts', async () => {
+      const resGetGifts: ResGetGifts = {
+        gifts: [],
+        giftsCount: 0,
+        nextPage: false,
+      };
+
+      const result = await service.getGifts(gift.buyer, '', 1);
+      const keys = Object.keys(result);
+      const required = Object.keys(resGetGifts);
+      expect(keys).toEqual(expect.arrayContaining(required));
+    });
   });
 
   describe('Get State', () => {
