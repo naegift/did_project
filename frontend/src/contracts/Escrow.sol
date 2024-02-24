@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-contract naegift_escrow {
+contract NaegiftEscrow {
     address public immutable buyer;
     address public immutable seller;
     address public immutable receiver;
@@ -40,17 +40,17 @@ contract naegift_escrow {
         contractState = ContractStateChoices.ACTIVE;
     }
     
-    // 상품 판매 완료
+    // 상품 사용 완료
     function confirmFulfillment() external {
-        require(msg.sender == market, 'e024');
+        require(msg.sender == receiver, 'e024');
         require(contractState == ContractStateChoices.ACTIVE, 'e013');
         contractState = ContractStateChoices.FULFILLED;
         emit FulfillmentConfirmed(msg.sender);
     }
 
-    // 상품 사용 완료
-    function confirmProductUsed() external {
-        require(msg.sender == receiver, 'e020'); 
+    // 상품 수령 확인
+        function confirmProductUsed() external {
+        require(msg.sender == market, 'e020'); 
         require(contractState == ContractStateChoices.FULFILLED, 'e021');
         contractState = ContractStateChoices.PRODUCT_USED;
         emit ProductUsedConfirmed(msg.sender);

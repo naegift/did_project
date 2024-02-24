@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "./naegift_escrow_factory.sol";
+import "./EscrowFactory.sol";
 
-contract NagiftEscrowProxy {
+contract NaegiftEscrowProxy {
     address public latestEscrow;
     address public factoryImplementation;
 

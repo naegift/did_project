@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
-import "./naegift_escrow.sol";
+import "./Escrow.sol";
 
 contract NaegiftEscrowFactory {
     mapping(address => bool) private escrowList;
@@ -16,7 +16,7 @@ contract NaegiftEscrowFactory {
         string memory uuid) public payable{
         require(msg.value >= _contractPrice, 'e002');
         require(msg.sender == _buyer, 'e003');
-        address newEscrowAddress = address(new naegift_escrow(
+        address newEscrowAddress = address(new NaegiftEscrow(
         _buyer,
         _seller, 
         _receiver, 

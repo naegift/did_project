@@ -21,9 +21,7 @@
     "recoil": "^0.7.7",
     "tailwind-merge": "^2.2.1",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4",
-    "prettier": "^2.0.5",
-    "prettier-plugin-solidity": "^1.0.0-beta.13"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -52,10 +50,10 @@
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.3",
     "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "autoprefixer": "^10.4.17",
     "chai": "^4.4.1",
     "ethereum-waffle": "^4.0.10",
     "ethers": "^5.7.0",
-    "autoprefixer": "^10.4.17",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1"
   }
