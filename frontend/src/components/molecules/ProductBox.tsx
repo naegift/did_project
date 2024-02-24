@@ -12,11 +12,8 @@ const ProductBox: React.FC<mainData> = ({ product }) => {
   return (
     <>
       {product.map((item, index) => (
-        <Link to={`/product/${item.id}`}>
-          <div
-            key={index}
-            className="w-[214px] h-[270px] p-4 shadow-xl rounded-md bg-slate-200"
-          >
+        <Link key={index} to={`/product/${item.id}`}>
+          <div className="w-[214px] h-[270px] p-4 shadow-xl rounded-md bg-slate-200">
             <div className="rounded-md">
               <img
                 src={
