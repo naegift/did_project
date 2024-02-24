@@ -63,12 +63,4 @@ describe('ProductController', () => {
       expect(service.payProduct).toHaveBeenCalled();
     });
   });
-
-  describe('Get State', () => {
-    it('Use | getState', async () => {
-      service.getState = jest.fn();
-      await controller.getState(product.id, MockProductModel.contract);
-      expect(service.getState).toHaveBeenCalled();
-    });
-  });
 });

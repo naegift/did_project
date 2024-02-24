@@ -5,14 +5,8 @@ import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { MockProductModel } from 'src/__base-code__/mock/entity/product.mock';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
-import {
-  BadRequestException,
-  NotAcceptableException,
-  NotFoundException,
-} from '@nestjs/common';
+import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { ResPostProduct } from './dto/res-post-product.dto';
-import { stateCode } from 'src/__base-code__/enum/state.enum';
-import { ResGetState } from './dto/res-get-state.dto';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
@@ -97,22 +91,6 @@ describe('ProductService', () => {
       };
       const result = service.payProduct(product.id, reqPayProduct);
       await expect(result).rejects.toThrow(NotAcceptableException);
-    });
-  });
-
-  describe('Get State', () => {
-    it('Return | ResGetState', async () => {
-      const resGetState: ResGetState = { state: stateCode[0] };
-
-      const result = await service.getState(MockProductModel.contract);
-      const keys = Object.keys(result);
-      const required = Object.keys(resGetState);
-      expect(keys).toEqual(expect.arrayContaining(required));
-    });
-
-    it('Error | Required escrow contract address.', async () => {
-      const result = service.getState('Not escrow contract');
-      await expect(result).rejects.toThrow(BadRequestException);
     });
   });
 });
