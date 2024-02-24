@@ -11,7 +11,6 @@ interface ProductData {
   content: string;
   image: string;
   price: string;
-  signature: string;
 }
 
 const RegistSellNft: React.FC<ProductData> = () => {
@@ -20,7 +19,6 @@ const RegistSellNft: React.FC<ProductData> = () => {
     content: "",
     image: "",
     price: "0",
-    signature: "",
   });
   const [modalItems, setModalItems] = useState(false);
 
@@ -29,8 +27,7 @@ const RegistSellNft: React.FC<ProductData> = () => {
       !productData.title ||
       !productData.content ||
       !productData.image ||
-      !productData.price ||
-      !productData.signature
+      !productData.price
     ) {
       alert("모든 입력 필드를 채워주세요.");
       return;
@@ -98,7 +95,6 @@ const RegistSellNft: React.FC<ProductData> = () => {
               content={productData.content}
               image={productData.image}
               price={productData.price}
-              signature={productData.signature}
             />
           )}
         </div>
