@@ -8,10 +8,18 @@ import {
   Query,
 } from '@nestjs/common';
 import { GiftService } from './gift.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ReqReceiveGift } from './dto/req-receive-gift.dto';
 import { ReqUseGift } from './dto/req-use-gift.dto';
 import { ReqConfirmGift } from './dto/req-confirm-gift.dto';
+import { ResGetState } from './dto/res-get-state.dto';
+import { badRequest } from 'src/__base-code__/error/bad-request';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('Account | Gift')
 @Controller('gift')
@@ -24,6 +32,15 @@ export class GiftController {
     @Query('receiver') receiver: string,
     @Query('page', ParseIntPipe) page: number,
   ) {}
+
+  @Get(':id/state')
+  @ApiOperation({ summary: '상품 상태' })
+  @ApiOkResponse({ type: ResGetState })
+  @ApiBadRequestResponse(badRequest('Required escrow contract address.'))
+  async getState(@Param('id', ParseIntPipe) id: number): Promise<ResGetState> {
+    const result = await this.giftService.getState(id);
+    return plainToInstance(ResGetState, result);
+  }
 
   @Patch(':id/receive')
   @ApiOperation({ summary: '[작업중] 선물받기' })

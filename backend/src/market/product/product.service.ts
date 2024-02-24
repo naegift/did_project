@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   NotAcceptableException,
   NotFoundException,
@@ -10,14 +9,12 @@ import { ResPostProduct } from './dto/res-post-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { Repository } from 'typeorm';
-import { ResGetState } from './dto/res-get-state.dto';
 import { ethers } from 'ethers';
-import { State, stateCode } from 'src/__base-code__/enum/state.enum';
+import { State } from 'src/__base-code__/enum/state.enum';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
-import { ESCROW_ABI } from 'src/__base-code__/abi/escrow.abi';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 
 @Injectable()
@@ -56,7 +53,7 @@ export class ProductService {
       let newGift: GiftModel;
 
       const provider = new ethers.providers.JsonRpcProvider(
-        process.env.NETWORK_RPC || 'https://rpc.sepolia.org',
+        process.env.NETWORK_RPC || MockGiftModel.network,
       );
       const contract = new ethers.Contract(
         process.env.PROXY_CONTRACT || MockGiftModel.proxyAddress,
@@ -97,20 +94,6 @@ export class ProductService {
       return { giftID: newGift.id };
     } catch (e) {
       throw new NotAcceptableException('Not enough values or gas.');
-    }
-  }
-
-  async getState(contract: string): Promise<ResGetState> {
-    const provider = new ethers.providers.JsonRpcProvider(
-      process.env.NETWORK_RPC || 'https://rpc.sepolia.org',
-    );
-    const escrow = new ethers.Contract(contract, ESCROW_ABI, provider);
-
-    try {
-      const code = Number(await escrow.escrowStatus());
-      return { state: stateCode[code] };
-    } catch {
-      throw new BadRequestException('Required escrow contract address.');
     }
   }
 }
