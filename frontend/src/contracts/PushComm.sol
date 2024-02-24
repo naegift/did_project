@@ -16,7 +16,6 @@ contract PushCommV2 is Initializable {
     // 이벤트 선언
     event SendNotification(address indexed channel, address indexed recipient, bytes identity);
     event Subscribe(address indexed channel, address indexed user);
-    event Unsubscribe(address indexed channel, address indexed user);
     event IncentivizeChatReqInitiated(address requestSender, address requestReceiver, uint256 amount, uint256 timestamp);
 
     // 상태 변수 선언
@@ -42,13 +41,6 @@ contract PushCommV2 is Initializable {
     function sendProductUsageNotification(address _seller, bytes memory _identity) external {
         require(usersSubscribed[_seller], "Seller is not subscribed");
         emit SendNotification(address(this), _seller, _identity);
-    }
-
-    // 채널 구독 취소 함수
-    function unsubscribe(address _user) external {
-        require(usersSubscribed[_user], "User not subscribed");
-        usersSubscribed[_user] = false;
-        emit Unsubscribe(address(this), _user);
     }
 
     // 세폴리아 테스트넷 확인 함수 (예시)

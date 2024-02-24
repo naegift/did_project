@@ -66,7 +66,12 @@ contract naegift_escrow {
         payable(seller).transfer(sellerShare);
         emit FundsDistributed(market, marketShare, seller, sellerShare);
         contractState = ContractStateChoices.EXECUTED;
-   }
+    }
+
+    // 컨트랙트 상태 조회
+    function escrowStatus() external view returns(ContractStateChoices) {
+        return contractState;
+    }
 
     receive() external payable {}
 }

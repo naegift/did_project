@@ -33,24 +33,6 @@ contract PushCommStorageV2 {
     mapping(address => mapping(address => bool))
         public delegatedNotificationSenders;
 
-    /**
-     * @notice 판매자가 로그인하고 채널 구독을 처리합니다.
-     * @param _sellerAddress 판매자의 주소
-     * @param _signature 메타마스크 서명
-     */
-    function loginAndSubscribe(address _sellerAddress, bytes memory _signature) public {
-        // 메타마스크 서명 검증 로직 추가 필요
-        // 채널 구독 로직 추가 필요
-    }
-
-    /**
-     * @notice 상품 사용 검증이 완료되면 판매자에게 알림을 보냅니다.
-     * @param _sellerAddress 판매자의 주소
-     */
-    function sendProductUsageVerificationNotification(address _sellerAddress) public {
-        // 판매자에게 알림을 보내는 로직 추가 필요
-    }
-
     /** 상태 변수 **/
     address public governance;
     address public pushChannelAdmin;
