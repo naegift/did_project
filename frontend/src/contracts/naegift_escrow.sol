@@ -16,7 +16,6 @@ contract naegift_escrow {
     }
     ContractStateChoices public contractState;
 
-    event CurrentState(ContractStateChoices state);
     event FulfillmentConfirmed(address indexed market);
     event ProductUsedConfirmed(address indexed receiver);
     event FundsDistributed(address indexed market, uint256 marketShare, address indexed seller, uint256 sellerShare);
@@ -47,7 +46,6 @@ contract naegift_escrow {
         require(contractState == ContractStateChoices.ACTIVE, 'e013');
         contractState = ContractStateChoices.FULFILLED;
         emit FulfillmentConfirmed(msg.sender);
-        emit CurrentState(contractState);
     }
 
     // 상품 사용 완료
@@ -56,7 +54,6 @@ contract naegift_escrow {
         require(contractState == ContractStateChoices.FULFILLED, 'e021');
         contractState = ContractStateChoices.PRODUCT_USED;
         emit ProductUsedConfirmed(msg.sender);
-        emit CurrentState(contractState);
         distributeFunds(); 
     }
 
@@ -69,8 +66,7 @@ contract naegift_escrow {
         payable(seller).transfer(sellerShare);
         emit FundsDistributed(market, marketShare, seller, sellerShare);
         contractState = ContractStateChoices.EXECUTED;
-        emit CurrentState(contractState);
-    }
+   }
 
     receive() external payable {}
 }
