@@ -30,10 +30,11 @@ export class GiftController {
   @Get()
   @ApiOperation({ summary: '받은 선물목록' })
   async getGifts(
+    @Query('buyer') buyer: string,
     @Query('receiver') receiver: string,
     @Query('page', ParseIntPipe) page: number,
   ): Promise<ResGetGifts> {
-    const result = await this.giftService.getGifts(receiver, page);
+    const result = await this.giftService.getGifts(buyer, receiver, page);
     return plainToInstance(ResGetGifts, result);
   }
 
