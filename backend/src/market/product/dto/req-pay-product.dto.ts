@@ -14,4 +14,9 @@ export class ReqPayProduct {
   @IsString()
   @Length(42)
   receiver: string;
+
+  @ApiProperty({ example: MockGiftModel.uuid })
+  @IsString()
+  @Length(36)
+  uuid: string;
 }

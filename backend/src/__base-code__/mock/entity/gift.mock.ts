@@ -16,8 +16,11 @@ export class MockGiftModel {
 
   constructor() {}
 
-  signature: string =
+  static proxyAddress: string = '0x85B05Eb0eA7A8E090F6AEE10eaf8DA2ceB5A8deE';
+  static escrowAddress: string = '0xd94976511bcb8f5167ba13b9a3a942b7d6d6b495';
+  static signature: string =
     '0x545420f6a302e5ecd10ce5aeac3ff51fd10a9bb6609a5c3c2f439a68bd14e6ec5615fbe282bebcf35dde189a1ea0bfb662c2849129b1a923ab542fe7e92a835c1b';
+  static uuid: string = '605638df-4c1e-4eb1-b081-8c74a0e8924d';
 
   gift: GiftModel = {
     id: 1,

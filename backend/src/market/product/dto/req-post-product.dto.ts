@@ -23,7 +23,7 @@ export class ReqPostProduct {
   @IsNotEmpty()
   price: string;
 
-  @ApiProperty({ example: new MockProductModel().signature })
+  @ApiProperty({ example: MockProductModel.signature })
   @IsString()
   @Length(132)
   signature: string;

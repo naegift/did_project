@@ -20,7 +20,7 @@ export class ReqUseGift {
   })
   vp: object;
 
-  @ApiProperty({ example: new MockGiftModel().signature })
+  @ApiProperty({ example: MockGiftModel.signature })
   @IsString()
   @Length(132)
   signature: string;
