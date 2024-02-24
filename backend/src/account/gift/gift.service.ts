@@ -24,11 +24,15 @@ export class GiftService {
     return gift;
   }
 
-  async getGifts(receiver: string, page: number): Promise<ResGetGifts> {
+  async getGifts(
+    buyer: string,
+    receiver: string,
+    page: number,
+  ): Promise<ResGetGifts> {
     const take = 3;
     const skip = take * (page - 1);
     const findAndCount = await this.giftRepo.findAndCount({
-      where: { receiver },
+      where: receiver ? { receiver } : { buyer },
       order: { id: 'desc' },
       take,
       skip,

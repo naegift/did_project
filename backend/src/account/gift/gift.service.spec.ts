@@ -43,7 +43,7 @@ describe('GiftService', () => {
       dataService.pagination = jest
         .fn()
         .mockReturnValue({ array: [], arrayCount: 0, nextPage: false });
-      await service.getGifts(gift.receiver, 1);
+      await service.getGifts('', gift.receiver, 1);
       expect(dataService.pagination).toHaveBeenCalled();
     });
 
@@ -54,7 +54,7 @@ describe('GiftService', () => {
         nextPage: false,
       };
 
-      const result = await service.getGifts(gift.receiver, 1);
+      const result = await service.getGifts(gift.buyer, '', 1);
       const keys = Object.keys(result);
       const required = Object.keys(resGetGifts);
       expect(keys).toEqual(expect.arrayContaining(required));
