@@ -9,7 +9,7 @@ interface SignatureInputProps {
 const SignatureInput: React.FC<SignatureInputProps> = ({ onChange }) => {
   const inputProps: InputProps = {
     variant: "default",
-    size: "lg",
+    size: "xlg",
     placeholder: "Signature",
     onChange: (e) => {
       onChange(e.target.value);
