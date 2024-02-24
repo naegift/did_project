@@ -4,9 +4,11 @@ import { providers } from 'src/__base-code__/mock/providers/providers';
 import { MockProductModel } from 'src/__base-code__/mock/entity/product.mock';
 import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { ResGetSellerProducts } from './dto/res-get-seller-products.dto';
+import { DataService } from 'src/common/data/data.service';
 
 describe('StoreService', () => {
   let service: StoreService;
+  let dataService: DataService;
   let product: ProductModel;
 
   beforeEach(async () => {
@@ -15,10 +17,19 @@ describe('StoreService', () => {
     }).compile();
 
     service = module.get<StoreService>(StoreService);
+    dataService = module.get<DataService>(DataService);
     product = new MockProductModel().product;
   });
 
   describe('Get Seller Products', () => {
+    it('Use | pagination', async () => {
+      dataService.pagination = jest
+        .fn()
+        .mockReturnValue({ array: [], arrayCount: 0, nextPage: false });
+      await service.getSellerProducts(product.seller, 1);
+      expect(dataService.pagination).toHaveBeenCalled();
+    });
+
     it('Return | ResGetSellerProducts', async () => {
       const resGetSellerProducts: ResGetSellerProducts = {
         products: [product],
