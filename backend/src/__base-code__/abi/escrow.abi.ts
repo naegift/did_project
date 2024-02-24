@@ -174,29 +174,6 @@ export const ESCROW_ABI = [
   },
   {
     inputs: [],
-    name: 'getBuyerAndReceiverAndPrice',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'market',
     outputs: [
       {
