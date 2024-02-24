@@ -20,6 +20,7 @@ import { ReqConfirmGift } from './dto/req-confirm-gift.dto';
 import { ResGetState } from './dto/res-get-state.dto';
 import { badRequest } from 'src/__base-code__/error/bad-request';
 import { plainToInstance } from 'class-transformer';
+import { ResGetGifts } from './dto/res-get-gifts.dto';
 
 @ApiTags('Account | Gift')
 @Controller('gift')
@@ -27,11 +28,14 @@ export class GiftController {
   constructor(private readonly giftService: GiftService) {}
 
   @Get()
-  @ApiOperation({ summary: '[작업중] 받은 선물목록' })
+  @ApiOperation({ summary: '받은 선물목록' })
   async getGifts(
     @Query('receiver') receiver: string,
     @Query('page', ParseIntPipe) page: number,
-  ) {}
+  ): Promise<ResGetGifts> {
+    const result = await this.giftService.getGifts(receiver, page);
+    return plainToInstance(ResGetGifts, result);
+  }
 
   @Get(':id/state')
   @ApiOperation({ summary: '선물 상태' })
