@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import {
-  ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiNotAcceptableResponse,
   ApiNotFoundResponse,
@@ -22,8 +21,6 @@ import { plainToInstance } from 'class-transformer';
 import { ResGetProduct } from './dto/res-get-product.dto';
 import { ResPostProduct } from './dto/res-post-product.dto';
 import { notFound } from 'src/__base-code__/error/not-found';
-import { ResGetState } from './dto/res-get-state.dto';
-import { badRequest } from 'src/__base-code__/error/bad-request';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { notAcceptable } from 'src/__base-code__/error/not-acceptable';
@@ -71,16 +68,4 @@ export class ProductController {
     @Param('id', ParseIntPipe) id: number,
     @Query('page', ParseIntPipe) page: number,
   ) {}
-
-  @Get(':id/state')
-  @ApiOperation({ summary: '상품 상태' })
-  @ApiOkResponse({ type: ResGetState })
-  @ApiBadRequestResponse(badRequest('Required escrow contract address.'))
-  async getState(
-    @Param('id', ParseIntPipe) id: number,
-    @Query('contract') contract: string,
-  ): Promise<ResGetState> {
-    const result = await this.productService.getState(contract);
-    return plainToInstance(ResGetState, result);
-  }
 }

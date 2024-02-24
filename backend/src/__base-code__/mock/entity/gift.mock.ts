@@ -9,7 +9,7 @@ export class MockGiftModel {
     id: 1,
     buyer: '0x0b6411C390c28D7e7c9D5147d6c7c52f6B89cD8E',
     receiver: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
-    contract: '0xDD4C2588B1E3a5b4D4e7531cF39CCD4aB3375832',
+    contract: '0xBBa0c83E971545Bb7EBc30fdCF47bD3A7D51f24c',
     state: State.DEPLOYED,
     product: Promise.resolve(product),
   };
@@ -21,12 +21,13 @@ export class MockGiftModel {
   static signature: string =
     '0x545420f6a302e5ecd10ce5aeac3ff51fd10a9bb6609a5c3c2f439a68bd14e6ec5615fbe282bebcf35dde189a1ea0bfb662c2849129b1a923ab542fe7e92a835c1b';
   static uuid: string = '605638df-4c1e-4eb1-b081-8c74a0e8924d';
+  static network: string = 'https://rpc.sepolia.org';
 
   gift: GiftModel = {
     id: 1,
     buyer: '0x0b6411C390c28D7e7c9D5147d6c7c52f6B89cD8E',
     receiver: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
-    contract: '0xDD4C2588B1E3a5b4D4e7531cF39CCD4aB3375832',
+    contract: '0xBBa0c83E971545Bb7EBc30fdCF47bD3A7D51f24c',
     state: State.ACTIVE,
     product: Promise.resolve(product),
   };
@@ -35,7 +36,7 @@ export class MockGiftModel {
     id: 2,
     buyer: '0x0b6411C390c28D7e7c9D5147d6c7c52f6B89cD8E',
     receiver: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
-    contract: '0xDD4C2588B1E3a5b4D4e7531cF39CCD4aB3375832',
+    contract: '0xBBa0c83E971545Bb7EBc30fdCF47bD3A7D51f24c',
     state: State.ACTIVE,
     product: Promise.resolve(product),
   };
