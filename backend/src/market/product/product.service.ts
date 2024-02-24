@@ -65,10 +65,8 @@ export class ProductService {
       );
 
       contract.on('EscrowCreated', async (escrowAddress, escrowUUID) => {
-        // TODO: Get escrow buyer, receiver
-        const product = await this.getProduct(id);
-
         if (uuid === escrowUUID) {
+          const product = await this.getProduct(id);
           const gift = this.giftRepo.create();
           gift.buyer = buyer;
           gift.receiver = receiver;
@@ -88,8 +86,8 @@ export class ProductService {
         );
       }
 
-      const loopIdx = Number(!process.env.PROXY_CONTRACT) * 9;
-      for (let i = loopIdx; i < 10; i++) {
+      const loopIdx = Number(!process.env.PROXY_CONTRACT) * 19;
+      for (let i = loopIdx; i < 20; i++) {
         await new Promise((resolve) => setTimeout(resolve, 3000));
 
         if (newGift?.id) {
