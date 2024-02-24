@@ -98,7 +98,7 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
             }}
           />
         </div>
-        <div>
+        {/* <div>
           <p>Signature</p>
           <SignatureInput
             onChange={(value) => {
@@ -106,7 +106,7 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
               handleInputChange();
             }}
           />
-        </div>
+        </div> */}
         <div>
           <p>Eth</p>
           <CoinInput

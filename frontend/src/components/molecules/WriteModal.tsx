@@ -1,5 +1,7 @@
 import React from "react";
 import Button from "../atoms/button";
+import axios from "axios";
+import { runEthers } from "../../utils/ethers";
 
 interface ModalProps {
   onClose: () => void;
@@ -7,7 +9,6 @@ interface ModalProps {
   content: string;
   image: string;
   price: string;
-  signature: string;
 }
 
 const WriteModal: React.FC<ModalProps> = ({
@@ -16,8 +17,33 @@ const WriteModal: React.FC<ModalProps> = ({
   content,
   image,
   price,
-  signature,
 }) => {
+  const handleRegistration = async () => {
+    onClose();
+    try {
+      const { message, signature } = await runEthers(
+        title,
+        content,
+        image,
+        price
+      );
+
+      const response = await axios.post("https://naegift.subin.kr/product", {
+        title: message.title,
+        content: message.content,
+        image: message.image,
+        price: message.price,
+        signature: signature,
+      });
+      console.log("Product registered:", response.data);
+
+      const productId = response.data.id;
+      window.location.href = `/product/${productId}`;
+    } catch (error) {
+      console.error("Error registering product:", error);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black opacity-80">
       <div className="w-full y-full flex justify-center flex-col items-center mt-[100px] gap-y-10">
@@ -25,7 +51,6 @@ const WriteModal: React.FC<ModalProps> = ({
         <p className="text-white text-wrap">Image: {image}</p>
         <p className="text-white">Price: {price} eth</p>
         <p className="text-white text-wrap">Content: {content}</p>
-        <p className="text-white">Signature: {signature}</p>
       </div>
       <div className="flex flex-row  justify-center my-[50px] gap-x-5">
         <Button
@@ -34,7 +59,13 @@ const WriteModal: React.FC<ModalProps> = ({
           label="뒤로"
           onClick={onClose}
         />
-        <Button variant="sendBtn1" size="mdl" label="등록" />
+
+        <Button
+          variant="sendBtn1"
+          size="mdl"
+          label="등록"
+          onClick={handleRegistration}
+        />
       </div>
     </div>
   );
