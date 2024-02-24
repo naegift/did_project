@@ -14,8 +14,6 @@ describe('ProductController', () => {
   let service: ProductService;
   let product: ProductModel;
   let gift: GiftModel;
-  const contract: string = new MockProductModel().contract;
-  const signature: string = new MockProductModel().signature;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -36,7 +34,7 @@ describe('ProductController', () => {
         content: product.content,
         image: product.image,
         price: product.price,
-        signature,
+        signature: MockProductModel.signature,
       };
 
       service.postProduct = jest.fn();
@@ -58,6 +56,7 @@ describe('ProductController', () => {
       const reqPayProduct: ReqPayProduct = {
         buyer: gift.buyer,
         receiver: gift.receiver,
+        uuid: MockGiftModel.uuid,
       };
       service.payProduct = jest.fn();
       await controller.payProduct(product.id, reqPayProduct);
@@ -68,7 +67,7 @@ describe('ProductController', () => {
   describe('Get State', () => {
     it('Use | getState', async () => {
       service.getState = jest.fn();
-      await controller.getState(product.id, contract);
+      await controller.getState(product.id, MockProductModel.contract);
       expect(service.getState).toHaveBeenCalled();
     });
   });

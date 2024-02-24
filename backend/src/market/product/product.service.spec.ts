@@ -22,8 +22,6 @@ describe('ProductService', () => {
   let service: ProductService;
   let product: ProductModel;
   let gift: GiftModel;
-  const contract: string = new MockProductModel().contract;
-  const signature: string = new MockProductModel().signature;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -42,7 +40,7 @@ describe('ProductService', () => {
         content: product.content,
         image: product.image,
         price: product.price,
-        signature,
+        signature: MockProductModel.signature,
       };
       const resPostProduct: ResPostProduct = { id: product.id };
 
@@ -81,6 +79,7 @@ describe('ProductService', () => {
       const reqPayProduct: ReqPayProduct = {
         buyer: gift.buyer,
         receiver: gift.receiver,
+        uuid: MockGiftModel.uuid,
       };
       const resPayProduct: ResPayProduct = { giftID: gift.id };
 
@@ -92,8 +91,9 @@ describe('ProductService', () => {
 
     it('Error | Not enough values or gas.', async () => {
       const reqPayProduct: ReqPayProduct = {
-        buyer: 'gift.buyer',
+        buyer: gift.buyer,
         receiver: gift.receiver,
+        uuid: '',
       };
       const result = service.payProduct(product.id, reqPayProduct);
       await expect(result).rejects.toThrow(NotAcceptableException);
@@ -104,7 +104,7 @@ describe('ProductService', () => {
     it('Return | ResGetState', async () => {
       const resGetState: ResGetState = { state: stateCode[0] };
 
-      const result = await service.getState(contract);
+      const result = await service.getState(MockProductModel.contract);
       const keys = Object.keys(result);
       const required = Object.keys(resGetState);
       expect(keys).toEqual(expect.arrayContaining(required));
