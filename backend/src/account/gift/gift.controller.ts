@@ -30,6 +30,7 @@ export class GiftController {
 
   @Get()
   @ApiOperation({ summary: '선물목록' })
+  @ApiOkResponse({ type: ResGetGifts })
   @ApiQuery({ name: 'buyer', required: false, type: String })
   @ApiQuery({ name: 'receiver', required: false, type: String })
   async getGifts(

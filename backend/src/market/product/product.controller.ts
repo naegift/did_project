@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Param,
   ParseIntPipe,
   Post,
@@ -32,6 +33,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
+  @HttpCode(201)
   @ApiOperation({ summary: '상품 등록' })
   @ApiCreatedResponse({ type: ResPostProduct })
   async postProduct(
@@ -53,7 +55,9 @@ export class ProductController {
   }
 
   @Post(':id/pay')
+  @HttpCode(201)
   @ApiOperation({ summary: '선물하기' })
+  @ApiCreatedResponse({ type: ResPayProduct })
   @ApiNotAcceptableResponse(notAcceptable('Not enough values or gas.'))
   async payProduct(
     @Param('id', ParseIntPipe) id: number,
