@@ -1,35 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-contract PushNotification {
-    address[] private subscribers;
-
-    event SendNotification(address indexed channel, address indexed recipient, bytes identity);
-    event Subscribe(address indexed channel, address indexed user);
+contract IntegratedSubscription {
 
     address public pushChannelAdmin;
     address public MarketAddress;
-    mapping(address => bool) public usersSubscribed;
 
+    event SendNotification(address indexed channel, address indexed recipient, bytes identity);
+    event Subscribe(address indexed channel, address indexed user);
+    event UserAuthenticated(address indexed user); 
+
+    // 관리자 또는 마켓만 호출 가능
     modifier onlyAdminOrMarket() {
         require(msg.sender == pushChannelAdmin || msg.sender == MarketAddress, "e001");
         _;
     }
-
-    function initialize(address _user, address _pushChannelAdmin, address _MarketAddress) public {
+    
+    constructor(address _pushChannelAdmin, address _MarketAddress) {
         pushChannelAdmin = _pushChannelAdmin;
         MarketAddress = _MarketAddress;
-        _subscribe(_user);
-    }
+    }    
 
-    function _subscribe(address _user) private {
-        require(!usersSubscribed[_user], "e002");
-        usersSubscribed[_user] = true;
-        emit Subscribe(address(this), _user);
-    }
-
+    // 상품 사용 알림
     function sendProductUsageNotification(address _seller, bytes memory _identity) external onlyAdminOrMarket {
-        require(usersSubscribed[_seller], "e003");
+        require(isSubscribed[_seller], "e003");
         emit SendNotification(address(this), _seller, _identity);
     }
 }
