@@ -38,7 +38,7 @@ export class ProductService {
     const { title, content, price, signature } = reqPostProduct;
     const data = JSON.stringify({ title, content, price });
 
-    const { link } = this.imageService.uploadImage(file);
+    const { link } = await this.imageService.uploadImage(file);
     const seller = ethers.utils.verifyMessage(data, signature);
 
     const product = await this.productRepo.save({
@@ -70,7 +70,7 @@ export class ProductService {
     if (seller !== product.seller) {
       throw new UnauthorizedException('Cannot update other sellers product.');
     }
-    const { link } = this.imageService.uploadImage(file);
+    const { link } = await this.imageService.uploadImage(file);
 
     await this.productRepo.save({
       ...reqPutProduct,

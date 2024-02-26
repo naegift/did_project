@@ -3,7 +3,7 @@ import { ResUploadImage } from './dto/res-upload-image.dto';
 
 @Injectable()
 export class ImageService {
-  uploadImage(file: Express.Multer.File): ResUploadImage {
+  async uploadImage(file: Express.Multer.File): Promise<ResUploadImage> {
     return {
       link: `${process.env.HOST}/public/image/${file.filename}`,
     };

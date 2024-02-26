@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
