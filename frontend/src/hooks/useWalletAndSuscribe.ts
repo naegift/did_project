@@ -1,17 +1,13 @@
 import { useState, useEffect } from "react";
 import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
 import { ethers } from "ethers";
-import dotenv from "dotenv";
-dotenv.config();
 
-const useWalletAndNotifications = () => {
+const useWalletAndSuscribe = () => {
   const [userAlice, setUserAlice] = useState<any | null>(null);
   const [notificationData, setNotificationData] = useState<any | null>(null);
   const [streamInstance, setStreamInstance] = useState<any | null>(null);
-  const [inboxNotifications, setInboxNotifications] = useState<any | null>([]);
-  const channelAddress = process.env.REACT_APP_CHANNEL_ADDRESS;
+  const channelAddress = "0xb2b7cf04a31d943fbf14ea4575112d9b3aa2d3e3";
 
-  // 지갑 연결 및 구독
   const connectWallet = async () => {
     if (!window.ethereum) {
       alert("메타마스크를 설치해주세요.");
@@ -59,7 +55,6 @@ const useWalletAndNotifications = () => {
     }
   };
 
-  // 실시간 스트림 초기화
   const initRealTimeNotificationStream = async (userAlice: any) => {
     if (!streamInstance) {
       try {
@@ -78,17 +73,6 @@ const useWalletAndNotifications = () => {
     }
   };
 
-  // 받은 알림 목록 조회
-  const inboxNotification = async () => {
-    try {
-      const notifications = await userAlice.notification.list("INBOX");
-      console.log("알림 목록:", notifications);
-      setInboxNotifications(notifications);
-    } catch (error) {
-      console.error("알림을 가져오는데 실패했습니다:", error);
-    }
-  };
-
   useEffect(() => {
     return () => {
       if (streamInstance) {
@@ -99,10 +83,9 @@ const useWalletAndNotifications = () => {
 
   return {
     connectWallet,
-    inboxNotification,
     notificationData,
-    inboxNotifications,
+    userAlice,
   };
 };
 
-export default useWalletAndNotifications;
+export default useWalletAndSuscribe;
