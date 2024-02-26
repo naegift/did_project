@@ -12,6 +12,7 @@ import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { DataService } from 'src/common/data/data.service';
+import { Readable } from 'typeorm/platform/PlatformTools';
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -31,17 +32,29 @@ describe('ProductService', () => {
   });
 
   describe('Post Product', () => {
+    const emptyFile = {
+      fieldname: '',
+      originalname: '',
+      encoding: '',
+      mimetype: '',
+      size: 1,
+      stream: new Readable(),
+      destination: '',
+      filename: '',
+      path: '',
+      buffer: Buffer.alloc(1),
+    };
+
     it('Return | ResPostProduct', async () => {
       const reqPostProduct: ReqPostProduct = {
         title: product.title,
         content: product.content,
-        image: product.image,
         price: product.price,
         signature: MockProductModel.signature,
       };
       const resPostProduct: ResPostProduct = { id: product.id };
 
-      const result = await service.postProduct(reqPostProduct);
+      const result = await service.postProduct(reqPostProduct, emptyFile);
       const keys = Object.keys(result);
       const required = Object.keys(resPostProduct);
       expect(keys).toEqual(expect.arrayContaining(required));

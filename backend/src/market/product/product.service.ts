@@ -10,12 +10,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { Repository } from 'typeorm';
 import { ethers } from 'ethers';
-import { State } from 'src/__base-code__/enum/state.enum';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
+import { ImageService } from 'src/common/image/image.service';
 
 @Injectable()
 export class ProductService {
@@ -24,15 +24,24 @@ export class ProductService {
     private readonly productRepo: Repository<ProductModel>,
     @InjectRepository(GiftModel)
     private readonly giftRepo: Repository<GiftModel>,
+    private readonly imageService: ImageService,
   ) {}
 
-  async postProduct(reqPostProduct: ReqPostProduct): Promise<ResPostProduct> {
-    const { title, content, image, price, signature } = reqPostProduct;
-    const data = JSON.stringify({ title, content, image, price });
+  async postProduct(
+    reqPostProduct: ReqPostProduct,
+    file: Express.Multer.File,
+  ): Promise<ResPostProduct> {
+    const { title, content, price, signature } = reqPostProduct;
+    const data = JSON.stringify({ title, content, price });
 
+    const { link } = this.imageService.uploadImage(file);
     const seller = ethers.utils.verifyMessage(data, signature);
 
-    const product = await this.productRepo.save({ ...reqPostProduct, seller });
+    const product = await this.productRepo.save({
+      ...reqPostProduct,
+      image: link,
+      seller,
+    });
 
     return { id: product.id };
   }

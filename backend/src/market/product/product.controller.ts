@@ -6,9 +6,13 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import {
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiNotAcceptableResponse,
   ApiNotFoundResponse,
@@ -24,6 +28,7 @@ import { notFound } from 'src/__base-code__/error/not-found';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { notAcceptable } from 'src/__base-code__/error/not-acceptable';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Market | Product')
 @Controller('product')
@@ -31,13 +36,31 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  @HttpCode(201)
+  @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: '상품 등록' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        title: { type: 'string' },
+        content: { type: 'string' },
+        price: { type: 'string' },
+        signature: { type: 'string' },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @HttpCode(201)
   @ApiCreatedResponse({ type: ResPostProduct })
   async postProduct(
     @Body() reqPostProduct: ReqPostProduct,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<ResPostProduct> {
-    const result = await this.productService.postProduct(reqPostProduct);
+    const result = await this.productService.postProduct(reqPostProduct, file);
     return plainToInstance(ResPostProduct, result);
   }
 

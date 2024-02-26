@@ -8,6 +8,7 @@ import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
+import { Readable } from 'typeorm/platform/PlatformTools';
 
 describe('ProductController', () => {
   let controller: ProductController;
@@ -28,17 +29,29 @@ describe('ProductController', () => {
   });
 
   describe('Post Product', () => {
+    const emptyFile = {
+      fieldname: '',
+      originalname: '',
+      encoding: '',
+      mimetype: '',
+      size: 1,
+      stream: new Readable(),
+      destination: '',
+      filename: '',
+      path: '',
+      buffer: Buffer.alloc(1),
+    };
+
     it('Use | postProduct', async () => {
       const reqPostProduct: ReqPostProduct = {
         title: product.title,
         content: product.content,
-        image: product.image,
         price: product.price,
         signature: MockProductModel.signature,
       };
 
       service.postProduct = jest.fn();
-      await controller.postProduct(reqPostProduct);
+      await controller.postProduct(reqPostProduct, emptyFile);
       expect(service.postProduct).toHaveBeenCalled();
     });
   });

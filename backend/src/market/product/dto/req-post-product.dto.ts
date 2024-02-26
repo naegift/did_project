@@ -13,11 +13,6 @@ export class ReqPostProduct {
   @IsNotEmpty()
   content: string;
 
-  @ApiProperty({ example: MockProductModel.swaggerProduct.image })
-  @IsString()
-  @IsNotEmpty()
-  image: string;
-
   @ApiProperty({ example: MockProductModel.swaggerProduct.price })
   @IsString()
   @IsNotEmpty()
