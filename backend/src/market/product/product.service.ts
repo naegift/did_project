@@ -111,11 +111,7 @@ export class ProductService {
         provider,
       );
 
-      console.log(contract);
-
       contract.on('EscrowCreated', async (escrowAddress, escrowUUID) => {
-        console.log(uuid);
-        console.log(escrowUUID);
         if (uuid === escrowUUID) {
           const product = await this.getProduct(id);
           newGift = await this.giftRepo.save({
