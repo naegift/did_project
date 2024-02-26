@@ -130,8 +130,8 @@ export class ProductService {
         );
       }
 
-      const loopIdx = Number(!process.env.PROXY_CONTRACT) * 19;
-      for (let i = loopIdx; i < 20; i++) {
+      const loopIdx = Number(!process.env.PROXY_CONTRACT) * 9;
+      for (let i = loopIdx; i < 10; i++) {
         await new Promise((resolve) => setTimeout(resolve, 3000));
 
         if (newGift?.id) {
