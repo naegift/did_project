@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "react-query";
 import RegistrationNFT from "../organisms/RegistrationNFT";
 import Button from "../atoms/button";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import WriteModal from "../molecules/WriteModal";
 
@@ -43,6 +44,8 @@ const RegistSellNft: React.FC<ProductData> = () => {
       throw new Error("Failed to save product data");
     }
   };
+
+  // const navigate = useNavigate();
 
   const saveProductData = useMutation((newData: ProductData) =>
     saveProductDataToServer(newData)
