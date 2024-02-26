@@ -12,7 +12,7 @@ import { FACTORY_ABI } from "../../abi/factory";
 
 interface ModalProps {
   onClose: () => void;
-  product: Product[];
+  product: Product;
 }
 
 const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
@@ -44,23 +44,27 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     );
 
     const buyer = address;
-    const seller = product[0].seller;
-    console.log(seller);
+    const seller = product.seller;
+    console.log("seller :", seller);
+    // const price = product.price;
+    // console.log(price);
+    // const priceETH = ethers.utils.parseUnits(price, "ether").toString();
+    // console.log(priceETH);
 
     const receiver = receiverInput;
     const market = "0xeF3010D076f62A91A774016E5eBAf58A1BFe1bD6";
 
     const transaction = {
-      to: FACTORY_CONTRACT, // contract
+      to: FACTORY_CONTRACT,
       data: contract.interface.encodeFunctionData("createEscrow", [
         buyer,
         seller,
         receiver,
         market,
-        ethers.utils.parseUnits("0.001", "ether"),
+        ethers.utils.parseUnits("0.001", "ether").toString(),
         UUID,
       ]),
-      value: ethers.utils.parseUnits("0.001", "ether"),
+      value: ethers.utils.parseUnits("0.001", "ether").toString(),
       gasLimit: 3000000,
     };
     console.log(transaction);
@@ -97,51 +101,45 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     <>
       {onClose && (
         <>
-          {product.map((item, index) => (
-            <>
-              <div
-                key={index}
-                className="fixed inset-0 bg-black opacity-80"
-              ></div>
-              <div className="fixed inset-0 flex items-center justify-center text-center">
-                <div className="fixed z-10 rounded-xl">
-                  <div className=" inline-block align-bottom bg-white p-5 rounded-xl text-left overflow-hidden shadow-xl">
-                    <div className=" absolute right-6 top-3 text-xl">
-                      <button onClick={onClose}>
-                        <img src={closeBtn} alt="" />
-                      </button>
-                    </div>
-                    <div className=" px-4 pt-5 pb-4">
-                      <div>
-                        <div className="mt-3 text-center ">
-                          <h3 className="text-2xl py-3 text-gray-900 ">
-                            {item.title} 선물 보내기
-                          </h3>
+          <div className="fixed inset-0 bg-black opacity-80"></div>
+          <div className="fixed inset-0 flex items-center justify-center text-center">
+            <div className="fixed z-10 rounded-xl">
+              <div className=" inline-block align-bottom bg-white p-5 rounded-xl text-left overflow-hidden shadow-xl">
+                <div className=" absolute right-6 top-3 text-xl">
+                  <button onClick={onClose}>
+                    <img src={closeBtn} alt="" />
+                  </button>
+                </div>
+                <div className=" px-4 pt-5 pb-4">
+                  <div>
+                    <div className="mt-3 text-center ">
+                      <h3 className="text-2xl py-3 text-gray-900 ">
+                        {product.title} 선물 보내기
+                      </h3>
+                      <p className="py-3">금액 : {product.price} </p>
 
-                          <Inputs
-                            onChange={(
-                              e: React.ChangeEvent<HTMLInputElement>
-                            ) => setReceiverInput(e.target.value)}
-                            type="text"
-                            size="xlg"
-                            placeholder="받는 사람 지갑 주소를 입력해주세요"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="px-4 py-3 flex justify-center ">
-                      <Button
-                        onClick={sendGift}
-                        variant="sendBtn2"
-                        size="lg"
-                        label="결제 후 선물보내기"
+                      <Inputs
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setReceiverInput(e.target.value)
+                        }
+                        type="text"
+                        size="xlg"
+                        placeholder="받는 사람 지갑 주소를 입력해주세요"
                       />
                     </div>
                   </div>
                 </div>
+                <div className="px-4 py-3 flex justify-center ">
+                  <Button
+                    onClick={sendGift}
+                    variant="sendBtn2"
+                    size="lg"
+                    label="결제 후 선물보내기"
+                  />
+                </div>
               </div>
-            </>
-          ))}
+            </div>
+          </div>
         </>
       )}
     </>
