@@ -63,12 +63,4 @@ describe('ProductController', () => {
       expect(service.payProduct).toHaveBeenCalled();
     });
   });
-
-  describe('Verified Products', () => {
-    it('Use | verifyProduct', async () => {
-      service.verifiedProducts = jest.fn();
-      await controller.verifiedProducts(product.id, 1);
-      expect(service.verifiedProducts).toHaveBeenCalled();
-    });
-  });
 });

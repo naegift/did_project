@@ -16,8 +16,6 @@ import { ResPayProduct } from './dto/res-pay-product.dto';
 import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
-import { ResVerifiedProducts } from './dto/res-verified-products.dto';
-import { DataService } from 'src/common/data/data.service';
 
 @Injectable()
 export class ProductService {
@@ -26,7 +24,6 @@ export class ProductService {
     private readonly productRepo: Repository<ProductModel>,
     @InjectRepository(GiftModel)
     private readonly giftRepo: Repository<GiftModel>,
-    private readonly dataService: DataService,
   ) {}
 
   async postProduct(reqPostProduct: ReqPostProduct): Promise<ResPostProduct> {
@@ -67,14 +64,11 @@ export class ProductService {
       contract.on('EscrowCreated', async (escrowAddress, escrowUUID) => {
         if (uuid === escrowUUID) {
           const product = await this.getProduct(id);
-          const gift = this.giftRepo.create();
-          gift.buyer = buyer;
-          gift.receiver = receiver;
-          gift.contract = escrowAddress;
-          gift.state = State.ACTIVE;
-          gift.product = Promise.resolve(product);
-
-          newGift = await this.giftRepo.save(gift);
+          newGift = await this.giftRepo.save({
+            ...reqPayProduct,
+            ...product,
+            contract: escrowAddress,
+          });
         }
       });
 
@@ -98,28 +92,5 @@ export class ProductService {
     } catch (e) {
       throw new NotAcceptableException('Not enough values or gas.');
     }
-  }
-
-  async verifiedProducts(
-    id: number,
-    page: number,
-  ): Promise<ResVerifiedProducts> {
-    const take = 3;
-    const skip = take * (page - 1);
-    const findAndCount = await this.giftRepo.findAndCount({
-      where: { product: { id }, state: State.PRODUCT_USED },
-      relations: { product: true },
-      take,
-      skip,
-      order: { product: { id: 'desc' } },
-    });
-
-    const {
-      array: gifts,
-      arrayCount: giftsCount,
-      nextPage,
-    } = this.dataService.pagination(findAndCount, take, skip, page);
-
-    return { gifts, giftsCount, nextPage };
   }
 }

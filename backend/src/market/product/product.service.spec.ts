@@ -12,7 +12,6 @@ import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { DataService } from 'src/common/data/data.service';
-import { ResVerifiedProducts } from './dto/res-verified-products.dto';
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -95,29 +94,6 @@ describe('ProductService', () => {
       };
       const result = service.payProduct(product.id, reqPayProduct);
       await expect(result).rejects.toThrow(NotAcceptableException);
-    });
-  });
-
-  describe('Verified Products', () => {
-    it('Use | pagination', async () => {
-      dataService.pagination = jest
-        .fn()
-        .mockReturnValue({ array: [], arrayCount: 0, nextPage: false });
-      await service.verifiedProducts(product.id, 1);
-      expect(dataService.pagination).toHaveBeenCalled();
-    });
-
-    it('Return | ResVerifiedProducts', async () => {
-      const resVerifiedProducts: ResVerifiedProducts = {
-        gifts: [],
-        giftsCount: 0,
-        nextPage: false,
-      };
-
-      const result = await service.verifiedProducts(product.id, 1);
-      const keys = Object.keys(result);
-      const required = Object.keys(resVerifiedProducts);
-      expect(keys).toEqual(expect.arrayContaining(required));
     });
   });
 });

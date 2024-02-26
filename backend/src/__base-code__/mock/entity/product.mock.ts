@@ -8,7 +8,6 @@ export class MockProductModel {
     image: 'http://example.com',
     price: `${10 ** 16}`,
     seller: '0xeF3010D076f62A91A774016E5eBAf58A1BFe1bD6',
-    gifts: Promise.resolve([]),
   };
 
   constructor() {}
@@ -24,7 +23,6 @@ export class MockProductModel {
     image: 'http://example.com',
     price: `${10 ** 16}`,
     seller: '0xeF3010D076f62A91A774016E5eBAf58A1BFe1bD6',
-    gifts: Promise.resolve([]),
   };
 
   otherProduct: ProductModel = {
@@ -34,7 +32,6 @@ export class MockProductModel {
     image: 'http://example.com',
     price: `${10 ** 16}`,
     seller: '0xeF3010D076f62A91A774016E5eBAf58A1BFe1bD6',
-    gifts: Promise.resolve([]),
   };
 
   products: ProductModel[] = [this.product, this.otherProduct];

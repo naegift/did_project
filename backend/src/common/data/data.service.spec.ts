@@ -18,20 +18,19 @@ describe('DataService', () => {
   });
 
   describe('Pagination', () => {
-    it('Return | {array: [], arrayCount: number, nextPage: number | boolean}', () => {
+    it('Return | {array: [], totalPages: number}', () => {
       const findAndCount: [ProductModel[], number] = [
         products,
         products.length,
       ];
-      const [take, skip, page] = [1, 0, 1];
-
-      const result = service.pagination(findAndCount, skip, take, page);
-      const { array, arrayCount, nextPage } = result;
+      const take = 3;
+      const result = service.pagination(findAndCount, take);
+      const { array, totalPages } = result;
 
       expect(array).toStrictEqual(findAndCount[0]);
-      expect(arrayCount).toEqual(findAndCount[1]);
-      expect(nextPage).toEqual(skip + take < arrayCount && page + 1);
-      expect(skip + (take + 1) < arrayCount && page + 1).toBeFalsy();
+      expect(totalPages).toEqual(
+        Math.floor((findAndCount[1] && findAndCount[1] - 1) / take) + 1,
+      );
     });
   });
 });

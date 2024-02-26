@@ -22,11 +22,10 @@ describe('MarketService', () => {
     it('Return | ResGetProducts', async () => {
       const resGetProducts: ResGetProducts = {
         products,
-        productsCount: products.length,
-        nextPage: false,
+        totalPages: 1,
       };
 
-      const result = await service.getProducts(1);
+      const result = await service.getProducts(1, 'desc');
       const keys = Object.keys(result);
       const required = Object.keys(resGetProducts);
       expect(keys).toEqual(expect.arrayContaining(required));

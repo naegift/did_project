@@ -1,6 +1,5 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseModel } from './base.entity';
-import { GiftModel } from './gift.entity';
 
 @Entity()
 export class ProductModel extends BaseModel {
@@ -18,7 +17,4 @@ export class ProductModel extends BaseModel {
 
   @Column()
   seller: string;
-
-  @OneToMany(() => GiftModel, (gift) => gift.product, { nullable: true })
-  gifts?: Promise<GiftModel[]>;
 }

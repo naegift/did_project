@@ -20,7 +20,7 @@ describe('MarketController', () => {
   describe('Get Products', () => {
     it('Use | getProducts', async () => {
       service.getProducts = jest.fn();
-      await controller.getProducts(1);
+      await controller.getProducts(1, 'desc');
       expect(service.getProducts).toHaveBeenCalled();
     });
   });

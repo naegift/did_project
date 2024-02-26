@@ -9,8 +9,5 @@ export class ResGetSellerProducts {
   products: ProductModel[];
 
   @ApiProperty({ example: 1 })
-  productsCount: number;
-
-  @ApiProperty({ example: false })
-  nextPage: number | boolean;
+  totalPages: number;
 }

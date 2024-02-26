@@ -6,7 +6,6 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import {
@@ -25,7 +24,6 @@ import { notFound } from 'src/__base-code__/error/not-found';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { notAcceptable } from 'src/__base-code__/error/not-acceptable';
-import { ResVerifiedProducts } from './dto/res-verified-products.dto';
 
 @ApiTags('Market | Product')
 @Controller('product')
@@ -65,16 +63,5 @@ export class ProductController {
   ): Promise<ResPayProduct> {
     const result = await this.productService.payProduct(id, reqPayProduct);
     return plainToInstance(ResPayProduct, result);
-  }
-
-  @Get(':id/verified')
-  @ApiOperation({ summary: '상품의 사용된 선물 목록' })
-  @ApiOkResponse({ type: ResVerifiedProducts })
-  async verifiedProducts(
-    @Param('id', ParseIntPipe) id: number,
-    @Query('page', ParseIntPipe) page: number,
-  ): Promise<ResVerifiedProducts> {
-    const result = await this.productService.verifiedProducts(id, page);
-    return plainToInstance(ResVerifiedProducts, result);
   }
 }

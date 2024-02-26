@@ -24,7 +24,7 @@ describe('GiftController', () => {
   describe('Get Gifts', () => {
     it('Use | getGifts', async () => {
       service.getGifts = jest.fn();
-      await controller.getGifts(null, gift.receiver, 1);
+      await controller.getGifts(null, gift.receiver, 1, 'desc');
       expect(service.getGifts).toHaveBeenCalled();
     });
   });
