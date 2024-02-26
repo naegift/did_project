@@ -1,71 +1,46 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("PushCommV2", function () {
-  let pushCommV2;
-  let admin, market, user1, user2;
+describe("PushNotificationSender", function () {
+  let pushNotificationSender;
+  let owner, recipient;
 
   beforeEach(async function () {
-    [admin, market, user1, user2] = await ethers.getSigners();
-    const PushCommV2 = await ethers.getContractFactory("PushNotification");
-    pushCommV2 = await PushCommV2.deploy();
-    await pushCommV2.deployed();
+    // 계정 로드
+    [owner, recipient] = await ethers.getSigners();
 
-    await pushCommV2.initialize(user1.address, admin.address, market.address);
+    // 컨트랙트 배포
+    const PushNotificationSender = await ethers.getContractFactory(
+      "PushNotificationSender",
+      owner
+    );
+    pushNotificationSender = await PushNotificationSender.deploy();
+    await pushNotificationSender.deployed();
   });
 
-  it("구독이 허용되어야 함", async function () {
-    expect(await pushCommV2.usersSubscribed(user1.address)).to.equal(true);
-  });
+  it("should send a push notification", async function () {
+    // 백엔드 서버에서 true 값을 전달받았다고 가정
+    const backendServerResponse = true;
 
-  it("구독 시 Subscribe 이벤트가 발생해야 함", async function () {
-    await expect(
-      pushCommV2.initialize(user2.address, admin.address, market.address)
-    )
-      .to.emit(pushCommV2, "Subscribe")
-      .withArgs(pushCommV2.address, user2.address);
-  });
+    if (backendServerResponse) {
+      // 테스트를 위한 임의의 제목과 내용
+      const title = "Test Notification";
+      const body = "This is a test notification body.";
 
-  it("중복 구독 불가", async function () {
-    await expect(
-      pushCommV2.initialize(user1.address, admin.address, market.address)
-    ).to.be.revertedWith("e002");
-  });
+      // sendPushNotification 함수 호출
+      await expect(
+        pushNotificationSender.sendPushNotification(
+          recipient.address,
+          title,
+          body
+        )
+      )
+        .to.emit(pushNotificationSender, "NotificationSent") // 이벤트 발생 여부 확인
+        .withArgs(recipient.address, title, body); // 이벤트 인자 확인
 
-  it("관리자 또는 마켓만 알림을 보낼 수 있음", async function () {
-    const identity = ethers.utils.formatBytes32String("testIdentity");
-    await expect(
-      pushCommV2
-        .connect(admin)
-        .sendProductUsageNotification(user1.address, identity)
-    )
-      .to.emit(pushCommV2, "SendNotification")
-      .withArgs(pushCommV2.address, user1.address, identity);
-
-    await expect(
-      pushCommV2
-        .connect(market)
-        .sendProductUsageNotification(user1.address, identity)
-    )
-      .to.emit(pushCommV2, "SendNotification")
-      .withArgs(pushCommV2.address, user1.address, identity);
-  });
-
-  it("권한이 없는 주소는 알림을 보낼 수 없음", async function () {
-    const identity = ethers.utils.formatBytes32String("testIdentity");
-    await expect(
-      pushCommV2
-        .connect(user2)
-        .sendProductUsageNotification(user1.address, identity)
-    ).to.be.revertedWith("e001");
-  });
-
-  it("구독하지 않은 사용자에게 알림을 보내려고 하면 오류 발생", async function () {
-    const identity = ethers.utils.formatBytes32String("testIdentity");
-    await expect(
-      pushCommV2
-        .connect(admin)
-        .sendProductUsageNotification(user2.address, identity)
-    ).to.be.revertedWith("e003");
+      // 추가적인 상태 검증이 필요한 경우 여기에 구현
+    } else {
+      // 백엔드 서버에서 false 값을 전달받았을 때의 처리 로직
+    }
   });
 });
