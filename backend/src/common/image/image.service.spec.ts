@@ -31,7 +31,7 @@ describe('ImageService', () => {
     it('Return | ResUploadImage', async () => {
       const resUploadImage: ResUploadImage = { link: '' };
 
-      const result = service.uploadImage(emptyFile);
+      const result = await service.uploadImage(emptyFile);
       const keys = Object.keys(result);
       const required = Object.keys(resUploadImage);
       expect(keys).toEqual(expect.arrayContaining(required));
