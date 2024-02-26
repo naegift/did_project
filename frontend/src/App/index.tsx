@@ -6,6 +6,7 @@ import Header from "../components/organisms/Header";
 import Main from "../pages/Main";
 import View from "../pages/View";
 import ProductWrite from "../pages/ProductWrite";
+import MyStoreList from "../pages/MyStoreList";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Main />} />
         <Route path="/product/:id" element={<View />} />
         <Route path="/product" element={<ProductWrite />} />
+        <Route path="/store" element={<MyStoreList />} />
       </Routes>
     </QueryClientProvider>
   );
