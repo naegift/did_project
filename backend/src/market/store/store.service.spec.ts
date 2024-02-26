@@ -6,6 +6,7 @@ import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { ResGetSellerProducts } from './dto/res-get-seller-products.dto';
 import { DataService } from 'src/common/data/data.service';
 import { ResFulfilledGifts } from './dto/res-fulfilled-gifts.dto';
+import { Order } from 'src/__base-code__/enum/order.enum';
 
 describe('StoreService', () => {
   let service: StoreService;
@@ -27,7 +28,7 @@ describe('StoreService', () => {
       dataService.pagination = jest
         .fn()
         .mockReturnValue({ array: [], totalPages: 1 });
-      await service.getSellerProducts(product.seller, 1, 'desc');
+      await service.getSellerProducts(product.seller, 1, Order.DESC);
       expect(dataService.pagination).toHaveBeenCalled();
     });
 
@@ -37,7 +38,11 @@ describe('StoreService', () => {
         totalPages: 1,
       };
 
-      const result = await service.getSellerProducts(product.seller, 1, 'desc');
+      const result = await service.getSellerProducts(
+        product.seller,
+        1,
+        Order.DESC,
+      );
       const keys = Object.keys(result);
       const required = Object.keys(resGetSellerProducts);
       expect(keys).toEqual(expect.arrayContaining(required));
@@ -49,7 +54,7 @@ describe('StoreService', () => {
       dataService.pagination = jest
         .fn()
         .mockReturnValue({ array: [], totalPages: 1 });
-      await service.fulfilledGifts(product.seller, 1, 'desc');
+      await service.fulfilledGifts(product.seller, 1, Order.DESC);
       expect(dataService.pagination).toHaveBeenCalled();
     });
 
@@ -59,7 +64,11 @@ describe('StoreService', () => {
         totalPages: 1,
       };
 
-      const result = await service.fulfilledGifts(product.seller, 1, 'desc');
+      const result = await service.fulfilledGifts(
+        product.seller,
+        1,
+        Order.DESC,
+      );
       const keys = Object.keys(result);
       const required = Object.keys(resFulfilledGifts);
       expect(keys).toEqual(expect.arrayContaining(required));

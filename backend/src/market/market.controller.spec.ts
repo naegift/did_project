@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MarketController } from './market.controller';
 import { providers } from 'src/__base-code__/mock/providers/providers';
 import { MarketService } from './market.service';
+import { Order } from 'src/__base-code__/enum/order.enum';
 
 describe('MarketController', () => {
   let controller: MarketController;
@@ -20,7 +21,7 @@ describe('MarketController', () => {
   describe('Get Products', () => {
     it('Use | getProducts', async () => {
       service.getProducts = jest.fn();
-      await controller.getProducts(1, 'desc');
+      await controller.getProducts(1, Order.DESC);
       expect(service.getProducts).toHaveBeenCalled();
     });
   });
