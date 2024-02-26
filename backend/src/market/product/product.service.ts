@@ -20,6 +20,7 @@ import { ImageService } from 'src/common/image/image.service';
 import { ReqPutProduct } from './dto/req-put-product.dto';
 import { ResPutProduct } from './dto/res-put-product.dto';
 import { ReqDeleteProduct } from './dto/req-delete-product.dto';
+import { State } from 'src/__base-code__/enum/state.enum';
 
 @Injectable()
 export class ProductService {
@@ -98,7 +99,7 @@ export class ProductService {
     reqPayProduct: ReqPayProduct,
   ): Promise<ResPayProduct> {
     try {
-      const { uuid } = reqPayProduct;
+      const { buyer, receiver, uuid } = reqPayProduct;
       let newGift: GiftModel;
 
       const provider = new ethers.providers.JsonRpcProvider(
@@ -110,13 +111,22 @@ export class ProductService {
         provider,
       );
 
+      console.log(contract);
+
       contract.on('EscrowCreated', async (escrowAddress, escrowUUID) => {
+        console.log(uuid);
+        console.log(escrowUUID);
         if (uuid === escrowUUID) {
           const product = await this.getProduct(id);
           newGift = await this.giftRepo.save({
-            ...reqPayProduct,
-            ...product,
-            id: null,
+            buyer,
+            receiver,
+            title: product.title,
+            content: product.content,
+            image: product.image,
+            price: product.price,
+            seller: product.seller,
+            state: State.ACTIVE,
             contract: escrowAddress,
           });
         }
