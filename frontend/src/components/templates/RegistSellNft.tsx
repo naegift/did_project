@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useMutation } from "react-query";
 import RegistrationNFT from "../organisms/RegistrationNFT";
 import Button from "../atoms/button";
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import WriteModal from "../molecules/WriteModal";
 
@@ -45,31 +44,9 @@ const RegistSellNft: React.FC<ProductData> = () => {
     }
   };
 
-  // const navigate = useNavigate();
-
   const saveProductData = useMutation((newData: ProductData) =>
     saveProductDataToServer(newData)
   );
-
-  // const handleSave = () => {
-  //   if (
-  //     !productData.title ||
-  //     !productData.content ||
-  //     !productData.image ||
-  //     !productData.price ||
-  //     !productData.signature
-  //   ) {
-  //     alert("모든 입력 필드를 채워주세요.");
-  //     return;
-  //   }
-  //   saveProductData.mutate(productData, {
-  //     onSuccess: (id: string) => {
-  //       navigate(`/product/${id}`);
-  //     },
-  //   });
-
-  //   console.log(productData);
-  // };
 
   const handleNftDataChange = (newData: ProductData) => {
     setProductData(newData);
