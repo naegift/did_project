@@ -24,8 +24,16 @@ describe('StoreController', () => {
   describe('Get Seller Products', () => {
     it('Use | getSellerProducts', async () => {
       service.getSellerProducts = jest.fn();
-      await controller.getSellerProducts(product.seller, 1);
+      await controller.getSellerProducts(product.seller, 1, 'desc');
       expect(service.getSellerProducts).toHaveBeenCalled();
+    });
+  });
+
+  describe('Fulfilled Gifts', () => {
+    it('Use | fulfilledGifts', async () => {
+      service.fulfilledGifts = jest.fn();
+      await controller.fulfilledGifts(product.seller, 1, 'desc');
+      expect(service.fulfilledGifts).toHaveBeenCalled();
     });
   });
 });

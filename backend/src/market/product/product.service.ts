@@ -2,6 +2,7 @@ import {
   Injectable,
   NotAcceptableException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
@@ -10,14 +11,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { Repository } from 'typeorm';
 import { ethers } from 'ethers';
-import { State } from 'src/__base-code__/enum/state.enum';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
 import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
-import { ResVerifiedProducts } from './dto/res-verified-products.dto';
-import { DataService } from 'src/common/data/data.service';
+import { ImageService } from 'src/common/image/image.service';
+import { ReqPutProduct } from './dto/req-put-product.dto';
+import { ResPutProduct } from './dto/res-put-product.dto';
+import { ReqDeleteProduct } from './dto/req-delete-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -26,16 +28,24 @@ export class ProductService {
     private readonly productRepo: Repository<ProductModel>,
     @InjectRepository(GiftModel)
     private readonly giftRepo: Repository<GiftModel>,
-    private readonly dataService: DataService,
+    private readonly imageService: ImageService,
   ) {}
 
-  async postProduct(reqPostProduct: ReqPostProduct): Promise<ResPostProduct> {
-    const { title, content, image, price, signature } = reqPostProduct;
-    const data = JSON.stringify({ title, content, image, price });
+  async postProduct(
+    reqPostProduct: ReqPostProduct,
+    file: Express.Multer.File,
+  ): Promise<ResPostProduct> {
+    const { title, content, price, signature } = reqPostProduct;
+    const data = JSON.stringify({ title, content, price });
 
+    const { link } = this.imageService.uploadImage(file);
     const seller = ethers.utils.verifyMessage(data, signature);
 
-    const product = await this.productRepo.save({ ...reqPostProduct, seller });
+    const product = await this.productRepo.save({
+      ...reqPostProduct,
+      image: link,
+      seller,
+    });
 
     return { id: product.id };
   }
@@ -47,12 +57,47 @@ export class ProductService {
     return product;
   }
 
+  async putProduct(
+    id: number,
+    reqPutProduct: ReqPutProduct,
+    file: Express.Multer.File,
+  ): Promise<ResPutProduct> {
+    const product = await this.getProduct(id);
+    const { title, content, price, signature } = reqPutProduct;
+    const data = JSON.stringify({ title, content, price });
+
+    const seller = ethers.utils.verifyMessage(data, signature);
+    if (seller !== product.seller) {
+      throw new UnauthorizedException('Cannot update other sellers product.');
+    }
+    const { link } = this.imageService.uploadImage(file);
+
+    await this.productRepo.save({
+      ...reqPutProduct,
+      image: link,
+      seller,
+    });
+
+    return { id: product.id };
+  }
+
+  async deleteProduct(id: number, reqDeleteProduct: ReqDeleteProduct) {
+    const product = await this.getProduct(id);
+    const { signature } = reqDeleteProduct;
+    const seller = ethers.utils.verifyMessage('{}', signature);
+    if (seller !== product.seller) {
+      throw new UnauthorizedException('Cannot delete other sellers product.');
+    }
+
+    await this.productRepo.delete(id);
+  }
+
   async payProduct(
     id: number,
     reqPayProduct: ReqPayProduct,
   ): Promise<ResPayProduct> {
     try {
-      const { buyer, receiver, uuid } = reqPayProduct;
+      const { uuid } = reqPayProduct;
       let newGift: GiftModel;
 
       const provider = new ethers.providers.JsonRpcProvider(
@@ -67,14 +112,12 @@ export class ProductService {
       contract.on('EscrowCreated', async (escrowAddress, escrowUUID) => {
         if (uuid === escrowUUID) {
           const product = await this.getProduct(id);
-          const gift = this.giftRepo.create();
-          gift.buyer = buyer;
-          gift.receiver = receiver;
-          gift.contract = escrowAddress;
-          gift.state = State.ACTIVE;
-          gift.product = Promise.resolve(product);
-
-          newGift = await this.giftRepo.save(gift);
+          newGift = await this.giftRepo.save({
+            ...reqPayProduct,
+            ...product,
+            id: null,
+            contract: escrowAddress,
+          });
         }
       });
 
@@ -98,28 +141,5 @@ export class ProductService {
     } catch (e) {
       throw new NotAcceptableException('Not enough values or gas.');
     }
-  }
-
-  async verifiedProducts(
-    id: number,
-    page: number,
-  ): Promise<ResVerifiedProducts> {
-    const take = 3;
-    const skip = take * (page - 1);
-    const findAndCount = await this.giftRepo.findAndCount({
-      where: { product: { id }, state: State.PRODUCT_USED },
-      relations: { product: true },
-      take,
-      skip,
-      order: { product: { id: 'desc' } },
-    });
-
-    const {
-      array: gifts,
-      arrayCount: giftsCount,
-      nextPage,
-    } = this.dataService.pagination(findAndCount, take, skip, page);
-
-    return { gifts, giftsCount, nextPage };
   }
 }

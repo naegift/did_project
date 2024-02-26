@@ -22,6 +22,7 @@ import { ResGetState } from './dto/res-get-state.dto';
 import { badRequest } from 'src/__base-code__/error/bad-request';
 import { plainToInstance } from 'class-transformer';
 import { ResGetGifts } from './dto/res-get-gifts.dto';
+import { FindOptionsOrderValue } from 'typeorm';
 
 @ApiTags('Account | Gift')
 @Controller('gift')
@@ -30,14 +31,21 @@ export class GiftController {
 
   @Get()
   @ApiOperation({ summary: '선물목록' })
+  @ApiOkResponse({ type: ResGetGifts })
   @ApiQuery({ name: 'buyer', required: false, type: String })
   @ApiQuery({ name: 'receiver', required: false, type: String })
   async getGifts(
     @Query('buyer') buyer: string,
     @Query('receiver') receiver: string,
     @Query('page', ParseIntPipe) page: number,
+    @Query('order') order: FindOptionsOrderValue,
   ): Promise<ResGetGifts> {
-    const result = await this.giftService.getGifts(buyer, receiver, page);
+    const result = await this.giftService.getGifts(
+      buyer,
+      receiver,
+      page,
+      order,
+    );
     return plainToInstance(ResGetGifts, result);
   }
 

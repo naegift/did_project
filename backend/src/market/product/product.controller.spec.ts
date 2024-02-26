@@ -8,12 +8,27 @@ import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
+import { Readable } from 'typeorm/platform/PlatformTools';
+import { ReqPutProduct } from './dto/req-put-product.dto';
+import { ReqDeleteProduct } from './dto/req-delete-product.dto';
 
 describe('ProductController', () => {
   let controller: ProductController;
   let service: ProductService;
   let product: ProductModel;
   let gift: GiftModel;
+  const emptyFile = {
+    fieldname: '',
+    originalname: '',
+    encoding: '',
+    mimetype: '',
+    size: 1,
+    stream: new Readable(),
+    destination: '',
+    filename: '',
+    path: '',
+    buffer: Buffer.alloc(1),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -32,13 +47,12 @@ describe('ProductController', () => {
       const reqPostProduct: ReqPostProduct = {
         title: product.title,
         content: product.content,
-        image: product.image,
         price: product.price,
         signature: MockProductModel.signature,
       };
 
       service.postProduct = jest.fn();
-      await controller.postProduct(reqPostProduct);
+      await controller.postProduct(reqPostProduct, emptyFile);
       expect(service.postProduct).toHaveBeenCalled();
     });
   });
@@ -48,6 +62,33 @@ describe('ProductController', () => {
       service.getProduct = jest.fn();
       await controller.getProduct(product.id);
       expect(service.getProduct).toHaveBeenCalled();
+    });
+  });
+
+  describe('Put Product', () => {
+    it('Use | putProduct', async () => {
+      const reqPutProduct: ReqPutProduct = {
+        title: product.title,
+        content: product.content,
+        price: product.price,
+        signature: MockProductModel.signature,
+      };
+
+      service.putProduct = jest.fn();
+      await controller.putProduct(product.id, reqPutProduct, emptyFile);
+      expect(service.putProduct).toHaveBeenCalled();
+    });
+  });
+
+  describe('Delete Product', () => {
+    const reqDeleteProduct: ReqDeleteProduct = {
+      signature: MockProductModel.signature,
+    };
+
+    it('Use | deleteProduct', async () => {
+      service.deleteProduct = jest.fn();
+      await controller.deleteProduct(product.id, reqDeleteProduct);
+      expect(service.deleteProduct).toHaveBeenCalled();
     });
   });
 
@@ -61,14 +102,6 @@ describe('ProductController', () => {
       service.payProduct = jest.fn();
       await controller.payProduct(product.id, reqPayProduct);
       expect(service.payProduct).toHaveBeenCalled();
-    });
-  });
-
-  describe('Verified Products', () => {
-    it('Use | verifyProduct', async () => {
-      service.verifiedProducts = jest.fn();
-      await controller.verifiedProducts(product.id, 1);
-      expect(service.verifiedProducts).toHaveBeenCalled();
     });
   });
 });

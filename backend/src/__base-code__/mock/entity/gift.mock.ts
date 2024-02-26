@@ -6,12 +6,13 @@ const product = new MockProductModel().product;
 
 export class MockGiftModel {
   static swaggerGift: GiftModel = {
+    ...product,
     id: 1,
     buyer: '0x0b6411C390c28D7e7c9D5147d6c7c52f6B89cD8E',
     receiver: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
     contract: '0xBBa0c83E971545Bb7EBc30fdCF47bD3A7D51f24c',
-    state: State.PRODUCT_USED,
-    product: Promise.resolve(product),
+    state: State.FULFILLED,
+    updatedAt: new Date(),
   };
 
   constructor() {}
@@ -24,21 +25,23 @@ export class MockGiftModel {
   static network: string = 'https://rpc.sepolia.org';
 
   gift: GiftModel = {
+    ...product,
     id: 1,
     buyer: '0x0b6411C390c28D7e7c9D5147d6c7c52f6B89cD8E',
     receiver: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
     contract: '0xBBa0c83E971545Bb7EBc30fdCF47bD3A7D51f24c',
     state: State.ACTIVE,
-    product: Promise.resolve(product),
+    updatedAt: new Date(),
   };
 
   otherGift: GiftModel = {
+    ...product,
     id: 2,
     buyer: '0x0b6411C390c28D7e7c9D5147d6c7c52f6B89cD8E',
     receiver: '0x4c2d2742A153503AF6210c1D9455E9Ff64FFb89d',
     contract: '0xBBa0c83E971545Bb7EBc30fdCF47bD3A7D51f24c',
     state: State.ACTIVE,
-    product: Promise.resolve(product),
+    updatedAt: new Date(),
   };
 
   gifts: GiftModel[] = [this.gift, this.otherGift];
