@@ -18,6 +18,7 @@
     "dotenv": "^16.4.5",
     "prettier": "^2.0.5",
     "prettier-plugin-solidity": "^1.0.0-beta.13",
+    "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
@@ -30,9 +31,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -54,14 +55,24 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
     "@nomiclabs/hardhat-ethers": "^2.2.3",
     "@nomiclabs/hardhat-waffle": "^2.0.6",
     "@types/uuid": "^9.0.8",
+    "assert": "^2.1.0",
     "autoprefixer": "^10.4.17",
+    "browserify-zlib": "^0.2.0",
     "chai": "^4.4.1",
+    "crypto-browserify": "^3.12.0",
     "ethereum-waffle": "^4.0.10",
     "ethers": "^5.7.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
     "postcss": "^8.4.35",
-    "tailwindcss": "^3.4.1"
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tailwindcss": "^3.4.1",
+    "url": "^0.11.3"
   }
 }
