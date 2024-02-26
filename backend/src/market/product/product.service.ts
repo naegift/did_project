@@ -73,6 +73,7 @@ export class ProductService {
     const { link } = await this.imageService.uploadImage(file);
 
     await this.productRepo.save({
+      id: product.id,
       ...reqPutProduct,
       image: link,
       seller,
