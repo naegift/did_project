@@ -9,12 +9,19 @@ export interface Product {
   title: string;
   content: string;
   image: string;
-  price: number;
+  price: string;
   seller: string;
 }
 
 const View: React.FC = () => {
-  const [product, setProduct] = useState<Product[]>([]);
+  const [product, setProduct] = useState<Product>({
+    id: 0,
+    title: "",
+    content: "",
+    image: "",
+    price: "",
+    seller: "",
+  });
   const { id } = useParams();
 
   useEffect((): void => {
@@ -24,7 +31,7 @@ const View: React.FC = () => {
           `https://naegift.subin.kr/product/${id}`
         );
         console.log(response.data);
-        setProduct([response.data]);
+        setProduct(response.data);
       } catch (error) {
         console.log(error);
       }
