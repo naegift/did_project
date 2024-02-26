@@ -3,9 +3,11 @@ import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
 import { ethers } from "ethers";
 
 const useWalletAndSuscribe = () => {
-  const [userAlice, setUserAlice] = useState<any | null>(null);
+  const [user, setUser] = useState<any | null>(null);
   const [notificationData, setNotificationData] = useState<any | null>(null);
   const [streamInstance, setStreamInstance] = useState<any | null>(null);
+
+  // 채널주소는 추후 마켓주소로 변경예정
   const channelAddress = "0xb2b7cf04a31d943fbf14ea4575112d9b3aa2d3e3";
 
   const connectWallet = async () => {
@@ -22,7 +24,7 @@ const useWalletAndSuscribe = () => {
       const user = await PushAPI.initialize(signer, {
         env: CONSTANTS.ENV.STAGING,
       });
-      setUserAlice(user);
+      setUser(user);
 
       await initRealTimeNotificationStream(user);
 
@@ -55,10 +57,10 @@ const useWalletAndSuscribe = () => {
     }
   };
 
-  const initRealTimeNotificationStream = async (userAlice: any) => {
+  const initRealTimeNotificationStream = async (user: any) => {
     if (!streamInstance) {
       try {
-        const newStreamInstance = await userAlice.initStream([
+        const newStreamInstance = await user.initStream([
           CONSTANTS.STREAM.NOTIF,
         ]);
         newStreamInstance.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
@@ -84,7 +86,7 @@ const useWalletAndSuscribe = () => {
   return {
     connectWallet,
     notificationData,
-    userAlice,
+    user,
   };
 };
 

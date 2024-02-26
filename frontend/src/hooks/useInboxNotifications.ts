@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-const useInboxNotifications = (userAlice: any) => {
+const useInboxNotifications = (user: any) => {
   const [inboxNotifications, setInboxNotifications] = useState<any | null>([]);
 
   const inboxNotification = async () => {
     try {
-      const notifications = await userAlice.notification.list("INBOX");
+      const notifications = await user.notification.list("INBOX");
       console.log("알림 목록:", notifications);
       setInboxNotifications(notifications);
     } catch (error) {
