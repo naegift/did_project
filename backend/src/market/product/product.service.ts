@@ -2,6 +2,7 @@ import {
   Injectable,
   NotAcceptableException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
@@ -16,6 +17,9 @@ import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 import { ImageService } from 'src/common/image/image.service';
+import { ReqPutProduct } from './dto/req-put-product.dto';
+import { ResPutProduct } from './dto/res-put-product.dto';
+import { ReqDeleteProduct } from './dto/req-delete-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -53,12 +57,47 @@ export class ProductService {
     return product;
   }
 
+  async putProduct(
+    id: number,
+    reqPutProduct: ReqPutProduct,
+    file: Express.Multer.File,
+  ): Promise<ResPutProduct> {
+    const product = await this.getProduct(id);
+    const { title, content, price, signature } = reqPutProduct;
+    const data = JSON.stringify({ title, content, price });
+
+    const seller = ethers.utils.verifyMessage(data, signature);
+    if (seller !== product.seller) {
+      throw new UnauthorizedException('Cannot update other sellers product.');
+    }
+    const { link } = this.imageService.uploadImage(file);
+
+    await this.productRepo.save({
+      ...reqPutProduct,
+      image: link,
+      seller,
+    });
+
+    return { id: product.id };
+  }
+
+  async deleteProduct(id: number, reqDeleteProduct: ReqDeleteProduct) {
+    const product = await this.getProduct(id);
+    const { signature } = reqDeleteProduct;
+    const seller = ethers.utils.verifyMessage('{}', signature);
+    if (seller !== product.seller) {
+      throw new UnauthorizedException('Cannot delete other sellers product.');
+    }
+
+    await this.productRepo.delete(id);
+  }
+
   async payProduct(
     id: number,
     reqPayProduct: ReqPayProduct,
   ): Promise<ResPayProduct> {
     try {
-      const { buyer, receiver, uuid } = reqPayProduct;
+      const { uuid } = reqPayProduct;
       let newGift: GiftModel;
 
       const provider = new ethers.providers.JsonRpcProvider(
@@ -76,6 +115,7 @@ export class ProductService {
           newGift = await this.giftRepo.save({
             ...reqPayProduct,
             ...product,
+            id: null,
             contract: escrowAddress,
           });
         }

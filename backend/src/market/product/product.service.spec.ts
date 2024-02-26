@@ -5,20 +5,37 @@ import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { MockProductModel } from 'src/__base-code__/mock/entity/product.mock';
 import { ReqPostProduct } from './dto/req-post-product.dto';
 import { ResGetProduct } from './dto/res-get-product.dto';
-import { NotAcceptableException, NotFoundException } from '@nestjs/common';
+import {
+  NotAcceptableException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ResPostProduct } from './dto/res-post-product.dto';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 import { ResPayProduct } from './dto/res-pay-product.dto';
-import { DataService } from 'src/common/data/data.service';
 import { Readable } from 'typeorm/platform/PlatformTools';
+import { ReqPutProduct } from './dto/req-put-product.dto';
+import { ResPutProduct } from './dto/res-put-product.dto';
+import { ReqDeleteProduct } from './dto/req-delete-product.dto';
 
 describe('ProductService', () => {
   let service: ProductService;
-  let dataService: DataService;
   let product: ProductModel;
   let gift: GiftModel;
+  const emptyFile = {
+    fieldname: '',
+    originalname: '',
+    encoding: '',
+    mimetype: '',
+    size: 1,
+    stream: new Readable(),
+    destination: '',
+    filename: '',
+    path: '',
+    buffer: Buffer.alloc(1),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -26,25 +43,11 @@ describe('ProductService', () => {
     }).compile();
 
     service = module.get<ProductService>(ProductService);
-    dataService = module.get<DataService>(DataService);
     product = new MockProductModel().product;
     gift = new MockGiftModel().gift;
   });
 
   describe('Post Product', () => {
-    const emptyFile = {
-      fieldname: '',
-      originalname: '',
-      encoding: '',
-      mimetype: '',
-      size: 1,
-      stream: new Readable(),
-      destination: '',
-      filename: '',
-      path: '',
-      buffer: Buffer.alloc(1),
-    };
-
     it('Return | ResPostProduct', async () => {
       const reqPostProduct: ReqPostProduct = {
         title: product.title,
@@ -81,6 +84,64 @@ describe('ProductService', () => {
     it('Error | Cannot find product.', async () => {
       const result = service.getProduct(-1);
       await expect(result).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('Put Product', () => {
+    it('Return | ResPutProduct', async () => {
+      const reqPutProduct: ReqPutProduct = {
+        title: product.title,
+        content: product.content,
+        price: product.price,
+        signature: MockProductModel.signature,
+      };
+      const resPutProduct: ResPutProduct = { id: product.id };
+
+      const result = await service.putProduct(
+        product.id,
+        reqPutProduct,
+        emptyFile,
+      );
+      const keys = Object.keys(result);
+      const required = Object.keys(resPutProduct);
+      expect(keys).toEqual(expect.arrayContaining(required));
+    });
+
+    it('Error | Cannot update other sellers product.', async () => {
+      const otherProduct = new MockProductModel().otherProduct;
+      const reqPutProduct: ReqPutProduct = {
+        title: product.title,
+        content: product.content,
+        price: product.price,
+        signature: MockProductModel.signature,
+      };
+
+      const result = service.putProduct(
+        otherProduct.id,
+        reqPutProduct,
+        emptyFile,
+      );
+      await expect(result).rejects.toThrow(UnauthorizedException);
+    });
+  });
+
+  describe('Delete Product', () => {
+    it('Return | No content', async () => {
+      const reqDeleteProduct: ReqDeleteProduct = {
+        signature: MockProductModel.deleteSignature,
+      };
+
+      await service.deleteProduct(product.id, reqDeleteProduct);
+    });
+
+    it('Error | Cannot delete other sellers product.', async () => {
+      const otherProduct = new MockProductModel().otherProduct;
+      const reqDeleteProduct: ReqDeleteProduct = {
+        signature: MockProductModel.deleteSignature,
+      };
+
+      const result = service.deleteProduct(otherProduct.id, reqDeleteProduct);
+      await expect(result).rejects.toThrow(UnauthorizedException);
     });
   });
 
