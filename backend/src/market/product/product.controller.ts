@@ -9,7 +9,6 @@ import {
   Post,
   Put,
   UploadedFile,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
@@ -119,6 +118,7 @@ export class ProductController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   @ApiOperation({ summary: '상품 삭제' })
   @ApiNoContentResponse()
   @ApiUnauthorizedResponse(unauthorized('Cannot delete other sellers product.'))
