@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { DataService } from 'src/common/data/data.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductModel } from 'src/__base-code__/entity/product.entity';
-import { FindOptionsOrderValue, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ResGetSellerProducts } from './dto/res-get-seller-products.dto';
 import { State } from 'src/__base-code__/enum/state.enum';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { ResFulfilledGifts } from './dto/res-fulfilled-gifts.dto';
+import { Order } from 'src/__base-code__/enum/order.enum';
 
 @Injectable()
 export class StoreService {
@@ -20,7 +21,7 @@ export class StoreService {
   async getSellerProducts(
     seller: string,
     page: number,
-    order: FindOptionsOrderValue,
+    order: Order,
   ): Promise<ResGetSellerProducts> {
     const take = 3;
     const skip = take * (page - 1);
@@ -42,7 +43,7 @@ export class StoreService {
   async fulfilledGifts(
     seller: string,
     page: number,
-    order: FindOptionsOrderValue,
+    order: Order,
   ): Promise<ResFulfilledGifts> {
     const take = 3;
     const skip = take * (page - 1);

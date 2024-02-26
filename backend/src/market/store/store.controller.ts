@@ -1,10 +1,16 @@
-import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  ParseEnumPipe,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
 import { StoreService } from './store.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { ResGetSellerProducts } from './dto/res-get-seller-products.dto';
 import { ResFulfilledGifts } from './dto/res-fulfilled-gifts.dto';
-import { FindOptionsOrderValue } from 'typeorm';
+import { Order } from 'src/__base-code__/enum/order.enum';
 
 @ApiTags('Market | Store')
 @Controller('store')
@@ -17,7 +23,7 @@ export class StoreController {
   async getSellerProducts(
     @Query('seller') seller: string,
     @Query('page', ParseIntPipe) page: number,
-    @Query('order') order: FindOptionsOrderValue,
+    @Query('order', new ParseEnumPipe(Order)) order: Order,
   ): Promise<ResGetSellerProducts> {
     const result = await this.storeService.getSellerProducts(
       seller,
@@ -33,7 +39,7 @@ export class StoreController {
   async fulfilledGifts(
     @Query('seller') seller: string,
     @Query('page', ParseIntPipe) page: number,
-    @Query('order') order: FindOptionsOrderValue,
+    @Query('order', new ParseEnumPipe(Order)) order: Order,
   ): Promise<ResFulfilledGifts> {
     const result = await this.storeService.fulfilledGifts(seller, page, order);
     return plainToInstance(ResFulfilledGifts, result);

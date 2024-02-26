@@ -8,6 +8,7 @@ import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 import { providers } from 'src/__base-code__/mock/providers/providers';
 import { DataService } from 'src/common/data/data.service';
 import { ResGetGifts } from './dto/res-get-gifts.dto';
+import { Order } from 'src/__base-code__/enum/order.enum';
 
 describe('GiftService', () => {
   let service: GiftService;
@@ -43,7 +44,7 @@ describe('GiftService', () => {
       dataService.pagination = jest
         .fn()
         .mockReturnValue({ array: [], totalPages: 1 });
-      await service.getGifts(null, gift.receiver, 1, 'desc');
+      await service.getGifts(null, gift.receiver, 1, Order.DESC);
       expect(dataService.pagination).toHaveBeenCalled();
     });
 
@@ -53,7 +54,7 @@ describe('GiftService', () => {
         totalPages: 1,
       };
 
-      const result = await service.getGifts(gift.buyer, null, 1, 'desc');
+      const result = await service.getGifts(gift.buyer, null, 1, Order.DESC);
       const keys = Object.keys(result);
       const required = Object.keys(resGetGifts);
       expect(keys).toEqual(expect.arrayContaining(required));
