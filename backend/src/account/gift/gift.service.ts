@@ -5,10 +5,11 @@ import { ESCROW_ABI } from 'src/__base-code__/abi/escrow.abi';
 import { stateCode } from 'src/__base-code__/enum/state.enum';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsOrderValue, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 import { ResGetGifts } from './dto/res-get-gifts.dto';
 import { DataService } from 'src/common/data/data.service';
+import { Order } from 'src/__base-code__/enum/order.enum';
 
 @Injectable()
 export class GiftService {
@@ -28,7 +29,7 @@ export class GiftService {
     buyer: string,
     receiver: string,
     page: number,
-    order: FindOptionsOrderValue,
+    order: Order,
   ): Promise<ResGetGifts> {
     const take = 3;
     const skip = take * (page - 1);

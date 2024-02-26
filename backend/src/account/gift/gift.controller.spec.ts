@@ -4,6 +4,7 @@ import { GiftService } from './gift.service';
 import { providers } from 'src/__base-code__/mock/providers/providers';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
+import { Order } from 'src/__base-code__/enum/order.enum';
 
 describe('GiftController', () => {
   let controller: GiftController;
@@ -24,7 +25,7 @@ describe('GiftController', () => {
   describe('Get Gifts', () => {
     it('Use | getGifts', async () => {
       service.getGifts = jest.fn();
-      await controller.getGifts(null, gift.receiver, 1, 'desc');
+      await controller.getGifts(null, gift.receiver, 1, Order.DESC);
       expect(service.getGifts).toHaveBeenCalled();
     });
   });

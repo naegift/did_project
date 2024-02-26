@@ -4,6 +4,7 @@ import { StoreService } from './store.service';
 import { providers } from 'src/__base-code__/mock/providers/providers';
 import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { MockProductModel } from 'src/__base-code__/mock/entity/product.mock';
+import { Order } from 'src/__base-code__/enum/order.enum';
 
 describe('StoreController', () => {
   let controller: StoreController;
@@ -24,7 +25,7 @@ describe('StoreController', () => {
   describe('Get Seller Products', () => {
     it('Use | getSellerProducts', async () => {
       service.getSellerProducts = jest.fn();
-      await controller.getSellerProducts(product.seller, 1, 'desc');
+      await controller.getSellerProducts(product.seller, 1, Order.DESC);
       expect(service.getSellerProducts).toHaveBeenCalled();
     });
   });
@@ -32,7 +33,7 @@ describe('StoreController', () => {
   describe('Fulfilled Gifts', () => {
     it('Use | fulfilledGifts', async () => {
       service.fulfilledGifts = jest.fn();
-      await controller.fulfilledGifts(product.seller, 1, 'desc');
+      await controller.fulfilledGifts(product.seller, 1, Order.DESC);
       expect(service.fulfilledGifts).toHaveBeenCalled();
     });
   });

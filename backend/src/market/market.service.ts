@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductModel } from 'src/__base-code__/entity/product.entity';
 import { DataService } from 'src/common/data/data.service';
-import { FindOptionsOrderValue, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ResGetProducts } from './dto/res-get-products.dto';
+import { Order } from 'src/__base-code__/enum/order.enum';
 
 @Injectable()
 export class MarketService {
@@ -13,10 +14,7 @@ export class MarketService {
     private readonly dataService: DataService,
   ) {}
 
-  async getProducts(
-    page: number,
-    order: FindOptionsOrderValue,
-  ): Promise<ResGetProducts> {
+  async getProducts(page: number, order: Order): Promise<ResGetProducts> {
     const take = 3;
     const skip = take * (page - 1);
     const findAndCount = await this.productRepo.findAndCount({
