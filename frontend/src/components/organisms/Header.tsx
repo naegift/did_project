@@ -19,6 +19,10 @@ interface Ethereum {
   }: {
     method: string;
   }) => Promise<any>;
+  on(
+    event: string,
+    listener: (...args: any[]) => void
+  ): void;
 }
 
 declare global {
@@ -28,13 +32,36 @@ declare global {
 }
 
 const Header: React.FC = () => {
-  const [api, setApi] = useState(null);
+  const [api, setApi]: any =
+    useState(null);
   // const [vcs, setVcs] = useState(null);
   const [did, setDid] = useState("");
 
   // useEffect(() => {
-  //   runMasca();
+  //   changeWallet()
   // }, []);
+
+  const changeWallet = () => {
+    // When account changes in dapp
+    window.ethereum.on(
+      "accountsChanged",
+      async (...accounts: any[]) => {
+        const setAccountRes =
+          await api.setCurrentAccount({
+            currentAccount: (
+              accounts[0] as string[]
+            )[0],
+          });
+
+        if (isError(setAccountRes)) {
+          console.error(
+            setAccountRes.error
+          );
+          return;
+        }
+      }
+    );
+  };
 
   const walletConnect = async () => {
     // Connect the user and get the address of his current account
@@ -45,11 +72,12 @@ const Header: React.FC = () => {
     const address = accounts[0];
 
     // Enable Masca
-    const enableResult =
+
+    const enableResult: any =
       await enableMasca(address, {
-        snapId:
-          "npm:@blockchain-lab-um/masca",
-        version: "1.2.0-beta.2",
+        // snapId:
+        //   "npm:@blockchain-lab-um/masca",
+        // version: "1.2.0-beta.2",
       });
 
     // // Check if there was an error and handle it accordingly
@@ -61,16 +89,19 @@ const Header: React.FC = () => {
     // Now get the Masca API object
     const mascaApi =
       await enableResult.data.getMascaApi();
+
     await mascaApi.setCurrentAccount({
       account: address,
     });
+
     console.log(
       "api was fed an account address: ",
       mascaApi
     );
     setApi(mascaApi);
+
     const currentDID =
-      await api.getDID();
+      await mascaApi.getDID();
     console.log(
       "currentDID: ",
       currentDID.data
@@ -80,23 +111,23 @@ const Header: React.FC = () => {
 
   const createVC = async () => {
     if (!api) return;
-    const receiverAddress =
+    const holderAddress =
       "0xC9Ca23774917afa90E7d6C9Ad300b57aCAC5bee8";
 
     const payload = {
       type: [
         "VerifiableCredential",
-        "Food",
+        "Drinks",
       ],
       credentialSubject: {
-        id: `did:ethr:0xaa36a7:${receiverAddress}`,
-        category: "Chicken",
+        id: `did:ethr:0xaa36a7:${holderAddress}`,
+        category: "Eunjae Chicken",
         image:
           "https://s3.amazonaws.com/",
         shop: "BBQ",
-        name: "황금올리브",
+        name: "순살 치킨",
         description:
-          "신선한 올리브유에서 튀긴 건강한 치킨",
+          "누가 이런 닭대가리를 돈 주고 사 먹어요? 내가.",
       },
       credentialSchema: {
         id: "https://beta.api.schemas.serto.id/v1/public/program-completion-certificate/1.0/json-schema.json",
@@ -130,22 +161,32 @@ const Header: React.FC = () => {
         proofFormat:
           "EthereumEip712Signature2021",
         options: {
-          save: true,
-          store: ["snap"],
+          // save: true,
+          // store: ["snap"],
         },
       });
     console.log(
       "VC creation Reponse, vcs in the data: ",
       res
     );
-    // setVcs(res.data);
 
-    // axios.post('http://localhost:4000/')
+    const posted = await axios.post(
+      "http://localhost:4000/vc",
+      {
+        credential: JSON.stringify(
+          res.data
+        ),
+      }
+    );
+    console.log("VC posted: ", posted);
 
     // VC 조회 ()
-    let saved =
+    let queried =
       await api.queryCredentials();
-    console.log("VCs queried: ", saved);
+    console.log(
+      "VCs queried: ",
+      queried
+    );
 
     const vp =
       await api.createPresentation({
@@ -177,8 +218,8 @@ const Header: React.FC = () => {
     // VC 삭제
     const deleted =
       await api.deleteCredential(
-        saved.data[
-          saved.data.length - 1
+        queried.data[
+          queried.data.length - 1
         ].metadata.id,
         {
           store: ["snap"],
@@ -186,17 +227,39 @@ const Header: React.FC = () => {
       );
     console.log("Deleting...", deleted);
 
-    saved =
+    queried =
       await api.queryCredentials();
     console.log(
       "Queried again to check deletion: ",
-      saved
+      queried
     );
   };
 
-  // const saveVC = async () => {
-  //   api.saveCredential();
-  // };
+  const saveVC = async () => {
+    const received = await axios.get(
+      "http://localhost:4000/vc/17"
+    );
+    console.log(
+      "VC received: ",
+      JSON.parse(
+        received.data.credential
+      )
+    );
+    const parsed = JSON.parse(
+      received.data.credential
+    );
+    console.log("parsed: ", parsed);
+    const reparsed = JSON.parse(
+      parsed.credential
+    );
+
+    await api.saveCredential(reparsed);
+    console.log("VC saved: ", reparsed);
+
+    const queried =
+      await api.queryCredentials();
+    console.log("queried: ", queried);
+  };
 
   return (
     <div className="flex flex-row justify-between p-5 border-b">
@@ -236,7 +299,9 @@ const Header: React.FC = () => {
         <button onClick={createVC}>
           Create VC test
         </button>
-        {/* <button>Save VC test</button> */}
+        <button onClick={saveVC}>
+          Save VC test
+        </button>
       </div>
     </div>
   );

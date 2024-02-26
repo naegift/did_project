@@ -8,6 +8,8 @@ import { ProductModel } from './__base-code__/entity/product.entity';
 import { GiftModel } from './__base-code__/entity/gift.entity';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { VcModule } from './vc/vc.module';
+import { VcModel } from './__base-code__/entity/vc.entity';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [ProductModel, GiftModel],
+      entities: [ProductModel, GiftModel, VcModel],
       synchronize: true,
       ssl: process.env.DB_AWS_HOSTNAME && {
         rejectUnauthorized: false,
@@ -32,6 +34,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     AccountModule,
     MarketModule,
     CommonModule,
+    VcModule,
   ],
   controllers: [],
   providers: [
