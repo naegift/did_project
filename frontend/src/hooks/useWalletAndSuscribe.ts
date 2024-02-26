@@ -6,6 +6,7 @@ const useWalletAndSuscribe = () => {
   const [user, setUser] = useState<any | null>(null);
   const [notificationData, setNotificationData] = useState<any | null>(null);
   const [streamInstance, setStreamInstance] = useState<any | null>(null);
+  const [isLogged, setIsLogged] = useState<boolean>(false); // 로그인 상태를 추적하는 상태 추가
 
   // 채널주소는 추후 마켓주소로 변경예정
   const channelAddress = "0xb2b7cf04a31d943fbf14ea4575112d9b3aa2d3e3";
@@ -13,6 +14,11 @@ const useWalletAndSuscribe = () => {
   const connectWallet = async () => {
     if (!window.ethereum) {
       alert("메타마스크를 설치해주세요.");
+      return;
+    }
+
+    if (isLogged) {
+      alert("이미 로그인 중입니다.");
       return;
     }
 
@@ -25,6 +31,7 @@ const useWalletAndSuscribe = () => {
         env: CONSTANTS.ENV.STAGING,
       });
       setUser(user);
+      setIsLogged(true);
 
       await initRealTimeNotificationStream(user);
 
