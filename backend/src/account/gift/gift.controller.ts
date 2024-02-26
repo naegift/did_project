@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseEnumPipe,
   ParseIntPipe,
   Patch,
   Query,
@@ -38,7 +39,7 @@ export class GiftController {
     @Query('buyer') buyer: string,
     @Query('receiver') receiver: string,
     @Query('page', ParseIntPipe) page: number,
-    @Query('order') order: Order,
+    @Query('order', new ParseEnumPipe(Order)) order: Order,
   ): Promise<ResGetGifts> {
     const result = await this.giftService.getGifts(
       buyer,

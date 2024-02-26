@@ -1,4 +1,10 @@
-import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  ParseEnumPipe,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
 import { StoreService } from './store.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
@@ -17,7 +23,7 @@ export class StoreController {
   async getSellerProducts(
     @Query('seller') seller: string,
     @Query('page', ParseIntPipe) page: number,
-    @Query('order') order: Order,
+    @Query('order', new ParseEnumPipe(Order)) order: Order,
   ): Promise<ResGetSellerProducts> {
     const result = await this.storeService.getSellerProducts(
       seller,
@@ -33,7 +39,7 @@ export class StoreController {
   async fulfilledGifts(
     @Query('seller') seller: string,
     @Query('page', ParseIntPipe) page: number,
-    @Query('order') order: Order,
+    @Query('order', new ParseEnumPipe(Order)) order: Order,
   ): Promise<ResFulfilledGifts> {
     const result = await this.storeService.fulfilledGifts(seller, page, order);
     return plainToInstance(ResFulfilledGifts, result);
