@@ -20,11 +20,9 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
   const [receiverInput, setReceiverInput] = useState<string>("");
 
   const runEthers = async () => {
-    const provider = new ethers.providers.Web3Provider(
-      (window as any).ethereum
-    );
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     console.log("provider: ", provider);
-    const wallets = await (window as any).ethereum.request({
+    const wallets = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
     const address = wallets[0];
