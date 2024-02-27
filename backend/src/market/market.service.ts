@@ -15,7 +15,7 @@ export class MarketService {
   ) {}
 
   async getProducts(page: number, order: Order): Promise<ResGetProducts> {
-    const take = 3;
+    const take = 5;
     const skip = take * (page - 1);
     const findAndCount = await this.productRepo.findAndCount({
       order: { id: order },
