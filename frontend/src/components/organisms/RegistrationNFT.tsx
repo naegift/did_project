@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-import NftNameInput from "../molecules/NftNameInput";
-import CoinInput from "../molecules/CoinInput";
-import axios from "axios";
 
 interface RegistrationNFTProps {
   onChange: (data: {
@@ -39,11 +36,11 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
     <div className="flex flex-col border w-full">
       <label className="h-[200px] relative">
         {imagePreview && (
-          <div className="border h-full flex flex ">
+          <div className=" ">
             <img
               src={imagePreview}
               alt="Preview"
-              className="absolute inset-0 object-cover w-200px h-200px"
+              className="absolute inset-0 object-cover w-[180px] h-[180px]  mx-[auto] my-[auto]"
             />
           </div>
         )}
@@ -83,14 +80,17 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
           type="text"
           value={price}
           onChange={(e) => {
-            setPrice(e.target.value);
-            onChange({
-              title: e.target.value,
-              content,
-              image,
-              price,
-              signature,
-            });
+            const inputValue = e.target.value;
+            if (/^\d*$/.test(inputValue)) {
+              setPrice(inputValue);
+              onChange({
+                title,
+                content,
+                image,
+                price: inputValue,
+                signature,
+              });
+            }
           }}
         />
       </label>

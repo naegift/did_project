@@ -15,10 +15,7 @@ interface MyProductListProps {
   userAddress: string;
 }
 
-const MyProductList: React.FC<MyProductListProps> = ({
-  products,
-  userAddress,
-}) => {
+const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
   const [pageSize, setPageSize] = useState<Number>(10);
   const [sortOrder, setSortOrder] = useState<String>("asc");
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -72,7 +69,7 @@ const MyProductList: React.FC<MyProductListProps> = ({
                   />
                   <div className="w-full">
                     <h3>{product.title}</h3>
-                    <p>Price: {product.price} ETH</p>
+                    <p>Price: {product.price} WEI</p>
                     <span className="whitespace-normal overflow-hidden">
                       {product.seller}
                     </span>
