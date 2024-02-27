@@ -1,28 +1,26 @@
 import React, { useState } from "react";
-import { useMutation } from "react-query";
 import RegistrationNFT from "../organisms/RegistrationNFT";
 import Button from "../atoms/button";
-// import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import WriteModal from "../molecules/WriteModal";
 
-interface ProductData {
-  title: string;
-  content: string;
-  image: string;
-  price: string;
-}
-
-const RegistSellNft: React.FC<ProductData> = () => {
-  const [productData, setProductData] = useState({
+const RegistSellNft: React.FC = () => {
+  const [productData, setProductData] = useState<{
+    title: string;
+    content: string;
+    image: File | null;
+    signature: string;
+    price: string;
+  }>({
     title: "",
     content: "",
-    image: "",
+    image: null,
+    signature: "",
     price: "0",
   });
-  const [modalItems, setModalItems] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const openWritModal = () => {
+  const openWriteModal = () => {
     if (
       !productData.title ||
       !productData.content ||
@@ -32,49 +30,40 @@ const RegistSellNft: React.FC<ProductData> = () => {
       alert("모든 입력 필드를 채워주세요.");
       return;
     }
-    setModalItems(true);
+    setModalOpen(true);
   };
 
-  const saveProductDataToServer = async (data: ProductData) => {
+  const handleRegistration = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/product", data);
-      return response.data.id;
+      setModalOpen(false);
     } catch (error) {
-      console.error("Error saving product data:", error);
-      throw new Error("Failed to save product data");
+      console.error("Error registering product:", error);
     }
   };
 
   // const navigate = useNavigate();
 
-  const saveProductData = useMutation((newData: ProductData) =>
-    saveProductDataToServer(newData)
-  );
-
-  const handleNftDataChange = (newData: ProductData) => {
-    setProductData(newData);
-  };
-
   return (
     <div>
       <div className="flex flex-col justify-center w-[500px] mx-[auto]">
-        <RegistrationNFT onChange={handleNftDataChange} />
+        <RegistrationNFT onChange={setProductData} />
         <div className="flex flex-row mx-[auto] p-4 gap-x-1.5">
           <Button variant="iconTextBtn" size="mdl" label="취소" />
           <Button
             variant="sendBtn1"
             size="mdl"
             label="저장"
-            onClick={openWritModal}
-            disabled={saveProductData.isLoading}
+            onClick={openWriteModal}
           />
-          {modalItems && (
+          {modalOpen && (
             <WriteModal
-              onClose={() => setModalItems(false)}
+              onClose={() => setModalOpen(false)}
               title={productData.title}
               content={productData.content}
-              image={productData.image}
+              file={productData.image as File}
+              signature={productData.signature}
               price={productData.price}
+              onSubmit={handleRegistration}
             />
           )}
         </div>

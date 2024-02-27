@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import NftNameInput from "../molecules/NftNameInput";
 import CoinInput from "../molecules/CoinInput";
-import SignatureInput from "../molecules/SignatureInput";
 import axios from "axios";
-// import { ethers } from "ethers";
 
 interface RegistrationNFTProps {
   onChange: (data: {
     title: string;
     content: string;
-    image: string;
+    image: File | null;
     price: string;
     signature: string;
   }) => void;
@@ -18,116 +16,102 @@ interface RegistrationNFTProps {
 const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
+  const [image, setImage] = useState<File | null>(null);
   const [price, setPrice] = useState<string>("0");
   const [signature, setSignature] = useState<string>("");
-  const [image, setImage] = useState<string | null>(null);
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imagePreview, setImagePreview] = useState<string>("");
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    if (file) {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const selectedImage = e.target.files[0];
+      setImage(selectedImage);
+      onChange({ title, content, image: selectedImage, price, signature });
+
       const reader = new FileReader();
-      reader.onloadend = async () => {
-        setImageUrl(reader.result as string);
-        await uploadImage(file);
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
       };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleInputChange = () => {
-    onChange({ title, content, image: image || "", price, signature });
-  };
-
-  const uploadImage = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    try {
-      const response = await axios.post(
-        "https://naegift.subin.kr/image",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setImage(response.data.link);
-    } catch (error) {
-      console.error("Image Error uploading ", error);
+      reader.readAsDataURL(selectedImage);
     }
   };
 
   return (
-    <div
-      className={`w-full mx-auto my-auto mt-10 ${
-        "mobileTab" ? "flex flex-col" : "flex flex-row justify-around"
-      }`}
-    >
-      <div className="border w-full h-[200px] py-[70px]">
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt="NFT"
-            className="w-[100px] h-[100px] object-cover mx-auto"
-          />
-        ) : (
-          <p className="w-[50px] mx-[auto]">Product</p>
+    <div className="flex flex-col border w-full">
+      <label className="h-[200px] relative">
+        {imagePreview && (
+          <div className="border h-full flex flex ">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="absolute inset-0 object-cover w-200px h-200px"
+            />
+          </div>
         )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="hidden"
-          id="image-upload"
-        />
-        <label
-          htmlFor="image-upload"
-          className="cursor-pointer mx-[auto] border"
-        >
-          Choose Product
+
+        <label className="absolute inset-0 flex items-center justify-center w-full h-full cursor-pointer">
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          {!imagePreview && <span className="text-gray-500">Select Image</span>}
         </label>
-      </div>
-      <div className="my-[10px]">
+      </label>
+      <label className="p-5 border">
         <p>Title</p>
-        <div>
-          <NftNameInput
-            onChange={(value) => {
-              setTitle(value);
-              handleInputChange();
-            }}
-          />
-        </div>
-        {/* <div>
-          <p>Signature</p>
-          <SignatureInput
-            onChange={(value) => {
-              setSignature(value);
-              handleInputChange();
-            }}
-          />
-        </div> */}
-        <div>
-          <p>Eth</p>
-          <CoinInput
-            onChange={(value) => {
-              setPrice(value);
-              handleInputChange();
-            }}
-          />
-        </div>
-        <div>
-          <p>내용</p>
-          <textarea
-            value={content}
-            onChange={(e) => {
-              setContent(e.target.value);
-              handleInputChange();
-            }}
-            className="border w-full h-[200px] resize-none focus:outline-none focus:border-sky-300"
-          ></textarea>
-        </div>
-      </div>
+        <input
+          className="border w-full"
+          type="text"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+            onChange({
+              title: e.target.value,
+              content,
+              image,
+              price,
+              signature,
+            });
+          }}
+        />
+      </label>
+      <label className="p-5 border">
+        <p>Wei</p>
+        <input
+          className="border w-full"
+          type="text"
+          value={price}
+          onChange={(e) => {
+            setPrice(e.target.value);
+            onChange({
+              title: e.target.value,
+              content,
+              image,
+              price,
+              signature,
+            });
+          }}
+        />
+      </label>
+
+      <label className="p-5 border">
+        Content:
+        <textarea
+          className="border w-full h-[200px] resize-none"
+          value={content}
+          onChange={(e) => {
+            setContent(e.target.value);
+            onChange({
+              title,
+              content: e.target.value,
+              image,
+              price,
+              signature,
+            });
+          }}
+        />
+      </label>
     </div>
   );
 };
