@@ -17,4 +17,9 @@ export class VcController {
     console.log(JSON.stringify(credential));
     return this.VcService.create({ credential: JSON.stringify(credential) });
   }
+
+  @Get('verify/:id')
+  verify(@Param('id') id: number) {
+    const vc = this.VcService.findOne(id);
+  }
 }
