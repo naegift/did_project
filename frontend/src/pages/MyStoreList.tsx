@@ -20,12 +20,15 @@ const MyStoreList: React.FC = () => {
   const [data, setData] = useState<Data[]>([]);
   const [product, setProduct] = useState<Product[]>([]);
   const [userAddress, setUserAddress] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [order, setOrder] = useState<string>("asc");
+  const [seller, setSeller] = useState<string>("");
 
   useEffect((): void => {
     const mainData = async () => {
       try {
         const response = await axios.get<Data>(
-          `https://naegift.subin.kr/?page=1`
+          `https://naegift.subin.kr/store?seller=${seller}&page=${page}&order=${order}`
         );
         console.log(response.data.products);
         setData([response.data]);
@@ -35,7 +38,7 @@ const MyStoreList: React.FC = () => {
       }
     };
     mainData();
-  }, []);
+  }, [page, order, seller]);
 
   return (
     <div>

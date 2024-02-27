@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 
-export async function runEthers(title, content, image, price) {
+export async function runEthers(title: string, content: string, price: string) {
   try {
     if (!window.ethereum) {
       throw new Error("Ethereum 지갑을 찾을 수 없습니다.");
@@ -20,7 +20,6 @@ export async function runEthers(title, content, image, price) {
     const message = {
       title,
       content,
-      image,
       price: ethPrice.toString(),
     };
 
