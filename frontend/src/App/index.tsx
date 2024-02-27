@@ -7,6 +7,7 @@ import Main from "../pages/Main";
 import View from "../pages/View";
 import ProductWrite from "../pages/ProductWrite";
 import MyStoreList from "../pages/MyStoreList";
+import Gift from "../pages/Gift";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ const App: React.FC = () => {
         <Route path="/product/:id" element={<View />} />
         <Route path="/product" element={<ProductWrite />} />
         <Route path="/store" element={<MyStoreList />} />
+        <Route path="/gift" element={<Gift />} />
       </Routes>
     </QueryClientProvider>
   );
