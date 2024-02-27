@@ -21,7 +21,7 @@ const MyStoreList: React.FC = () => {
   const [product, setProduct] = useState<Product[]>([]);
   const [userAddress, setUserAddress] = useState<string>("");
   const [page, setPage] = useState<number>(1);
-  const [order, setOrder] = useState<string>("asc");
+  const [order, setOrder] = useState<string>("desc");
   const [seller, setSeller] = useState<string>("");
 
   useEffect((): void => {

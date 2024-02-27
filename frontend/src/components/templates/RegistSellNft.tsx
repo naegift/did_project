@@ -25,7 +25,9 @@ const RegistSellNft: React.FC = () => {
       !productData.title ||
       !productData.content ||
       !productData.image ||
-      !productData.price
+      !productData.price ||
+      isNaN(Number(productData.price)) ||
+      Number(productData.price) <= 0
     ) {
       alert("모든 입력 필드를 채워주세요.");
       return;
@@ -41,11 +43,9 @@ const RegistSellNft: React.FC = () => {
     }
   };
 
-  // const navigate = useNavigate();
-
   return (
     <div>
-      <div className="flex flex-col justify-center w-[500px] mx-[auto]">
+      <div className="flex flex-col justify-center w-[500px] mx-[auto] mt-6">
         <RegistrationNFT onChange={setProductData} />
         <div className="flex flex-row mx-[auto] p-4 gap-x-1.5">
           <Button variant="iconTextBtn" size="mdl" label="취소" />
