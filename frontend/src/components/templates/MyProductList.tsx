@@ -17,38 +17,36 @@ interface MyProductListProps {
 
 const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
   const [pageSize, setPageSize] = useState<Number>(10);
-  const [sortOrder, setSortOrder] = useState<String>("asc");
+  const [order, setOrder] = useState<string>("desc");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
 
   const changePage = async (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  const orderChange = (selected: string) => {
+    setOrder(selected);
+  };
   return (
     <>
       <div>
-        <h2>My Products</h2>
         <div>
           <label>
-            Page Size:
-            <select
-              value={pageSize.toString()}
-              onChange={(e) => setPageSize(Number(e.target.value))}
-            >
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-            </select>
-          </label>
-          <label>
-            Sort Order:
-            <select
-              value={sortOrder.toString()}
-              onChange={(e) => setSortOrder(e.target.value)}
-            >
-              <option value="asc">Ascending</option>
-              <option value="desc">Descending</option>
-            </select>
+            <div className="w-5/6 flex flex-row py-5 gap-5 px-20 mx-auto items-center">
+              <Button
+                variant="basicBtn2"
+                size="md"
+                label="최신순"
+                onClick={() => orderChange("desc")}
+              />
+              <Button
+                variant="basicBtn2"
+                size="md"
+                label="과거순"
+                onClick={() => orderChange("asc")}
+              />
+            </div>
           </label>
         </div>
         {products.map((product) => {
@@ -80,7 +78,6 @@ const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
           <Pagination
             activePage={currentPage}
             itemsCountPerPage={5}
-            // totalItemsCount={product.length * totalPage}
             totalItemsCount={totalPage * 5}
             pageRangeDisplayed={5}
             prevPageText={"‹"}
