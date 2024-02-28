@@ -3,17 +3,21 @@ import { Link } from "react-router-dom";
 
 import { Product } from "../../pages/Main";
 import { viewImg1 } from "../../images/Product";
+import { formatEther } from "@ethersproject/units";
 
 interface ProductBox {
   product: Product;
 }
 
 const ProductBox: React.FC<ProductBox> = ({ product }) => {
+  const priceETH = formatEther(product.price);
+
   return (
     <Link to={`/product/${product.id}`}>
-      <div className="w-[214px] h-[270px] p-4 shadow-xl rounded-md bg-slate-200">
+      <div className="w-[214px] h-[270px] p-4 shadow-xl rounded-md bg-slate-200 hover:scale-105 duration-200">
         <div className="rounded-md">
           <img
+            className="w-[182px] h-[185px]"
             src={
               product.image && product.image !== "http://example.com"
                 ? product.image
@@ -23,7 +27,7 @@ const ProductBox: React.FC<ProductBox> = ({ product }) => {
           />
         </div>
         <p className="py-1">{product.title}</p>
-        <p className="text-[18px]">{product.price}</p>
+        <p className="text-[18px]">{priceETH} ETH</p>
       </div>
     </Link>
   );
