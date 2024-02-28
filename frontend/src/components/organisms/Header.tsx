@@ -30,7 +30,7 @@ const Header: React.FC = () => {
     }
   };
 
-  return (
+   return (
     <div className="flex flex-row justify-between p-5 border-b">
       <div>
         <Link to="/">
