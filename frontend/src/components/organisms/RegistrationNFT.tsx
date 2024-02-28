@@ -80,14 +80,14 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
         />
       </label>
       <label className="p-5 border">
-        <p>Wei</p>
+        <p>ETH</p>
         <input
           className="border w-full"
           type="text"
-          value={price}
+          placeholder="ex) 0.00001"
           onChange={(e) => {
             const inputValue = e.target.value;
-            if (/^\d*$/.test(inputValue)) {
+            if (/^\d*\.?\d*$/.test(inputValue)) {
               setPrice(inputValue);
               onChange({
                 title,
