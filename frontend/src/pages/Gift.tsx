@@ -21,12 +21,14 @@ const Gift: React.FC = () => {
   const [payPage, setPayPage] = useState<number>(1);
   const [receiveTotalPage, setReceiveTotalPage] = useState<number>(1);
   const [payTotalPage, setPayTotalPage] = useState<number>(1);
+  const [receiveOrder, setReceiveOrder] = useState<string>("desc");
+  const [payOrder, setPayOrder] = useState<string>("desc");
   const { walletAddress } = useRecoilValue(walletState);
 
   const recevieGiftData = async (page: number) => {
     try {
       const response = await axios.get(
-        `https://naegift.subin.kr/gift?receiver=${walletAddress}&page=${page}&order=desc`
+        `https://naegift.subin.kr/gift?receiver=${walletAddress}&page=${page}&order=${receiveOrder}`
       );
       console.log(response.data.gifts);
       setReceiveProduct(response.data.gifts);
@@ -38,7 +40,7 @@ const Gift: React.FC = () => {
   const payGiftData = async (page: number) => {
     try {
       const response = await axios.get(
-        `https://naegift.subin.kr/gift?buyer=${walletAddress}&page=${page}&order=desc`
+        `https://naegift.subin.kr/gift?buyer=${walletAddress}&page=${page}&order=${payOrder}`
       );
       console.log(response.data.gifts);
       setPayProduct(response.data.gifts);
@@ -51,7 +53,7 @@ const Gift: React.FC = () => {
   useEffect((): void => {
     recevieGiftData(receivePage);
     payGiftData(payPage);
-  }, [receivePage, payPage]);
+  }, [receivePage, payPage, receiveOrder, payOrder]);
 
   const receivePageChange = (pageNumber: number) => {
     setReceivePage(pageNumber);
@@ -60,6 +62,14 @@ const Gift: React.FC = () => {
   const payPageChange = (pageNumber: number) => {
     console.log(pageNumber);
     setPayPage(pageNumber);
+  };
+
+  const receiveOrderChange = (selected: string) => {
+    setReceiveOrder(selected);
+  };
+
+  const payOrderChange = (selected: string) => {
+    setPayOrder(selected);
   };
 
   return (
@@ -73,6 +83,8 @@ const Gift: React.FC = () => {
         payTotalPage={payTotalPage}
         onReceivePageChange={receivePageChange}
         onPayPageChange={payPageChange}
+        onReceiveOrderChange={receiveOrderChange}
+        onPayOrderChange={payOrderChange}
       />
     </>
   );

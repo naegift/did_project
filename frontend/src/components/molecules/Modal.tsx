@@ -9,6 +9,8 @@ import Button from "../atoms/button";
 import { closeBtn } from "../../images/Icon";
 import { Product } from "../../pages/View";
 import { FACTORY_ABI } from "../../abi/factory";
+import { useRecoilValue } from "recoil";
+import { walletState } from "../../recoil/walletState";
 
 interface ModalProps {
   onClose: () => void;
@@ -18,14 +20,13 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
   const { id } = useParams();
   const [receiverInput, setReceiverInput] = useState<string>("");
+  const { walletAddress } = useRecoilValue(walletState);
 
   const runEthers = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     console.log("provider: ", provider);
-    const wallets = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    const address = wallets[0];
+
+    const address = walletAddress;
     console.log(address);
 
     const signer = provider.getSigner(address);
@@ -42,6 +43,8 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     );
 
     const buyer = address;
+    console.log(buyer);
+
     const seller = product.seller;
     console.log("seller :", seller);
     // const price = product.price;
