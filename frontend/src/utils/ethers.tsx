@@ -16,11 +16,11 @@ export async function runEthers(title: string, content: string, price: string) {
     console.log("address: ", address);
 
     const signer = provider.getSigner(address);
-    const ethPrice = ethers.utils.parseUnits(price, "ether");
+    // const ethPrice = ethers.utils.parseUnits(price, "ether");
     const message = {
       title,
       content,
-      price: ethPrice.toString(),
+      price: price,
     };
 
     const signature = await signer.signMessage(JSON.stringify(message));
