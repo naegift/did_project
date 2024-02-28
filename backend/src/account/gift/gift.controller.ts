@@ -64,7 +64,9 @@ export class GiftController {
   async receiveGift(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqReceiveGift: ReqReceiveGift,
-  ) {}
+  ) {
+    return this.giftService.receiveGift(id, reqReceiveGift.signature);
+  }
 
   @Patch(':id/use')
   @ApiOperation({ summary: '[작업중] 선물 사용하기' })
