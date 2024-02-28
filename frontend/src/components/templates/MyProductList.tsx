@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "../atoms/button";
-import { arrowBTN } from "../../images/Icon";
 import { Link } from "react-router-dom";
+import Pagination from "react-js-pagination";
 interface Product {
   id: number;
   title: string;
@@ -19,13 +19,10 @@ const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
   const [pageSize, setPageSize] = useState<Number>(10);
   const [sortOrder, setSortOrder] = useState<String>("asc");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(1);
 
-  const onPageChange = (action: "next" | "prev") => {
-    if (action === "next") {
-      console.log("Next page");
-    } else if (action === "prev") {
-      console.log("Previous page");
-    }
+  const changePage = async (pageNumber: number) => {
+    setCurrentPage(pageNumber);
   };
   return (
     <>
@@ -79,26 +76,20 @@ const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
             </Link>
           );
         })}
-        <div className=" y-full flex flex-row justify-around mt-5">
-          {/* <button onClick={() => onPageChange(1)}>First</button> */}
-          <Button
-            variant="iconBtn"
-            size="md"
-            onClick={() => onPageChange("prev")}
-          >
-            <img src={arrowBTN} alt="" className="mr-1 w-10 rotate-180" />
-          </Button>
-
-          <span>Current Page: {currentPage}</span>
-          {/* <button onClick={() => onPageChange("next")}>Next</button> */}
-          <Button
-            variant="iconBtn"
-            size="md"
-            onClick={() => onPageChange("next")}
-          >
-            <img src={arrowBTN} alt="" className="mr-1 w-10" />
-          </Button>
-          {/* <button onClick={() => onPageChange(4)}>Last</button> */}
+        <div className="w-5/6 flex flex-row py-2 gap-5 px-20 justify-center items-center">
+          <Pagination
+            activePage={currentPage}
+            itemsCountPerPage={5}
+            // totalItemsCount={product.length * totalPage}
+            totalItemsCount={totalPage * 5}
+            pageRangeDisplayed={5}
+            prevPageText={"‹"}
+            nextPageText={"›"}
+            onChange={(pageNumber) => changePage(pageNumber)}
+            innerClass="flex flex-row py-5 justify-center items-center gap-2"
+            itemClass="inline-block w-10 h-10 border border-gray-300 flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white "
+            activeClass="text-black hover:bg-[#ff4400] hover:text-white"
+          />
         </div>
       </div>
     </>

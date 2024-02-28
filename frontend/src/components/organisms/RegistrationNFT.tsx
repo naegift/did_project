@@ -22,7 +22,13 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
     if (e.target.files && e.target.files[0]) {
       const selectedImage = e.target.files[0];
       setImage(selectedImage);
-      onChange({ title, content, image: selectedImage, price, signature });
+      onChange({
+        title,
+        content,
+        image: selectedImage,
+        price,
+        signature,
+      });
 
       const reader = new FileReader();
       reader.onloadend = () => {

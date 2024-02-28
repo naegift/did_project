@@ -3,6 +3,7 @@ import Button from "../atoms/button";
 import axios from "axios";
 import { runEthers } from "../../utils/ethers";
 import Loading from "../organisms/Loading";
+import { ethers } from "ethers";
 
 interface ModalProps {
   onClose: () => void;
@@ -11,6 +12,7 @@ interface ModalProps {
   file: File;
   signature: string;
   price: string;
+  // userWalletAddress: string;
   onSubmit: () => Promise<void>;
 }
 
@@ -21,19 +23,23 @@ const WriteModal: React.FC<ModalProps> = ({
   file,
   signature,
   price,
+  // userWalletAddress,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const handleRegistration = async () => {
     onClose();
     setIsLoading(true);
+    const ethPrice = ethers.utils.parseUnits(price, "ether").toString();
     try {
-      const { message, signature } = await runEthers(title, content, price);
+      const { message, signature } = await runEthers(title, content, ethPrice);
       const formData = new FormData();
       formData.append("file", file);
       formData.append("title", title);
       formData.append("content", content);
-      formData.append("price", price);
+      formData.append("price", ethPrice);
       formData.append("signature", signature);
+
+      // formData.append("seller", userWalletAddress);
 
       const response = await axios.post(
         "https://naegift.subin.kr/product",
@@ -46,6 +52,8 @@ const WriteModal: React.FC<ModalProps> = ({
       console.log("Product registered:", response.data);
 
       const productId = response.data.id;
+      console.log(file, title, content, price, signature);
+
       window.location.href = `/product/${productId}`;
     } catch (error) {
       console.error("Error registering product:", error);
