@@ -45,7 +45,7 @@ contract NaegiftEscrow {
         require(msg.sender == receiver, 'e024');
         require(contractState == ContractStateChoices.ACTIVE, 'e013');
         contractState = ContractStateChoices.FULFILLED;
-        emit FulfillmentConfirmed(msg.sender);
+        emit FulfillmentConfirmed(msg.sender, 'confirmFulfillment');
     }
 
     // 상품 수령 확인
@@ -53,7 +53,7 @@ contract NaegiftEscrow {
         require(msg.sender == market, 'e020'); 
         require(contractState == ContractStateChoices.FULFILLED, 'e021');
         contractState = ContractStateChoices.PRODUCT_USED;
-        emit ProductUsedConfirmed(msg.sender);
+        emit ProductUsedConfirmed(msg.sender, 'confirmProductUsed');
         distributeFunds(); 
     }
 
@@ -64,7 +64,7 @@ contract NaegiftEscrow {
         uint256 sellerShare = contractPrice - marketShare; 
         payable(market).transfer(marketShare);
         payable(seller).transfer(sellerShare);
-        emit FundsDistributed(market, marketShare, seller, sellerShare);
+        emit FundsDistributed(market, marketShare, seller, sellerShare, 'distributeFunds');
         contractState = ContractStateChoices.EXECUTED;
     }
 
