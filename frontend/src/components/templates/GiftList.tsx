@@ -1,22 +1,40 @@
 import React from "react";
+import Pagination from "react-js-pagination";
 
 import { Product } from "../../pages/Gift";
 import PayBox from "../molecules/PayBox";
 import ReceiveBox from "../molecules/ReceiveBox";
+import "../../index.css";
 
 interface GiftData {
   payProducts: Product[];
   receiveProducts: Product[];
-  receivePage: number;
+  receiveTotalPage: number;
+  payTotalPage: number;
   payPage: number;
+  receivePage: number;
+  onReceivePageChange: (pageNumber: number) => void;
+  onPayPageChange: (pageNumber: number) => void;
 }
 
 const GiftList: React.FC<GiftData> = ({
   payProducts,
   receiveProducts,
-  receivePage,
+  receiveTotalPage,
+  payTotalPage,
   payPage,
+  receivePage,
+  onReceivePageChange,
+  onPayPageChange,
 }) => {
+  const receivePageChange = (pageNumber: number) => {
+    onReceivePageChange(pageNumber);
+  };
+
+  const payPageChange = (pageNumber: number) => {
+    onPayPageChange(pageNumber);
+  };
+
   return (
     <div className="w-full px-20 flex flex-row py-5 gap-8">
       <div className="w-1/2">
@@ -35,8 +53,18 @@ const GiftList: React.FC<GiftData> = ({
           </div>
         </div>
         <div>
-          페이지네이션자리
-          {payPage}
+          <Pagination
+            activePage={payPage}
+            itemsCountPerPage={3}
+            totalItemsCount={payTotalPage * 3}
+            pageRangeDisplayed={5}
+            prevPageText={"‹"}
+            nextPageText={"›"}
+            onChange={(pageNumber) => payPageChange(pageNumber)}
+            innerClass="flex flex-row py-5 justify-center items-center gap-2"
+            itemClass="inline-block w-10 h-10 border border-gray-300 flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white"
+            activeClass="text-black hover:bg-[#ff4400] hover:text-white "
+          />
         </div>
       </div>
       <div className="w-1/2 ">
@@ -57,8 +85,18 @@ const GiftList: React.FC<GiftData> = ({
           </div>
         </div>
         <div>
-          페이지네이션자리
-          {receivePage}
+          <Pagination
+            activePage={receivePage}
+            itemsCountPerPage={3}
+            totalItemsCount={receiveTotalPage * 3}
+            pageRangeDisplayed={5}
+            prevPageText={"‹"}
+            nextPageText={"›"}
+            onChange={(pageNumber) => receivePageChange(pageNumber)}
+            innerClass="flex flex-row py-5 justify-center items-center gap-2"
+            itemClass="inline-block w-10 h-10 border border-gray-300 flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white"
+            activeClass="text-black hover:bg-[#ff4400] hover:text-white "
+          />
         </div>
       </div>
     </div>
