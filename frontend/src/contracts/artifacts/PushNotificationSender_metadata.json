@@ -1,0 +1,77 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "body",
+						"type": "string"
+					}
+				],
+				"name": "sendPushNotification",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"frontend/src/contracts/PushNotification.sol": "PushNotificationSender"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"frontend/src/contracts/PushNotification.sol": {
+			"keccak256": "0x44ad73de2be2b8c611e160c4ea26995d8f15dc98495b7fa2c00774f70019ac23",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://98aabfc4e0396ffa2870cfbd0ef734445d18b53671b7cfd2d1af073bbe7518a7",
+				"dweb:/ipfs/QmbYtUPM1No7jUVbqaDrumgCaQrFscaocoEi6PvEgT5jWG"
+			]
+		},
+		"frontend/src/contracts/interfaces/IPUSHNotiInterface.sol": {
+			"keccak256": "0xf44f274aae5d63b4c5064afeeb8029387319aeafb65cb02da539ce6520a92824",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://bb0d22199d30e6a34661a35ef12dbfbeb410337a98b6b6e82d3df6c01958e311",
+				"dweb:/ipfs/Qmd2w2LcDdvp77SCu5fVmxsTqg4xXmwQyC2fsb1xPa5cMZ"
+			]
+		}
+	},
+	"version": 1
+}

@@ -49,7 +49,6 @@ const useWalletAndSuscribe = () => {
 
       if (isAlreadySubscribed) {
         console.log("이미 구독중");
-        alert("이미 구독중인 채널입니다.");
         return;
       }
 
