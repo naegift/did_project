@@ -6,9 +6,10 @@ import Modal from "./Modal";
 
 interface viewBoxData {
   product: Product;
+  userWalletAddress: string;
 }
 
-const ViewBox: React.FC<viewBoxData> = ({ product }) => {
+const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
@@ -34,6 +35,8 @@ const ViewBox: React.FC<viewBoxData> = ({ product }) => {
           <p className="text-3xl py-5">{product.title}</p>
           <p className="text-2xl ">{product.price}</p>
           <p className="py-7">{product.content}</p>
+          <p className="py-7">Seller:{product.seller}</p>
+          <p className="py-7">내 지갑{userWalletAddress}</p>
 
           <Button
             onClick={openModal}
@@ -41,6 +44,12 @@ const ViewBox: React.FC<viewBoxData> = ({ product }) => {
             size="lg"
             label="선물하기"
           />
+          {product.seller === userWalletAddress && (
+            <div className="flex flex-row gap-x-2 mt-10">
+              <Button variant="iconBtn" size="mm" label="수정" />
+              <Button variant="basicBtn2" size="mm" label="삭제" />
+            </div>
+          )}
           {modalOpen && (
             <Modal product={product} onClose={() => setModalOpen(false)} />
           )}

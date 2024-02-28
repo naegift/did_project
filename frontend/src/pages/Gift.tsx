@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import GiftList from "../components/templates/GiftList";
+import { useRecoilValue } from "recoil";
+import { walletState } from "../recoil/walletState";
 
 export interface Product {
   id: number;
@@ -17,48 +19,73 @@ const Gift: React.FC = () => {
   const [payProduct, setPayProduct] = useState<Product[]>([]);
   const [receivePage, setReceivePage] = useState<number>(1);
   const [payPage, setPayPage] = useState<number>(1);
+  const [receiveTotalPage, setReceiveTotalPage] = useState<number>(1);
+  const [payTotalPage, setPayTotalPage] = useState<number>(1);
+  const [receiveOrder, setReceiveOrder] = useState<string>("desc");
+  const [payOrder, setPayOrder] = useState<string>("desc");
+  const { walletAddress } = useRecoilValue(walletState);
 
-  const address = "0x925378ab635C0e103ddAf62f8B03a088bbEF5544";
+  const recevieGiftData = async (page: number) => {
+    try {
+      const response = await axios.get(
+        `https://naegift.subin.kr/gift?receiver=${walletAddress}&page=${page}&order=${receiveOrder}`
+      );
+      console.log(response.data.gifts);
+      setReceiveProduct(response.data.gifts);
+      setReceiveTotalPage(response.data.totalPages);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const payGiftData = async (page: number) => {
+    try {
+      const response = await axios.get(
+        `https://naegift.subin.kr/gift?buyer=${walletAddress}&page=${page}&order=${payOrder}`
+      );
+      console.log(response.data.gifts);
+      setPayProduct(response.data.gifts);
+      setPayTotalPage(response.data.totalPages);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect((): void => {
-    // recoil되면 address 수정하기
-    const recevieGiftData = async () => {
-      try {
-        const response = await axios.get(
-          `https://naegift.subin.kr/gift?receiver=${address}&page=1&order=desc`
-        );
-        console.log(response.data.totalPages);
-        console.log(response.data.gifts);
-        setReceiveProduct(response.data.gifts);
-        setReceivePage(response.data.totalPages);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const payGiftData = async () => {
-      try {
-        const response = await axios.get(
-          `https://naegift.subin.kr/gift?buyer=${address}&page=1&order=desc`
-        );
-        console.log(response.data.gifts);
-        setPayProduct(response.data.gifts);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    recevieGiftData();
-    payGiftData();
-  }, []);
+    recevieGiftData(receivePage);
+    payGiftData(payPage);
+  }, [receivePage, payPage, receiveOrder, payOrder]);
+
+  const receivePageChange = (pageNumber: number) => {
+    setReceivePage(pageNumber);
+  };
+
+  const payPageChange = (pageNumber: number) => {
+    console.log(pageNumber);
+    setPayPage(pageNumber);
+  };
+
+  const receiveOrderChange = (selected: string) => {
+    setReceiveOrder(selected);
+  };
+
+  const payOrderChange = (selected: string) => {
+    setPayOrder(selected);
+  };
+
   return (
     <>
-      <div className="">
-        <GiftList
-          payProducts={payProduct}
-          receiveProducts={receiveProduct}
-          receivePage={receivePage}
-          payPage={payPage}
-        />
-      </div>
+      <GiftList
+        payProducts={payProduct}
+        receiveProducts={receiveProduct}
+        payPage={payPage}
+        receivePage={receivePage}
+        receiveTotalPage={receiveTotalPage}
+        payTotalPage={payTotalPage}
+        onReceivePageChange={receivePageChange}
+        onPayPageChange={payPageChange}
+        onReceiveOrderChange={receiveOrderChange}
+        onPayOrderChange={payOrderChange}
+      />
     </>
   );
 };
