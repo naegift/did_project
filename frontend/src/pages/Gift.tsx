@@ -23,12 +23,10 @@ const Gift: React.FC = () => {
   const [payTotalPage, setPayTotalPage] = useState<number>(1);
   const { walletAddress } = useRecoilValue(walletState);
 
-  const address = walletAddress.toLowerCase();
-
   const recevieGiftData = async (page: number) => {
     try {
       const response = await axios.get(
-        `https://naegift.subin.kr/gift?receiver=${address}&page=${page}&order=desc`
+        `https://naegift.subin.kr/gift?receiver=${walletAddress}&page=${page}&order=desc`
       );
       console.log(response.data.gifts);
       setReceiveProduct(response.data.gifts);
@@ -40,7 +38,7 @@ const Gift: React.FC = () => {
   const payGiftData = async (page: number) => {
     try {
       const response = await axios.get(
-        `https://naegift.subin.kr/gift?buyer=${address}&page=${page}&order=desc`
+        `https://naegift.subin.kr/gift?buyer=${walletAddress}&page=${page}&order=desc`
       );
       console.log(response.data.gifts);
       setPayProduct(response.data.gifts);
