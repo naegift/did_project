@@ -30,19 +30,26 @@ const Header: React.FC = () => {
     }
   };
 
-   return (
+  return (
     <div className="flex flex-row justify-between p-5 border-b">
       <div>
         <Link to="/">
           <img src={logo} alt="" />
         </Link>
       </div>
-      <div className="flex flex-row gap-10">
-        <Button variant="iconBtn" size="sm" label="">
+      <div className="flex flex-row gap-10 items-center">
+        <Button variant="iconBtn" size="sm" label="" className="hidden">
           <img src={menuIcon} alt="" />
         </Button>
         <Link to="/product">
           <Button variant="sendBtn2" size="mdl" label="상품등록하기" />
+        </Link>
+        <Link to="/store">
+          <Button variant="sendBtn2" size="mdl" label="SELLER" />
+        </Link>
+
+        <Link to="/gift">
+          <Button variant="sendBtn2" size="mdl" label="선물함" />
         </Link>
 
         {sellerWallets.isLoggedIn ? (
