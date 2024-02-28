@@ -5,6 +5,9 @@ const { persistAtom } = recoilPersist();
 
 export const walletState = atom({
   key: "walletState",
-  default: "",
+  default: {
+    walletAddress: "",
+    isLoggedIn: false,
+  },
   effects_UNSTABLE: [persistAtom],
 });
