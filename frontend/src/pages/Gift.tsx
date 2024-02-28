@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import GiftList from "../components/templates/GiftList";
+import { useRecoilValue } from "recoil";
+import { walletState } from "../recoil/walletState";
 
 export interface Product {
   id: number;
@@ -19,15 +21,14 @@ const Gift: React.FC = () => {
   const [payPage, setPayPage] = useState<number>(1);
   const [receiveTotalPage, setReceiveTotalPage] = useState<number>(1);
   const [payTotalPage, setPayTotalPage] = useState<number>(1);
+  const { walletAddress } = useRecoilValue(walletState);
 
-  const address = "0x4f849786178ab320330dbb14802412e285171d22";
-  const address2 = "0x925378ab635C0e103ddAf62f8B03a088bbEF5544";
+  const address = walletAddress.toLowerCase();
 
-  // recoil되면 address 수정하기
   const recevieGiftData = async (page: number) => {
     try {
       const response = await axios.get(
-        `https://naegift.subin.kr/gift?receiver=${address2}&page=${page}&order=desc`
+        `https://naegift.subin.kr/gift?receiver=${address}&page=${page}&order=desc`
       );
       console.log(response.data.gifts);
       setReceiveProduct(response.data.gifts);
