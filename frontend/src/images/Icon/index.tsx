@@ -7,6 +7,7 @@ import iconProfile1 from "./iconProfile1.png";
 import iconProfile2 from "./iconProfile2.png";
 import closeBtn from "./popup_close_btn.png";
 import arrowBTN from "./arrowBTN.png";
+import loadingCat from "./loadingCat.gif";
 
 export {
   userIcon,
@@ -18,4 +19,5 @@ export {
   iconProfile2,
   closeBtn,
   arrowBTN,
+  loadingCat,
 };

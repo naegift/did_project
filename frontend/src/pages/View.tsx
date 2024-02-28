@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-
+import Loading from "../components/organisms/Loading";
 import ViewBox from "../components/molecules/ViewBox";
 
 export interface Product {
@@ -22,6 +22,8 @@ const View: React.FC = () => {
     price: "",
     seller: "",
   });
+  const [loading, setLoading] = useState(true);
+
   const { id } = useParams();
 
   useEffect((): void => {
@@ -32,6 +34,9 @@ const View: React.FC = () => {
         );
         console.log(response.data);
         setProduct(response.data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1500);
       } catch (error) {
         console.log(error);
       }
@@ -41,6 +46,7 @@ const View: React.FC = () => {
 
   return (
     <>
+       {loading ? <Loading /> : null}
       <ViewBox product={product} />
     </>
   );
