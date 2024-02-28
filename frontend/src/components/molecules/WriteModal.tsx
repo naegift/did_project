@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "../atoms/button";
 import axios from "axios";
 import { runEthers } from "../../utils/ethers";
+import Loading from "../organisms/Loading";
 
 interface ModalProps {
   onClose: () => void;
@@ -21,8 +22,10 @@ const WriteModal: React.FC<ModalProps> = ({
   signature,
   price,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const handleRegistration = async () => {
     onClose();
+    setIsLoading(true);
     try {
       const { message, signature } = await runEthers(title, content, price);
       const formData = new FormData();
@@ -46,10 +49,15 @@ const WriteModal: React.FC<ModalProps> = ({
       window.location.href = `/product/${productId}`;
     } catch (error) {
       console.error("Error registering product:", error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
     }
   };
   return (
     <div className="fixed inset-0 bg-black opacity-80">
+      {isLoading && <Loading />}
       <div className="w-full y-full flex justify-center flex-col items-center mt-[100px] gap-y-10">
         <p className="text-white">Title: {title}</p>
         <p className="text-white text-wrap">Image: {file ? file.name : ""}</p>
