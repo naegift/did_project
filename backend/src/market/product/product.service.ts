@@ -61,7 +61,7 @@ export class ProductService {
   async putProduct(
     id: number,
     reqPutProduct: ReqPutProduct,
-    file: Express.Multer.File,
+    file?: Express.Multer.File,
   ): Promise<ResPutProduct> {
     const product = await this.getProduct(id);
     const { title, content, price, signature } = reqPutProduct;
@@ -71,13 +71,16 @@ export class ProductService {
     if (seller !== product.seller) {
       throw new UnauthorizedException('Cannot update other sellers product.');
     }
-    const { link } = await this.imageService.uploadImage(file);
+
+    if (file) {
+      const { link } = await this.imageService.uploadImage(file);
+      product.image = link;
+    }
 
     await this.productRepo.save({
       id: product.id,
+      image: product.image,
       ...reqPutProduct,
-      image: link,
-      seller,
     });
 
     return { id: product.id };
