@@ -111,11 +111,11 @@ const ReceiveBox: React.FC<
       mascaApi
     );
 
-    const { signature } =
+    const { message, signature } =
       await runEthers(
-        "test",
-        "test",
-        "test"
+        receivedItem.title,
+        receivedItem.content,
+        receivedItem.price
       );
     const response = await axios.patch(
       `${
@@ -126,6 +126,9 @@ const ReceiveBox: React.FC<
       }/receive`,
       {
         signature,
+        title: message.title,
+        content: message.content,
+        price: message.price,
       }
     );
     await mascaApi.saveCredential(

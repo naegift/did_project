@@ -29,9 +29,9 @@ export async function runEthers(
       provider.getSigner(address);
     // const ethPrice = ethers.utils.parseUnits(price, "ether");
     const message = {
-      // title,
-      // content,
-      // price,
+      title,
+      content,
+      price,
     };
 
     const signature =

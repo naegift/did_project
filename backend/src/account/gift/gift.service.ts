@@ -26,6 +26,7 @@ import {
 } from '@veramo/core';
 import { EIP712 } from './EthereumEIP712Signature2021';
 import { _TypedDataEncoder } from 'ethers/lib/utils';
+import { ReqReceiveGift } from './dto/req-receive-gift.dto';
 
 @Injectable()
 export class GiftService {
@@ -127,13 +128,24 @@ export class GiftService {
 
   async receiveGift(
     id: number,
-    signature: string,
+    reqReceiveGift: ReqReceiveGift,
   ): Promise<VerifiableCredential> {
     const gift = await this.getGift(id);
     console.log(gift);
     // signature verified (this is the receiver)
-    const message = '{}';
-    const signer = ethers.utils.verifyMessage(message, signature);
+
+    const message = {
+      title: reqReceiveGift.title,
+      content: reqReceiveGift.content,
+      price: reqReceiveGift.price,
+    };
+
+    const signature = reqReceiveGift.signature;
+
+    const signer = ethers.utils.verifyMessage(
+      JSON.stringify(message),
+      signature,
+    );
     if (signer !== gift.receiver)
       throw new UnauthorizedException('Invalid signature.');
 
