@@ -11,6 +11,7 @@ import { Product } from "../../pages/View";
 import { FACTORY_ABI } from "../../abi/factory";
 import { useRecoilValue } from "recoil";
 import { walletState } from "../../recoil/walletState";
+import { formatEther } from "@ethersproject/units";
 
 interface ModalProps {
   onClose: () => void;
@@ -22,12 +23,10 @@ const Modal: React.FC<ModalProps> = ({
   product,
 }) => {
   const { id } = useParams();
-  const [
-    receiverInput,
-    setReceiverInput,
-  ] = useState<string>("");
-  const { walletAddress } =
-    useRecoilValue(walletState);
+  const [receiverInput, setReceiverInput] = useState<string>("");
+  const { walletAddress } = useRecoilValue(walletState);
+  const priceETH = formatEther(product.price);
+
 
   const runEthers = async () => {
     const provider =
@@ -157,10 +156,8 @@ const Modal: React.FC<ModalProps> = ({
                         {product.title}{" "}
                         선물 보내기
                       </h3>
-                      <p className="py-3">
-                        금액 :{" "}
-                        {product.price}{" "}
-                      </p>
+
+                      <p className="py-3">금액 : {priceETH} ETH </p>
 
                       <Inputs
                         onChange={(
