@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loading from "../components/organisms/Loading";
@@ -15,16 +18,21 @@ export interface Product {
 }
 
 const View: React.FC = () => {
-  const [product, setProduct] = useState<Product>({
-    id: 0,
-    title: "",
-    content: "",
-    image: "",
-    price: "",
-    seller: "",
-  });
-  const [loading, setLoading] = useState(true);
-  const [userWalletAddress, setUserWalletAddress] = useState("");
+  const [product, setProduct] =
+    useState<Product>({
+      id: 0,
+      title: "",
+      content: "",
+      image: "",
+      price: "",
+      seller: "",
+    });
+  const [loading, setLoading] =
+    useState(true);
+  const [
+    userWalletAddress,
+    setUserWalletAddress,
+  ] = useState("");
 
   const { id } = useParams();
 
@@ -32,9 +40,14 @@ const View: React.FC = () => {
     const fetchData = async () => {
       try {
         // 상품 데이터 가져오기
-        const response = await axios.get<Product>(
-          `https://naegift.subin.kr/product/${id}`
-        );
+        const response =
+          await axios.get<Product>(
+            `${
+              process.env
+                .REACT_APP_API ||
+              process.env.REACT_APP_AWS
+            }/product/${id}`
+          );
         console.log(response.data);
         setProduct(response.data);
         setLoading(false);
@@ -43,25 +56,33 @@ const View: React.FC = () => {
       }
     };
 
-    const fetchWalletAddress = async () => {
-      if (window.ethereum) {
-        try {
-          await window.ethereum.enable();
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const signer = provider.getSigner();
-          const address = await signer.getAddress();
-          setUserWalletAddress(address);
-        } catch (error) {
+    const fetchWalletAddress =
+      async () => {
+        if (window.ethereum) {
+          try {
+            await window.ethereum.enable();
+            const provider =
+              new ethers.providers.Web3Provider(
+                window.ethereum
+              );
+            const signer =
+              provider.getSigner();
+            const address =
+              await signer.getAddress();
+            setUserWalletAddress(
+              address
+            );
+          } catch (error) {
+            console.error(
+              "MetaMask 또는 유사한 웹3 지갑이 설치되어 있지 않습니다."
+            );
+          }
+        } else {
           console.error(
             "MetaMask 또는 유사한 웹3 지갑이 설치되어 있지 않습니다."
           );
         }
-      } else {
-        console.error(
-          "MetaMask 또는 유사한 웹3 지갑이 설치되어 있지 않습니다."
-        );
-      }
-    };
+      };
 
     fetchData();
     fetchWalletAddress();
@@ -70,7 +91,12 @@ const View: React.FC = () => {
   return (
     <>
        {loading ? <Loading /> : null}
-      <ViewBox product={product} userWalletAddress={userWalletAddress} />
+      <ViewBox
+        product={product}
+        userWalletAddress={
+          userWalletAddress
+        }
+      />
     </>
   );
 };
