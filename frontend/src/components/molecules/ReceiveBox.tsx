@@ -1,4 +1,7 @@
-import React from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
 import { Product } from "../../pages/Gift";
 import Button from "../atoms/button";
 import DateTime from "./DateTime";
@@ -9,6 +12,8 @@ import {
   enableMasca,
   isError,
 } from "@blockchain-lab-um/masca-connector";
+import { useRecoilValue } from "recoil";
+import { walletState } from "../../recoil/walletState";
 
 interface GiftListData {
   receivedItem: Product;
@@ -17,12 +22,29 @@ interface GiftListData {
 const ReceiveBox: React.FC<
   GiftListData
 > = ({ receivedItem }) => {
+  const { walletAddress: address } =
+    useRecoilValue(walletState);
+
+  const [hideButton, setHideButton] =
+    useState(false);
+
+  const states: {
+    [key: string]: string;
+  } = {
+    issued: "사용 가능",
+    active:
+      "선물을 아직 받지 않았습니다",
+    fulfilled: "상품 준비중",
+    productUsed: "사용 완료",
+    executed: "사용 완료",
+  };
+
   const verify = async () => {
-    const accounts =
-      await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-    const address = accounts[0];
+    // const accounts =
+    //   await window.ethereum.request({
+    //     method: "eth_requestAccounts",
+    //   });
+    // const address = accounts[0];
 
     // Enable Masca
 
@@ -74,14 +96,23 @@ const ReceiveBox: React.FC<
       targetVc
     );
     console.log(verifyRes);
+    setHideButton(verifyRes.data);
   };
 
+  // useEffect(() => {
+  //   if (
+  //     receivedItem.state === "issued"
+  //   ) {
+  //     verify();
+  //   }
+  // }, [hideButton]);
+
   const receiveGift = async () => {
-    const accounts =
-      await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-    const address = accounts[0];
+    // const accounts =
+    //   await window.ethereum.request({
+    //     method: "eth_requestAccounts",
+    //   });
+    // const address = accounts[0];
 
     // Enable Masca
 
@@ -138,9 +169,6 @@ const ReceiveBox: React.FC<
       "VC was handed over",
       response.data
     );
-    const queried =
-      await mascaApi.queryCredentials();
-    console.log(queried);
   };
   return (
     <>
@@ -159,29 +187,33 @@ const ReceiveBox: React.FC<
           </p>
           <p>
             상태 :{" "}
-            {receivedItem.state !==
-            "active"
-              ? "사용 완료"
-              : "사용 가능"}
+            {states[receivedItem.state]}
           </p>
           <p>
             From : {receivedItem.buyer}
           </p>
         </div>
-        <div>
-          <Button
-            onClick={receiveGift}
-            variant="basicBtn"
-            size="dd"
-            label="선물받기"
-          />
-          <Button
-            onClick={verify}
-            variant="basicBtn"
-            size="dd"
-            label="선물 사용하기"
-          />
-        </div>
+        {receivedItem.state.length ===
+          6 && (
+          <div>
+            {receivedItem.state ===
+            "issued" ? (
+              <Button
+                onClick={verify}
+                variant="basicBtn"
+                size="dd"
+                label="사용하기"
+              />
+            ) : (
+              <Button
+                onClick={receiveGift}
+                variant="basicBtn"
+                size="dd"
+                label="선물받기"
+              />
+            )}
+          </div>
+        )}
       </div>
     </>
   );

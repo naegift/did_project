@@ -44,18 +44,25 @@ const Gift: React.FC = () => {
   ] = useState<string>("desc");
   const [payOrder, setPayOrder] =
     useState<string>("desc");
+
   const { walletAddress } =
     useRecoilValue(walletState);
 
   const recevieGiftData = async (
+    _walletAddress: string,
     page: number
   ) => {
     try {
+      const url = `${
+        process.env.REACT_APP_API ||
+        process.env.REACT_APP_AWS
+      }/gift?receiver=${_walletAddress}&page=${page}&order=${receiveOrder}`;
       const response = await axios.get(
-        `${
-          process.env.REACT_APP_API ||
-          process.env.REACT_APP_AWS
-        }/gift?receiver=${walletAddress}&page=${page}&order=${receiveOrder}`
+        url
+      );
+      console.log(
+        `response from ${url}`,
+        response
       );
       console.log(response.data.gifts);
       setReceiveProduct(
@@ -69,14 +76,20 @@ const Gift: React.FC = () => {
     }
   };
   const payGiftData = async (
+    _walletAddress: string,
     page: number
   ) => {
     try {
+      const url = `${
+        process.env.REACT_APP_API ||
+        process.env.REACT_APP_AWS
+      }/gift?buyer=${_walletAddress}&page=${page}&order=${payOrder}`;
       const response = await axios.get(
-        `${
-          process.env.REACT_APP_API ||
-          process.env.REACT_APP_AWS
-        }/gift?buyer=${walletAddress}&page=${page}&order=${payOrder}`
+        url
+      );
+      console.log(
+        `response from ${url}`,
+        response
       );
       console.log(response.data.gifts);
       setPayProduct(
@@ -91,13 +104,17 @@ const Gift: React.FC = () => {
   };
 
   useEffect((): void => {
-    recevieGiftData(receivePage);
-    payGiftData(payPage);
+    recevieGiftData(
+      walletAddress,
+      receivePage
+    );
+    payGiftData(walletAddress, payPage);
   }, [
     receivePage,
     payPage,
     receiveOrder,
     payOrder,
+    walletAddress,
   ]);
 
   const receivePageChange = (
