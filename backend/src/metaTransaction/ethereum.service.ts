@@ -24,31 +24,31 @@ export class EthereumService {
 
     this.contract = new ethers.Contract(contractAddress, abi, wallet);
 
-    this.setupEventListeners();
+    // this.setupEventListeners();
   }
 
-  private setupNaegiftEscrowEventListeners() {
-    const escrowContract = new ethers.Contract(
-      this.configService.get<string>('NAEGIFT_ESCROW_CONTRACT_ADDRESS'),
-      ESCROW_ABI,
-      this.provider,
-    );
+  // private setupEventListeners() {
+  //   const escrowContract = new ethers.Contract(
+  //     this.configService.get<string>('NAEGIFT_ESCROW_CONTRACT_ADDRESS'),
+  //     ESCROW_ABI,
+  //     this.provider,
+  //   );
 
-    escrowContract.on('FulfillmentConfirmed', async (market, event) => {
-      // 여기에 데이터베이스에 저장하는 로직을 구현합니다.
-    });
+  //   escrowContract.on('FulfillmentConfirmed', async (market, event) => {
+  //     // 여기에 데이터베이스에 저장하는 로직을 구현합니다.
+  //   });
 
-    escrowContract.on('ProductUsedConfirmed', async (receiver, event) => {
-      // 여기에 데이터베이스에 저장하는 로직을 구현합니다.
-    });
+  //   escrowContract.on('ProductUsedConfirmed', async (receiver, event) => {
+  //     // 여기에 데이터베이스에 저장하는 로직을 구현합니다.
+  //   });
 
-    escrowContract.on(
-      'FundsDistributed',
-      async (market, marketShare, seller, sellerShare, event) => {
-        // 여기에 데이터베이스에 저장하는 로직을 구현합니다.
-      },
-    );
-  }
+  //   escrowContract.on(
+  //     'FundsDistributed',
+  //     async (market, marketShare, seller, sellerShare, event) => {
+  //       // 여기에 데이터베이스에 저장하는 로직을 구현합니다.
+  //     },
+  //   );
+  // }
 
   async processBatchTransactions(transactions) {
     const tx = await this.contract.processBatchTransactions(

@@ -10,7 +10,7 @@ export class TransactionsTask {
     private ethereumService: EthereumService,
   ) {}
 
-  @Cron(CronExpression.EVERY_DAY_AT_NOON)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async handleCron() {
     console.log('작업을 시작합니다...');
     const transactions = await this.databaseService.getPendingTransactions();
