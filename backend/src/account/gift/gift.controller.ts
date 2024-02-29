@@ -62,7 +62,7 @@ export class GiftController {
   }
 
   @Patch(':id/receive')
-  @ApiOperation({ summary: '[작업중] 선물받기' })
+  @ApiOperation({ summary: '선물받기' })
   async receiveGift(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqReceiveGift: ReqReceiveGift,
@@ -77,7 +77,7 @@ export class GiftController {
     // @Body() reqUseGift: ReqUseGift,
     @Body() VcRes: QueryCredentialsRequestResult,
   ) {
-    return this.giftService.verifyCredential(VcRes);
+    return this.giftService.verifyCredential(id, VcRes);
   }
 
   @Patch(':id/confirm')

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -6,7 +7,7 @@ import {
 import { ResGetState } from './dto/res-get-state.dto';
 import { ethers } from 'ethers';
 import { ESCROW_ABI } from 'src/__base-code__/abi/escrow.abi';
-import { stateCode } from 'src/__base-code__/enum/state.enum';
+import { State, stateCode } from 'src/__base-code__/enum/state.enum';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -89,6 +90,7 @@ export class GiftService {
   }
 
   async verifyCredential(
+    id: number,
     VcRes: QueryCredentialsRequestResult,
   ): Promise<boolean> {
     // revoke mechanism
@@ -98,7 +100,7 @@ export class GiftService {
     // console.log('VDR: ', VDR);
     // console.log(VcRes.metadata.id);
     // if (VDR.includes(VcRes.metadata.id))
-    //   throw new UnauthorizedException('Already used credential.');
+    //   throw new BadRequestException('Already used credential.');
     // VDR.push(VcRes.metadata.id);
 
     const { proof, ...unsignedCredential } = VcRes.data as VerifiableCredential;
@@ -120,7 +122,29 @@ export class GiftService {
       );
       console.log(recoveredAddress, signerAddress);
 
-      return recoveredAddress.toLowerCase() === signerAddress.toLowerCase();
+      const result =
+        recoveredAddress.toLowerCase() === signerAddress.toLowerCase();
+      if (result) {
+        // const gift = await this.getGift(id);
+        // const provider = new ethers.providers.JsonRpcProvider(
+        //   process.env.NETWORK_RPC || MockGiftModel.network,
+        // );
+        // const escrowContract = new ethers.Contract(
+        //   gift.contract,
+        //   ESCROW_ABI,
+        //   provider,
+        // );
+        // const escrowFulfilled = await escrowContract.confirmFulfillment();
+        // console.log(escrowFulfilled)
+        this.giftRepo.update(id, { state: State.FULFILLED });
+      }
+      // push notification to the seller
+
+      // seller sends the item to the receiver
+
+      // receiver confirms the receipt
+
+      return result;
     } catch (e) {
       throw new UnauthorizedException('Invalid credential proof.');
     }
@@ -131,9 +155,12 @@ export class GiftService {
     reqReceiveGift: ReqReceiveGift,
   ): Promise<VerifiableCredential> {
     const gift = await this.getGift(id);
-    console.log(gift);
+    // check if the gift was already issued and received
+    if (gift.state === State.ISSUED)
+      throw new BadRequestException(
+        'The gift was already issued and received.',
+      );
     // signature verified (this is the receiver)
-
     const message = {
       title: reqReceiveGift.title,
       content: reqReceiveGift.content,
@@ -200,6 +227,14 @@ export class GiftService {
     };
 
     const vc = Object.assign(payload, toBeAssigned);
+    this.giftRepo.update(id, { state: State.ISSUED });
+
     return vc;
+  }
+
+  async confirm() {
+    // escrow contract call (confirmProductUsed)
+    // if escrow state changed, update the gift state
+    // metatransaction logic
   }
 }
