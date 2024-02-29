@@ -10,6 +10,8 @@ import { walletState } from "../recoil/walletState";
 export interface Product {
   id: number;
   title: string;
+  content: string;
+  price: string;
   image: string;
   state: string;
   updatedAt: string;

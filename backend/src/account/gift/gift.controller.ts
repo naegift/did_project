@@ -67,7 +67,7 @@ export class GiftController {
     @Param('id', ParseIntPipe) id: number,
     @Body() reqReceiveGift: ReqReceiveGift,
   ) {
-    return this.giftService.receiveGift(id, reqReceiveGift.signature);
+    return this.giftService.receiveGift(id, reqReceiveGift);
   }
 
   @Patch(':id/use')
