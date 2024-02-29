@@ -15,7 +15,10 @@ import { ResGetGifts } from './dto/res-get-gifts.dto';
 import { DataService } from 'src/common/data/data.service';
 import { Order } from 'src/__base-code__/enum/order.enum';
 import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
-import { MinimalUnsignedCredential } from '@blockchain-lab-um/masca-connector';
+import {
+  MinimalUnsignedCredential,
+  QueryCredentialsRequestResult,
+} from '@blockchain-lab-um/masca-connector';
 import {
   UnsignedCredential,
   VerifiableCredential,
@@ -78,12 +81,26 @@ export class GiftService {
     const domain = EIP712.domain;
     const types = EIP712.types;
     const signer = new ethers.Wallet(process.env.MARKET_PRIVATE_KEY);
+    console.log('here!');
     const signature = await signer._signTypedData(domain, types, credential);
+    console.log('there!');
     return signature;
   }
 
-  async verifyCredential(credential: VerifiableCredential): Promise<boolean> {
-    const { proof, ...unsignedCredential } = credential;
+  async verifyCredential(
+    VcRes: QueryCredentialsRequestResult,
+  ): Promise<boolean> {
+    // revoke mechanism
+
+    // const VDR = [];
+    // console.log(VcRes);
+    // console.log('VDR: ', VDR);
+    // console.log(VcRes.metadata.id);
+    // if (VDR.includes(VcRes.metadata.id))
+    //   throw new UnauthorizedException('Already used credential.');
+    // VDR.push(VcRes.metadata.id);
+
+    const { proof, ...unsignedCredential } = VcRes.data as VerifiableCredential;
 
     if (!proof || !proof.proofValue || !proof.verificationMethod) {
       throw new UnauthorizedException('Invalid credential proof structure.');
@@ -100,6 +117,7 @@ export class GiftService {
         message,
         proof.proofValue,
       );
+      console.log(recoveredAddress, signerAddress);
 
       return recoveredAddress.toLowerCase() === signerAddress.toLowerCase();
     } catch (e) {
@@ -171,11 +189,5 @@ export class GiftService {
 
     const vc = Object.assign(payload, toBeAssigned);
     return vc;
-  }
-  async testFunction(id: number, signature: string) {
-    const vc = await this.receiveGift(id, signature);
-    const result = await this.verifyCredential(vc);
-    console.log(result);
-    return result;
   }
 }
