@@ -15,12 +15,14 @@ export class EthereumService {
       this.configService.get<string>('NETWORK_RPC'),
     );
     const wallet = new ethers.Wallet(
-      this.configService.get<string>('PRIVATE_KEY'),
+      this.configService.get<string>('MARKET_PRIVATE_KEY'),
       provider,
     );
 
     const abi = ESCROW_ABI;
-    const contractAddress = this.configService.get<string>('CONTRACT_ADDRESS');
+    const contractAddress = this.configService.get<string>(
+      'ESCROW_CONTRACT_ADDRESS',
+    );
 
     this.contract = new ethers.Contract(contractAddress, abi, wallet);
 
