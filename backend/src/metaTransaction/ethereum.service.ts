@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from './database.service';
-import * as fs from 'fs';
+import { META_ABI } from '../__base-code__/abi/meta.abi';
+import { ESCROW_ABI } from '../__base-code__/abi/escrow.abi';
 
 @Injectable()
 export class EthereumService {
@@ -18,39 +19,47 @@ export class EthereumService {
       provider,
     );
 
-    const abiPath = this.configService.get<string>('ABI_PATH');
-    const abi = JSON.parse(fs.readFileSync(abiPath, 'utf8'));
+    const abi = ESCROW_ABI;
     const contractAddress = this.configService.get<string>('CONTRACT_ADDRESS');
 
     this.contract = new ethers.Contract(contractAddress, abi, wallet);
 
-    // this.setupEventListeners();
+    this.setupEventListeners();
   }
 
-  // private setupEventListeners() {
-  //   const escrowContract = new ethers.Contract(
-  //     this.configService.get<string>('NAEGIFT_ESCROW_CONTRACT_ADDRESS'),
-  //     ESCROW_ABI,
-  //     this.provider,
-  //   );
+  private setupEventListeners() {
+    // 이벤트 리스너 설정
+    this.contract.on('FulfillmentConfirmed', async (market, event) => {
+      await this.databaseService.saveTransactionData({
+        walletAddress: market,
+        message: 'FulfillmentConfirmed',
+        signature: '',
+      });
+    });
 
-  //   escrowContract.on('FulfillmentConfirmed', async (market, event) => {
-  //     // 여기에 데이터베이스에 저장하는 로직을 구현합니다.
-  //   });
+    this.contract.on('ProductUsedConfirmed', async (receiver, event) => {
+      await this.databaseService.saveTransactionData({
+        walletAddress: receiver,
+        message: 'ProductUsedConfirmed',
+        signature: '',
+      });
+    });
 
-  //   escrowContract.on('ProductUsedConfirmed', async (receiver, event) => {
-  //     // 여기에 데이터베이스에 저장하는 로직을 구현합니다.
-  //   });
-
-  //   escrowContract.on(
-  //     'FundsDistributed',
-  //     async (market, marketShare, seller, sellerShare, event) => {
-  //       // 여기에 데이터베이스에 저장하는 로직을 구현합니다.
-  //     },
-  //   );
-  // }
+    this.contract.on(
+      'FundsDistributed',
+      async (market, marketShare, seller, sellerShare, event) => {
+        await this.databaseService.saveTransactionData({
+          walletAddress: market,
+          message: 'FundsDistributed',
+          signature: '',
+        });
+      },
+    );
+  }
 
   async processBatchTransactions(transactions) {
+    const abi = META_ABI;
+
     const tx = await this.contract.processBatchTransactions(
       transactions.map((t) => t.wallet_address),
       transactions.map((t) => t.signature),
