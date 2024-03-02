@@ -110,11 +110,11 @@
 	},
 	"sources": {
 		"frontend/src/contracts/Escrow.sol": {
-			"keccak256": "0xa97eb10daa6bf08bc488dbcb8ad383d6502d27f4873aca47de043ff96a337dd9",
+			"keccak256": "0xe39bc56c97dd62bb00073e6df8cf79fab196fecbf277411e3023bf15e517e97d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://29605409ddf4ff548b693fce013483c244400bf1252cc2fea76ef3f276bd3438",
-				"dweb:/ipfs/Qmb7gZ4WsfUAoyxv5v1ErfVAe8XmoqkV9Bj2pN4FtycbHU"
+				"bzz-raw://1aff328bc020a435a1b84cb35c8440e128f644f61f0cf3a32a5cfd6dcb677ff5",
+				"dweb:/ipfs/QmPHNFuRDhXt74eYoowwQ6N9XRt8TxM12fGJycGdJP9nz6"
 			]
 		},
 		"frontend/src/contracts/EscrowFactory.sol": {
