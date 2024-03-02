@@ -5,15 +5,15 @@ export class TransactionModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  user: string;
+  @Column({ length: 42 })
+  wallet_address: string;
 
-  @Column()
+  @Column('text')
   message: string;
 
-  @Column()
+  @Column({ length: 132 })
   signature: string;
 
-  @Column({ default: 'pending' })
+  @Column({ default: 'pending', length: 255 })
   status: string;
 }

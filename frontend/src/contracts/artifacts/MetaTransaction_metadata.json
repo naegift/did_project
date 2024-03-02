@@ -82,19 +82,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "marketAddress",
-				"outputs": [
-					{
-						"internalType": "address payable",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "owner",
 				"outputs": [
 					{
@@ -127,19 +114,6 @@
 				"name": "processBatchTransactions",
 				"outputs": [],
 				"stateMutability": "payable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address payable",
-						"name": "_marketAddress",
-						"type": "address"
-					}
-				],
-				"name": "setMarketAddress",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -222,11 +196,11 @@
 			]
 		},
 		"frontend/src/contracts/MetaTransaction.sol": {
-			"keccak256": "0xaa33a8a7e2315c1e4db66d3ed46188d5d9d84f61c829d42941312ae58162a45e",
+			"keccak256": "0x4b5ab129abd68ca33ecd0ebeedb14007bcdee0e2924227ef4e319242ad167e9c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://81165e342596ca1b95d9a859414c08a182f6a955b2b02c2f4c691ab5cf07c525",
-				"dweb:/ipfs/QmUFpNmYhZiHP1X9VaDMhU6U17r9J8EQkQdanupZpyFAYU"
+				"bzz-raw://40572ec966391160e204ba7acfd3ecae5e3481abd6195fd1072ee53e57c785ed",
+				"dweb:/ipfs/QmdM1CoTGd8vUHyPYX4d5AuArbaZ3eTMbY8zQSEKQGLjvi"
 			]
 		}
 	},

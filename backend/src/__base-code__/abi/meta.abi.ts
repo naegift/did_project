@@ -76,19 +76,6 @@ export const META_ABI = [
   },
   {
     inputs: [],
-    name: 'marketAddress',
-    outputs: [
-      {
-        internalType: 'address payable',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'owner',
     outputs: [
       {
@@ -121,19 +108,6 @@ export const META_ABI = [
     name: 'processBatchTransactions',
     outputs: [],
     stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address payable',
-        name: '_marketAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setMarketAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
