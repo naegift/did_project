@@ -10,6 +10,7 @@ import { GiftModel } from './__base-code__/entity/gift.entity';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TransactionsModule } from './MetaTransaction/transactions.module';
+import { TransactionModel } from './__base-code__/entity/transaction.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { TransactionsModule } from './MetaTransaction/transactions.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [ProductModel, GiftModel],
+      entities: [ProductModel, GiftModel, TransactionModel],
       synchronize: true,
       ssl: process.env.DB_AWS_HOSTNAME && {
         rejectUnauthorized: false,

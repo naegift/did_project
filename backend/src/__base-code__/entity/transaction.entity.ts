@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Transaction {
+export class TransactionModel {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -14,5 +14,6 @@ export class Transaction {
   @Column()
   signature: string;
 
-  // 기타 필요한 컬럼들...
+  @Column({ default: 'pending' })
+  status: string;
 }
