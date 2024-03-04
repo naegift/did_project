@@ -8,6 +8,7 @@ import { streamIdState } from "../recoil/streamState";
 const useWalletAndSuscribe = () => {
   const [notificationData, setNotificationData] = useState<any | null>(null);
   const [streamInstance, setStreamInstance] = useState<any | null>(null);
+  const [user, setUser] = useState<any | null>(null); // user 상태 추가
   const [sellerWallets, setSellerWallets] = useRecoilState(walletState);
   const [streamId, setStreamId] = useRecoilState(streamIdState);
 
@@ -22,15 +23,22 @@ const useWalletAndSuscribe = () => {
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
 
-      const user = await PushAPI.initialize(signer, {
+      if (sellerWallets.isLoggedIn && sellerWallets.isSubscribed) {
+        console.log("이미 로그인 및 구독 완료 상태입니다.");
+        return;
+      }
+
+      const initializedUser = await PushAPI.initialize(signer, {
         env: CONSTANTS.ENV.STAGING,
       });
+
+      setUser(initializedUser);
 
       const walletAddress = await signer.getAddress();
       const channelAddress = "0x3C51F308502c5fde8c7C1Fa39d35aA621838F7DF";
 
       if (!sellerWallets.isSubscribed) {
-        const response = await user.notification.subscribe(
+        const response = await initializedUser.notification.subscribe(
           `eip155:11155111:${channelAddress}`
         );
         console.log(response);
@@ -47,6 +55,7 @@ const useWalletAndSuscribe = () => {
           isLoggedIn: true,
         });
       }
+
       window.ethereum.on(
         "accountsChanged",
         async (...accounts: Array<string>) => {
@@ -55,7 +64,9 @@ const useWalletAndSuscribe = () => {
               walletAddress: accounts[0],
               isLoggedIn: true,
             });
-            await initRealTimeNotificationStream(user);
+            if (initializedUser) {
+              await initRealTimeNotificationStream(initializedUser);
+            }
           } else {
             setSellerWallets({
               walletAddress: "",
@@ -68,7 +79,9 @@ const useWalletAndSuscribe = () => {
         }
       );
 
-      await initRealTimeNotificationStream(user);
+      if (initializedUser) {
+        await initRealTimeNotificationStream(initializedUser);
+      }
     } catch (error) {
       console.error("구독 처리 오류:", error);
       alert("메타마스크 연결 실패 또는 구독에 실패했습니다.");
@@ -77,10 +90,13 @@ const useWalletAndSuscribe = () => {
 
   useEffect(() => {
     connectWallet();
-  }, []);
+    if (sellerWallets.isLoggedIn && user) {
+      initRealTimeNotificationStream(user);
+    }
+  }, [sellerWallets.isLoggedIn, user]);
 
   const initRealTimeNotificationStream = async (user: any) => {
-    if (!streamInstance && sellerWallets.isLoggedIn && !streamId) {
+    if (sellerWallets.isLoggedIn && user) {
       try {
         const newStreamInstance = await user.initStream([
           CONSTANTS.STREAM.NOTIF,
