@@ -5,6 +5,7 @@ import Pagination from "react-js-pagination";
 import { bannerImg1, bannerImg2 } from "../images/Banner";
 import ProductList from "../components/templates/ProductList";
 import Button from "../components/atoms/button";
+import { cn } from "../utils/cn";
 
 export interface Data {
   nextPage: number;
@@ -57,9 +58,16 @@ const Main: React.FC = () => {
   return (
     <>
       <div className="w-pull">
-        <img src={bannerImg1} alt="" className="w-[100%]" />
+        <img src={bannerImg1} alt="" className="w-[100%] mobile:h-[150px]" />
       </div>
-      <div className="w-4/5 flex flex-row py-5 gap-5 px-20 mx-auto items-center justify-between">
+      <div
+        className={cn(
+          "w-4/5 flex flex-row py-5 gap-5 px-20 mx-auto items-center justify-between",
+          "note:w-full",
+          "tablet:w-full tablet:px-14",
+          "mobile:px-5"
+        )}
+      >
         <span className="text-xl">전체 상품 리스트</span>
         <div className="flex flex-row gap-8">
           <Button
@@ -77,7 +85,14 @@ const Main: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-4/5 flex flex-row py-4 gap-7 px-20 mx-auto ">
+      <div
+        className={cn(
+          "w-4/5 flex flex-row py-4 gap-7 px-20 mx-auto ",
+          "note:w-full",
+          "tablet:w-full tablet:flex-wrap tablet:px-16 tablet:gap-12",
+          "mobile:flex-wrap mobile:w-full"
+        )}
+      >
         <ProductList products={product} />
       </div>
       <div className="w-4/5 flex flex-row py-5 gap-5 mx-auto justify-center items-center">
@@ -95,7 +110,7 @@ const Main: React.FC = () => {
         />
       </div>
       <div className="w-pull">
-        <img src={bannerImg2} alt="" className="w-[100%]" />
+        <img src={bannerImg2} alt="" className="w-[100%] mobile:h-[150px]" />
       </div>
     </>
   );

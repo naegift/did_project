@@ -5,6 +5,7 @@ import { Product } from "../../pages/Gift";
 import PayBox from "../molecules/PayBox";
 import ReceiveBox from "../molecules/ReceiveBox";
 import Button from "../atoms/button";
+import { cn } from "../../utils/cn";
 
 interface GiftData {
   payProducts: Product[];
@@ -47,10 +48,20 @@ const GiftList: React.FC<GiftData> = ({
   };
 
   return (
-    <div className="w-full px-20 flex flex-row py-8 gap-8">
-      <div className="w-1/2 px-8">
-        <div className=" bg-slate-50 rounded-md p-5 shadow-md h-[660px] ">
-          <div className="flex justify-between items-center">
+    <div
+      className={cn(
+        "w-full px-20 flex flex-row py-8 gap-8",
+        "tablet:w-full tablet:px-2 tablet:gap-2 "
+      )}
+    >
+      <div className="w-1/2 px-8 note:px-3  tablet:px-3">
+        <div
+          className={cn(
+            "w-full bg-slate-50 rounded-md p-5 shadow-md ",
+            "h-[730px] tablet:h-[890px]"
+          )}
+        >
+          <div className="flex justify-between items-center tablet:flex-col tablet:gap-5">
             <h2 className="text-xl">🎁보낸 선물 내역</h2>
             <div className="flex flex-row gap-5">
               <Button
@@ -73,7 +84,9 @@ const GiftList: React.FC<GiftData> = ({
                 <PayBox key={payIndex} payItem={payItem} />
               ))
             ) : (
-              <p>{payProducts.length === 0 ? "보낸 선물이 없습니다." : ""}</p>
+              <p className=" tablet:text-center">
+                {payProducts.length === 0 ? "보낸 선물이 없습니다." : ""}
+              </p>
             )}
           </div>
         </div>
@@ -90,9 +103,14 @@ const GiftList: React.FC<GiftData> = ({
           activeClass="pagination-active text-black"
         />
       </div>
-      <div className="w-1/2 px-8 he">
-        <div className=" bg-slate-50 rounded-md p-5 shadow-md h-[660px] ">
-          <div className="flex justify-between items-center ">
+      <div className="w-1/2 px-8 note:px-3 tablet:px-3">
+        <div
+          className={cn(
+            "w-full bg-slate-50 rounded-md p-5 shadow-md ",
+            "h-[730px] tablet:h-[890px]"
+          )}
+        >
+          <div className="flex justify-between items-center tablet:flex-col tablet:gap-5">
             <h2 className="text-xl">🎁받은 선물 내역</h2>
             <div className="flex flex-row gap-5">
               <Button
@@ -115,7 +133,7 @@ const GiftList: React.FC<GiftData> = ({
                 <ReceiveBox key={receveIndex} receivedItem={receivedItem} />
               ))
             ) : (
-              <p>
+              <p className=" tablet:text-center">
                 {receiveProducts.length === 0 ? "받은 선물이 없습니다." : ""}
               </p>
             )}
