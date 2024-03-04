@@ -14,10 +14,10 @@ const ProductBox: React.FC<ProductBox> = ({ product }) => {
 
   return (
     <Link to={`/product/${product.id}`}>
-      <div className="w-[214px] h-[270px] p-4 shadow-xl rounded-md bg-slate-200 hover:scale-105 duration-200">
+      <div className=" p-4 shadow-xl rounded-md bg-slate-200 hover:scale-105 duration-200">
         <div className="rounded-md">
           <img
-            className="w-[182px] h-[185px]"
+            className="w-[220px] h-[225px]"
             src={
               product.image && product.image !== "http://example.com"
                 ? product.image
