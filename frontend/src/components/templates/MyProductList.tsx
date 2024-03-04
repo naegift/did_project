@@ -52,11 +52,11 @@ const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
 
         {products.map((product) => {
           return (
-            <Link to={`/product/${product.id}`}>
-              <div
-                className="flex flex-col mx-[auto] w-[80%] h-full "
-                key={product.id}
-              >
+            <div
+              className="flex flex-col mx-[auto] w-[80%] h-full "
+              key={product.id}
+            >
+              <Link to={`/product/${product.id}`}>
                 <div className="flex flex-row justify-around border rounded-md mt-[20px]  hover:scale-90 transition duration-700">
                   <div className="p-[20px] flex flex-row">
                     <span className="">No.{product.id}</span>
@@ -73,8 +73,8 @@ const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
                     <p className="truncate">{product.price} WEI</p>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </div>
           );
         })}
         <div className="w-5/6 flex flex-row py-2 gap-5 px-20 justify-center items-center">
