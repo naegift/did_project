@@ -1,3 +1,4 @@
-import bannerImg3 from "./banner3.png";
+import bannerImg1 from "./banner1.png";
+import bannerImg2 from "./banner2.png";
 
-export { bannerImg3 };
+export { bannerImg1, bannerImg2 };
