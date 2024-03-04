@@ -6,6 +6,7 @@ import Button from "../atoms/button";
 import { logo } from "../../images";
 import { menuIcon } from "../../images/Icon";
 import { walletState } from "../../recoil/walletState";
+import { cn } from "../../utils/cn";
 
 const Header: React.FC = () => {
   const { connectWallet } = useWalletAndSuscribe();
@@ -34,26 +35,27 @@ const Header: React.FC = () => {
     <div className="flex flex-row justify-between p-5 border-b">
       <div>
         <Link to="/">
-          <img src={logo} alt="" />
+          <img
+            src={logo}
+            alt=""
+            className=" tablet:w-[120px] mobile:w-[100px]"
+          />
         </Link>
       </div>
       <div className="flex flex-row gap-10 items-center">
-        <Button variant="iconBtn" size="sm" label="" className="hidden">
-          <img src={menuIcon} alt="" />
-        </Button>
-        <Link to="/product">
+        <Link to="/product" className="tablet:hidden mobile:hidden">
           <Button variant="sendBtn2" size="mdl" label="상품등록하기" />
         </Link>
-        <Link to="/store">
+        <Link to="/store" className="tablet:hidden mobile:hidden">
           <Button variant="sendBtn2" size="mdl" label="SELLER" />
         </Link>
 
-        <Link to="/gift">
+        <Link to="/gift" className="tablet:hidden mobile:hidden">
           <Button variant="sendBtn2" size="mdl" label="선물함" />
         </Link>
 
         {sellerWallets.walletAddress ? (
-          <div className="flex items-center">
+          <div className="flex items-center tablet:hidden mobile:hidden">
             <span className="mr-2">환영합니다</span>
           </div>
         ) : (
@@ -62,8 +64,13 @@ const Header: React.FC = () => {
             size="md"
             label="Connect"
             onClick={handleLoginButtonClick}
+            className="tablet:hidden mobile:hidden"
           />
         )}
+
+        <button className={cn("hidden tablet:inline-block", "mobile:block")}>
+          <img src={menuIcon} alt="" className="w-[25px]" />
+        </button>
       </div>
     </div>
   );
