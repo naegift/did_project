@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../atoms/button";
 import { Product } from "../../pages/View";
 import axios from "axios";
@@ -14,12 +14,11 @@ interface viewBoxData {
 
 const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [updatedData, setUpdatedData] = useState<Product>({
-    ...product,
-  });
+  const [updatedData, setUpdatedData] = useState<Product>(product);
   const [isEditMode, setIsEditMode] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [currentProduct, setCurrentProduct] = useState<Product>(product);
+  const [isInputValid, setIsInputValid] = useState(false);
 
   const openModal = () => {
     setModalOpen(true);
@@ -50,9 +49,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
           },
         }
       );
-
-      console.log("Product updated successfully:", response.data);
-
+      //   console.log("Product updated successfully:", response.data);
       setIsEditMode(false);
 
       setCurrentProduct(response.data);
@@ -63,13 +60,32 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
 
   const handleDeleteProduct = async (productId: number) => {
     try {
-      const response = await axios.delete(
-        `${process.env.REACT_APP_AWS}/product/${productId}`
-      );
-
-      //   console.log("Product deleted successfully:", response.data);
+      const { signature } = await runEthers("delete", "delete", "delete");
+      if (product.seller === userWalletAddress) {
+        const response = await axios.delete(
+          `${process.env.REACT_APP_AWS}/product/${productId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "*/*",
+            },
+            data: {
+              title: "delete",
+              content: "delete",
+              price: "delete",
+              signature,
+            },
+          }
+        );
+        console.log("Product deleted successfully:", response.data);
+        window.location.href = `/store`;
+      } else {
+        console.error("Cannot delete other seller's product.");
+        window.location.href = `/`;
+      }
     } catch (error) {
       console.error("Error deleting product:", error);
+      window.location.href = `/`;
     }
   };
 
@@ -92,15 +108,30 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setUpdatedData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
+    if (name === "price") {
+      const validNumberRegex = /^[0-9.]+$/;
+      if (value === "" || validNumberRegex.test(value)) {
+        setUpdatedData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      }
+    } else {
+      setUpdatedData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+    setIsInputValid(
+      !!updatedData.title && !!updatedData.price && !!updatedData.content
+    );
   };
 
   const handleCompleteButtonClick = () => {
-    handleEditProduct(product.id);
-    setUpdatedData(currentProduct);
+    if (isInputValid) {
+      handleEditProduct(product.id);
+    }
   };
 
   return (
@@ -110,7 +141,9 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
           <div>
             <img
               className="w-full y-full bg-white"
-              src={imageFile ? URL.createObjectURL(imageFile) : product.image}
+              src={
+                imageFile ? URL.createObjectURL(imageFile) : updatedData.image
+              }
               alt=""
             />
             {isEditMode && (
@@ -157,12 +190,14 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
             </div>
           ) : (
             <>
-              <p className="text-3xl py-5">{product.title}</p>
-              <p className="text-2xl ">{product.price} WEI</p>
-              <p className="py-7">{product.content}</p>
+              <p className="text-3xl py-5">{updatedData.title}</p>
+              <p className="text-2xl ">
+                {formatEther(updatedData.price).toString()} ETH
+              </p>
+              <p className="py-7">{updatedData.content}</p>
             </>
           )}
-          <p className="py-7">Seller: {product.seller}</p>
+          <p className="py-7">Seller: {updatedData.seller}</p>
 
           <Button
             onClick={openModal}
@@ -179,6 +214,8 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
                     size="mm"
                     label="완료"
                     onClick={handleCompleteButtonClick}
+                    disabled={!isInputValid}
+                    style={{ opacity: isInputValid ? 1 : 0.5 }}
                   />
                 ) : (
                   <Button
