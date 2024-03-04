@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Pagination from "react-js-pagination";
 
-import { bannerImg3 } from "../images/Banner";
+import { bannerImg1, bannerImg2 } from "../images/Banner";
 import ProductList from "../components/templates/ProductList";
 import Button from "../components/atoms/button";
 
@@ -57,7 +57,7 @@ const Main: React.FC = () => {
   return (
     <>
       <div className="w-pull">
-        <img src={bannerImg3} alt="" className="w-[100%]" />
+        <img src={bannerImg1} alt="" className="w-[100%]" />
       </div>
       <div className="w-4/5 flex flex-row py-5 gap-5 px-20 mx-auto items-center justify-between">
         <span className="text-xl">전체 상품 리스트</span>
@@ -95,7 +95,7 @@ const Main: React.FC = () => {
         />
       </div>
       <div className="w-pull">
-        <img src={bannerImg3} alt="" className="w-[100%]" />
+        <img src={bannerImg2} alt="" className="w-[100%]" />
       </div>
     </>
   );
