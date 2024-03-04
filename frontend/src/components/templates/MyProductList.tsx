@@ -47,16 +47,9 @@ const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
                 onClick={() => orderChange("asc")}
               />
             </div>
-            <table className="w-[80%] mx-[auto]">
-              <th className="flex flex-row border justify-around rounded-md mt-[20px]">
-                <tr>제품 번호</tr>
-                <tr>이미지</tr>
-                <tr>제목</tr>
-                <tr>가격</tr>
-              </th>
-            </table>
           </label>
         </div>
+
         {products.map((product) => {
           return (
             <Link to={`/product/${product.id}`}>
