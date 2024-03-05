@@ -74,6 +74,17 @@ const useWalletAndSuscribe = () => {
 
           window.ethereum.on(
             "accountsChanged",
+
+            //         (accounts: string[]) => {
+            //           const preserved =
+            //             accounts.map((e) =>
+            //               ethers.utils.getAddress(e)
+            //             );
+
+            //           setSellerWallets({
+            //             walletAddress: preserved[0],
+            //           });
+
             async (accounts: Array<string>) => {
               if (accounts.length > 0) {
                 const newProvider = new ethers.providers.Web3Provider(
