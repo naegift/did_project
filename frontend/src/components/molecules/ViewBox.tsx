@@ -198,13 +198,19 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
             </>
           )}
           <p className="py-7">Seller: {updatedData.seller}</p>
+          <>
+            {isEditMode ? (
+              <></>
+            ) : (
+              <Button
+                onClick={openModal}
+                variant="sendBtn2"
+                size="lg"
+                label="선물하기"
+              />
+            )}
+          </>
 
-          <Button
-            onClick={openModal}
-            variant="sendBtn2"
-            size="lg"
-            label="선물하기"
-          />
           <div className="flex flex-row  gap-10 mt-6">
             {product.seller === userWalletAddress && (
               <>
