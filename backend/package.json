@@ -39,7 +39,6 @@
     "@veramo/did-resolver": "^5.6.0",
     "@veramo/key-manager": "^5.6.0",
     "@veramo/kms-local": "^5.6.0",
-    "axios": "^1.6.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "did-resolver": "^4.1.0",
