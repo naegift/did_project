@@ -23,10 +23,15 @@ const Modal: React.FC<ModalProps> = ({
   product,
 }) => {
   const { id } = useParams();
-  const [receiverInput, setReceiverInput] = useState<string>("");
-  const { walletAddress } = useRecoilValue(walletState);
-  const priceETH = formatEther(product.price);
-
+  const [
+    receiverInput,
+    setReceiverInput,
+  ] = useState<string>("");
+  const { walletAddress } =
+    useRecoilValue(walletState);
+  const priceETH = formatEther(
+    product.price
+  );
 
   const runEthers = async () => {
     const provider =
@@ -42,14 +47,16 @@ const Modal: React.FC<ModalProps> = ({
       provider.getSigner(address);
     console.log(signer);
 
-    const FACTORY_CONTRACT =
-      "0x568996c47EdF580D0734c7728004d7d51A7df260";
     const UUID = uuid();
     console.log(UUID);
 
+    const PROXY_CONTRACT =
+      process.env
+        .REACT_APP_PROXY_ADDRESS;
+
     const contract =
       new ethers.Contract(
-        FACTORY_CONTRACT,
+        PROXY_CONTRACT as string,
         FACTORY_ABI,
         provider
       );
@@ -66,10 +73,11 @@ const Modal: React.FC<ModalProps> = ({
 
     const receiver = receiverInput;
     const market =
-      "0xeF3010D076f62A91A774016E5eBAf58A1BFe1bD6";
+      process.env
+        .REACT_APP_MARKET_ADDRESS;
 
     const transaction = {
-      to: FACTORY_CONTRACT,
+      to: PROXY_CONTRACT,
       data: contract.interface.encodeFunctionData(
         "createEscrow",
         [
@@ -157,7 +165,10 @@ const Modal: React.FC<ModalProps> = ({
                         선물 보내기
                       </h3>
 
-                      <p className="py-3">금액 : {priceETH} ETH </p>
+                      <p className="py-3">
+                        금액 :{" "}
+                        {priceETH} ETH{" "}
+                      </p>
 
                       <Inputs
                         onChange={(

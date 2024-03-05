@@ -88,6 +88,16 @@ const ReceiveBox: React.FC<
             ?.giftID === receivedItem.id
       );
 
+    const verifyTest =
+      await mascaApi.verifyData({
+        credential: targetVc.data,
+        verbose: true,
+      });
+    console.log(
+      "verification at the front",
+      verifyTest
+    );
+
     const verifyRes = await axios.patch(
       `${
         process.env.REACT_APP_API ||

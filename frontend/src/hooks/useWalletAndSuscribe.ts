@@ -78,7 +78,6 @@ const useWalletAndSuscribe = () => {
             accounts.map((e) =>
               ethers.utils.getAddress(e)
             );
-          console.log(preserved);
 
           setSellerWallets({
             walletAddress: preserved[0],
