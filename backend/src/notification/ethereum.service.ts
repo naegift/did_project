@@ -12,7 +12,7 @@ export class EthereumService {
       this.configService.get<string>('NETWORK_RPC'),
     );
     this.wallet = new ethers.Wallet(
-      this.configService.get<string>('PRIVATE_KEY'),
+      this.configService.get<string>('MARKET_PRIVATE_KEY'),
       this.provider,
     );
   }
