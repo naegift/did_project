@@ -71,7 +71,9 @@ const View: React.FC = () => {
       {loading ? (
         <Loading />
       ) : (
-        <ViewBox product={product} userWalletAddress={userWalletAddress} />
+        <div className="w-full h-[90vh] mt-10">
+          <ViewBox product={product} userWalletAddress={userWalletAddress} />
+        </div>
       )}
     </>
   );
