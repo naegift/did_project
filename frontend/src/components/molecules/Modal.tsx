@@ -18,34 +18,24 @@ interface ModalProps {
   product: Product;
 }
 
-const Modal: React.FC<ModalProps> = ({
-  onClose,
-  product,
-}) => {
+const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
   const { id } = useParams();
-  const [
-    receiverInput,
-    setReceiverInput,
-  ] = useState<string>("");
-  const { walletAddress } =
-    useRecoilValue(walletState);
-  const priceETH = formatEther(
-    product.price
-  );
+
+  const [receiverInput, setReceiverInput] = useState<string>("");
+  const { walletAddress } = useRecoilValue(walletState);
+  const priceETH = formatEther(product.price);
+
 
   const runEthers = async () => {
-    const provider =
-      new ethers.providers.Web3Provider(
-        window.ethereum
-      );
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     console.log("provider: ", provider);
 
     const address = walletAddress;
     console.log(address);
 
-    const signer =
-      provider.getSigner(address);
+    const signer = provider.getSigner(address);
     console.log(signer);
+
 
     const UUID = uuid();
     console.log(UUID);
@@ -72,6 +62,7 @@ const Modal: React.FC<ModalProps> = ({
     // console.log(priceETH);
 
     const receiver = receiverInput;
+
     const market =
       process.env
         .REACT_APP_MARKET_ADDRESS;
@@ -101,17 +92,12 @@ const Modal: React.FC<ModalProps> = ({
     };
     console.log(transaction);
 
-    await signer.sendTransaction(
-      transaction
-    );
-    console.log(
-      "Transaction sign post body: ",
-      {
-        buyer,
-        receiver,
-        uuid: UUID,
-      }
-    );
+    await signer.sendTransaction(transaction);
+    console.log("Transaction sign post body: ", {
+      buyer,
+      receiver,
+      uuid: UUID,
+    });
 
     const reqBody = {
       buyer,
@@ -119,13 +105,10 @@ const Modal: React.FC<ModalProps> = ({
       uuid: UUID,
     };
 
-    const response = await axios.post(
-      `${
-        process.env.REACT_APP_API ||
-        process.env.REACT_APP_AWS
-      }/product/${id}/pay`,
-      reqBody
-    );
+    const payUrl = `${process.env.REACT_APP_API}/product/${id}/pay`;
+    console.log(payUrl, reqBody);
+
+    const response = await axios.post(payUrl, reqBody);
     console.log(response);
   };
 
@@ -133,9 +116,7 @@ const Modal: React.FC<ModalProps> = ({
     if (receiverInput.trim() !== "") {
       await runEthers();
     } else {
-      alert(
-        "받는 사람 지갑 주소를 입력해주세요."
-      );
+      alert("받는 사람 지갑 주소를 입력해주세요.");
     }
   };
 
@@ -148,21 +129,15 @@ const Modal: React.FC<ModalProps> = ({
             <div className="fixed z-10 rounded-xl">
               <div className=" inline-block align-bottom bg-white p-5 rounded-xl text-left overflow-hidden shadow-xl">
                 <div className=" absolute right-6 top-3 text-xl">
-                  <button
-                    onClick={onClose}
-                  >
-                    <img
-                      src={closeBtn}
-                      alt=""
-                    />
+                  <button onClick={onClose}>
+                    <img src={closeBtn} alt="" />
                   </button>
                 </div>
                 <div className=" px-4 pt-5 pb-4">
                   <div>
                     <div className="mt-3 text-center ">
                       <h3 className="text-2xl py-3 text-gray-900 ">
-                        {product.title}{" "}
-                        선물 보내기
+                        {product.title} 선물 보내기
                       </h3>
 
                       <p className="py-3">
@@ -171,13 +146,8 @@ const Modal: React.FC<ModalProps> = ({
                       </p>
 
                       <Inputs
-                        onChange={(
-                          e: React.ChangeEvent<HTMLInputElement>
-                        ) =>
-                          setReceiverInput(
-                            e.target
-                              .value
-                          )
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setReceiverInput(e.target.value)
                         }
                         type="text"
                         size="xlg"

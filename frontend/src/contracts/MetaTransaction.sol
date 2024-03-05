@@ -4,7 +4,6 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract MetaTransaction {
-    address payable public marketAddress;
     address public owner;
 
     constructor() {
@@ -16,10 +15,6 @@ contract MetaTransaction {
         _;
     }
 
-    function setMarketAddress(address payable _marketAddress) public onlyOwner {
-        marketAddress = _marketAddress;
-    }
-
     function checkGas() public view returns (uint256) {
         return gasleft();
     }
@@ -28,7 +23,7 @@ contract MetaTransaction {
 
     function processBatchTransactions(address[] memory users, bytes[] memory signatures, string[] memory messages) public payable {
 
-        require(msg.sender == marketAddress, "Invalid caller");
+        require(msg.sender == owner, "Invalid caller");
         require(users.length == signatures.length && users.length == messages.length, "Invalid input");
         require(users.length <= 50, "Batch size too large");
 

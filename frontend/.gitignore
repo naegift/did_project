@@ -53,3 +53,11 @@ node_modules
 # solidity-coverage files
 /coverage
 /coverage.json
+
+# Compiled contract artifacts
+/build/
+/artifacts/
+/compiled_contracts/
+/frontend/src/contracts/
+/frontend/src/contracts/artifacts/
+

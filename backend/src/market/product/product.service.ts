@@ -88,8 +88,10 @@ export class ProductService {
 
   async deleteProduct(id: number, reqDeleteProduct: ReqDeleteProduct) {
     const product = await this.getProduct(id);
-    const { signature } = reqDeleteProduct;
-    const seller = ethers.utils.verifyMessage('{}', signature);
+    const { title, content, price, signature } = reqDeleteProduct;
+    const data = JSON.stringify({ title, content, price });
+
+    const seller = ethers.utils.verifyMessage(data, signature);
     if (seller !== product.seller) {
       throw new UnauthorizedException('Cannot delete other sellers product.');
     }
