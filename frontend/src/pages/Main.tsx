@@ -65,7 +65,7 @@ const Main: React.FC = () => {
           "w-4/5 flex flex-row py-5 gap-5 px-20 mx-auto items-center justify-between",
           "note:w-full",
           "tablet:w-full tablet:px-14",
-          "mobile:px-5"
+          "mobile:px-5 mobile:flex-col"
         )}
       >
         <span className="text-xl">전체 상품 리스트</span>
@@ -90,12 +90,17 @@ const Main: React.FC = () => {
           "w-4/5 flex flex-row py-4 gap-7 px-20 mx-auto ",
           "note:w-full",
           "tablet:w-full tablet:flex-wrap tablet:px-16 tablet:gap-12",
-          "mobile:flex-wrap mobile:w-full"
+          "mobile:flex-wrap mobile:px-6"
         )}
       >
         <ProductList products={product} />
       </div>
-      <div className="w-4/5 flex flex-row py-5 gap-5 mx-auto justify-center items-center">
+      <div
+        className={cn(
+          "w-4/5 flex flex-row py-5 gap-5 mx-auto justify-center items-center",
+          "mobile:w-full"
+        )}
+      >
         <Pagination
           activePage={page}
           itemsCountPerPage={5}
@@ -104,7 +109,61 @@ const Main: React.FC = () => {
           prevPageText={"‹"}
           nextPageText={"›"}
           onChange={(pageNumber) => changePage(pageNumber)}
-          innerClass="flex flex-row py-5 justify-center items-center gap-2"
+          innerClass="flex flex-row py-5 justify-center items-center gap-2 mobile:gap-[5px] moblie:w-full"
+          itemClass="inline-block w-10 h-10 border border-gray-300 flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white hover:border-none"
+          activeClass="pagination-active text-black"
+        />
+      </div>
+
+      <div
+        className={cn(
+          "w-4/5 flex flex-row py-5 gap-5 px-20 mx-auto items-center justify-between",
+          "note:w-full",
+          "tablet:w-full tablet:px-14",
+          "mobile:px-5 mobile:flex-col"
+        )}
+      >
+        <span className="text-xl">전체 상품 리스트</span>
+        <div className="flex flex-row gap-8">
+          <Button
+            variant="basicBtn2"
+            size="md"
+            label="최신순"
+            onClick={() => orderChange("desc")}
+          />
+          <Button
+            variant="basicBtn2"
+            size="md"
+            label="과거순"
+            onClick={() => orderChange("asc")}
+          />
+        </div>
+      </div>
+      <div
+        className={cn(
+          "w-4/5 flex flex-row py-4 gap-7 px-20 mx-auto ",
+          "note:w-full",
+          "tablet:w-full tablet:flex-wrap tablet:px-16 tablet:gap-12",
+          "mobile:flex-wrap mobile:px-6"
+        )}
+      >
+        <ProductList products={product} />
+      </div>
+      <div
+        className={cn(
+          "w-4/5 flex flex-row py-5 gap-5 mx-auto justify-center items-center",
+          "mobile:w-full"
+        )}
+      >
+        <Pagination
+          activePage={page}
+          itemsCountPerPage={5}
+          totalItemsCount={totalPage * 5}
+          pageRangeDisplayed={5}
+          prevPageText={"‹"}
+          nextPageText={"›"}
+          onChange={(pageNumber) => changePage(pageNumber)}
+          innerClass="flex flex-row py-5 justify-center items-center gap-2 mobile:gap-[5px] moblie:w-full"
           itemClass="inline-block w-10 h-10 border border-gray-300 flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white hover:border-none"
           activeClass="pagination-active text-black"
         />

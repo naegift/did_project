@@ -51,19 +51,40 @@ const GiftList: React.FC<GiftData> = ({
     <div
       className={cn(
         "w-full px-20 flex flex-row py-8 gap-8",
-        "tablet:w-full tablet:px-2 tablet:gap-2 "
+        "tablet:flex-col tablet:px-10 ",
+        "mobile:px-0 mobile:gap-5 mobile:py-3 mobile:flex-col"
       )}
     >
-      <div className="w-1/2 px-8 note:px-3  tablet:px-3">
+      <div
+        className={cn(
+          "hidden",
+          "tablet:flex tablet:justify-center tablet:items-center tablet:gap-3 tablet:px-3",
+          "mobile:block mobile:py-3 mobile:mx-auto"
+        )}
+      >
+        <span className="tablet:border tablet:flex-1"></span>
+        <span className=" mobile:text-sm">
+          받은 선물은 데스크탑에서 확인 가능합니다.
+        </span>
+        <span className="tablet:border tablet:flex-1"></span>
+      </div>
+      <div className="w-1/2 px-8 note:px-3 tablet:mx-auto tablet:w-full mobile:w-full">
         <div
           className={cn(
             "w-full bg-slate-50 rounded-md p-5 shadow-md ",
-            "h-[730px] tablet:h-[890px]"
+            "h-[700px] tablet:h-[890px] tablet:p-7",
+            "mobile:p-5"
           )}
         >
-          <div className="flex justify-between items-center tablet:flex-col tablet:gap-5">
-            <h2 className="text-xl">🎁보낸 선물 내역</h2>
-            <div className="flex flex-row gap-5">
+          <div
+            className={cn(
+              "flex justify-between items-center ",
+              "tablet:py-3",
+              "mobile:flex-col mobile:gap-4"
+            )}
+          >
+            <h2 className="text-xl mobile:text-base">🎁보낸 선물 내역</h2>
+            <div className="flex flex-row gap-5 mobile:hidden">
               <Button
                 variant="basicBtn2"
                 size="md"
@@ -84,7 +105,7 @@ const GiftList: React.FC<GiftData> = ({
                 <PayBox key={payIndex} payItem={payItem} />
               ))
             ) : (
-              <p className=" tablet:text-center">
+              <p className=" tablet:text-center mobile:text-center">
                 {payProducts.length === 0 ? "보낸 선물이 없습니다." : ""}
               </p>
             )}
@@ -103,11 +124,11 @@ const GiftList: React.FC<GiftData> = ({
           activeClass="pagination-active text-black"
         />
       </div>
-      <div className="w-1/2 px-8 note:px-3 tablet:px-3">
+      <div className="w-1/2 px-8 note:px-3 tablet:hidden mobile:hidden">
         <div
           className={cn(
             "w-full bg-slate-50 rounded-md p-5 shadow-md ",
-            "h-[730px] tablet:h-[890px]"
+            "h-[700px] tablet:h-[890px]"
           )}
         >
           <div className="flex justify-between items-center tablet:flex-col tablet:gap-5">

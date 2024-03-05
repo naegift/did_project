@@ -32,13 +32,13 @@ const Header: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-row justify-between p-5 border-b">
+    <div className="flex flex-row justify-between p-5 border-b items-center ">
       <div>
         <Link to="/">
           <img
             src={logo}
             alt=""
-            className=" tablet:w-[120px] mobile:w-[100px]"
+            className=" tablet:w-[120px] mobile:w-[150px]"
           />
         </Link>
       </div>

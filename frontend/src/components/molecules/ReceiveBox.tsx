@@ -110,10 +110,23 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
           price: message.price,
         }
       );
-      await mascaApi.saveCredential(response.data);
-      console.log("VC was handed over", response.data);
-      setBtnState("issued");
-      setItem("사용 가능");
+
+      // 수정하기
+      const saveVC = await mascaApi.saveCredential(response.data);
+      console.log("확인!!!!!", saveVC);
+
+      const successRes = await axios.post(`url/`, { success: saveVC.success });
+
+      if (successRes.data.success) {
+        setBtnState("issued");
+        setItem("사용 가능");
+      } else {
+        alert(
+          "디지털 바우처 발급을 거절하셨습니다. 선물을 받으시려면 승인이 필요합니다."
+        );
+      }
+
+      // console.log("VC was handed over", response.data);
     } catch (error) {
       console.error("선물받기에서 오류 발생:", error);
       alert("서명 거부 시 선물받기를 할수없습니다ㅠㅠ ");
@@ -148,12 +161,12 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
     <>
       <div
         className={cn(
-          "w-full shadow-xl bg-slate-200 rounded-xl py-10 px-7 flex flex-row gap-10 justify-between items-center",
-          " note: py-6",
+          "w-full shadow-xl bg-slate-200 rounded-xl py-9 px-7",
+          "flex flex-row gap-10 justify-between items-center",
           "tablet:flex-col tablet:flex-wrap tablet:p-5 gap-5"
         )}
       >
-        <div className="flex flex-col gap-1 tablet:overflow-hidden">
+        <div className="flex flex-col gap-1 ">
           <p className="text-lg font-extrabold">{receivedItem.title}</p>
           <p>
             선물 받은 날짜 : <DateTime dateString={receivedItem.updatedAt} />
