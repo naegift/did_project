@@ -4,6 +4,7 @@ export enum State {
   FULFILLED = 'fulfilled',
   PRODUCT_USED = 'product-used',
   EXECUTED = 'executed',
+  ISSUED = 'issued',
 }
 
 export const stateCode = [
@@ -12,4 +13,6 @@ export const stateCode = [
   State.FULFILLED,
   State.PRODUCT_USED,
   State.EXECUTED,
+
+  State.ISSUED,
 ];

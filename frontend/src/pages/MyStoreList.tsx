@@ -28,7 +28,9 @@ const MyStoreList: React.FC = () => {
     const getWalletAddress = async () => {
       if (window.ethereum) {
         try {
-          await window.ethereum.request({ method: "eth_requestAccounts" });
+          await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
           const provider = new ethers.providers.Web3Provider(window.ethereum);
           const signer = provider.getSigner();
           const userAddress = await signer.getAddress();
@@ -48,7 +50,11 @@ const MyStoreList: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get<Data>(
-          `https://naegift.subin.kr/store?seller=${seller}&page=${page}&order=${order}`
+          `${
+            // process.env
+            //   .REACT_APP_API ||
+            process.env.REACT_APP_AWS
+          }/store?seller=${seller}&page=${page}&order=${order}`
         );
         setProduct(response.data.products);
       } catch (error) {

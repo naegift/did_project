@@ -24,6 +24,8 @@ import { badRequest } from 'src/__base-code__/error/bad-request';
 import { plainToInstance } from 'class-transformer';
 import { ResGetGifts } from './dto/res-get-gifts.dto';
 import { Order } from 'src/__base-code__/enum/order.enum';
+import { VerifiableCredential } from '@veramo/core';
+import { QueryCredentialsRequestResult } from '@blockchain-lab-um/masca-connector';
 
 @ApiTags('Account | Gift')
 @Controller('gift')
@@ -60,20 +62,23 @@ export class GiftController {
   }
 
   @Patch(':id/receive')
-  @ApiOperation({ summary: '[작업중] 선물받기' })
+  @ApiOperation({ summary: '선물받기' })
   async receiveGift(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqReceiveGift: ReqReceiveGift,
   ) {
-    return this.giftService.testFunction(id, reqReceiveGift.signature);
+    return this.giftService.receiveGift(id, reqReceiveGift);
   }
 
   @Patch(':id/use')
   @ApiOperation({ summary: '[작업중] 선물 사용하기' })
   async useGift(
     @Param('id', ParseIntPipe) id: number,
-    @Body() reqUseGift: ReqUseGift,
-  ) {}
+    // @Body() reqUseGift: ReqUseGift,
+    @Body() VcRes: QueryCredentialsRequestResult,
+  ) {
+    return this.giftService.verifyCredential(id, VcRes);
+  }
 
   @Patch(':id/confirm')
   @ApiOperation({

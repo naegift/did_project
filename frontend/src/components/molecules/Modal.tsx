@@ -11,6 +11,7 @@ import { Product } from "../../pages/View";
 import { FACTORY_ABI } from "../../abi/factory";
 import { useRecoilValue } from "recoil";
 import { walletState } from "../../recoil/walletState";
+import { formatEther } from "@ethersproject/units";
 
 interface ModalProps {
   onClose: () => void;
@@ -19,8 +20,11 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
   const { id } = useParams();
+
   const [receiverInput, setReceiverInput] = useState<string>("");
   const { walletAddress } = useRecoilValue(walletState);
+  const priceETH = formatEther(product.price);
+
 
   const runEthers = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -32,15 +36,20 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     const signer = provider.getSigner(address);
     console.log(signer);
 
-    const FACTORY_CONTRACT = "0x568996c47EdF580D0734c7728004d7d51A7df260";
+
     const UUID = uuid();
     console.log(UUID);
 
-    const contract = new ethers.Contract(
-      FACTORY_CONTRACT,
-      FACTORY_ABI,
-      provider
-    );
+    const PROXY_CONTRACT =
+      process.env
+        .REACT_APP_PROXY_ADDRESS;
+
+    const contract =
+      new ethers.Contract(
+        PROXY_CONTRACT as string,
+        FACTORY_ABI,
+        provider
+      );
 
     const buyer = address;
     console.log(buyer);
@@ -53,19 +62,32 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     // console.log(priceETH);
 
     const receiver = receiverInput;
-    const market = "0xeF3010D076f62A91A774016E5eBAf58A1BFe1bD6";
+
+    const market =
+      process.env
+        .REACT_APP_MARKET_ADDRESS;
 
     const transaction = {
-      to: FACTORY_CONTRACT,
-      data: contract.interface.encodeFunctionData("createEscrow", [
-        buyer,
-        seller,
-        receiver,
-        market,
-        ethers.utils.parseUnits("0.001", "ether").toString(),
-        UUID,
-      ]),
-      value: ethers.utils.parseUnits("0.001", "ether").toString(),
+      to: PROXY_CONTRACT,
+      data: contract.interface.encodeFunctionData(
+        "createEscrow",
+        [
+          buyer,
+          seller,
+          receiver,
+          market,
+          ethers.utils
+            .parseUnits(
+              "0.001",
+              "ether"
+            )
+            .toString(),
+          UUID,
+        ]
+      ),
+      value: ethers.utils
+        .parseUnits("0.001", "ether")
+        .toString(),
       gasLimit: 3000000,
     };
     console.log(transaction);
@@ -83,10 +105,10 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
       uuid: UUID,
     };
 
-    const response = await axios.post(
-      `https://naegift.subin.kr/product/${id}/pay`,
-      reqBody
-    );
+    const payUrl = `${process.env.REACT_APP_API}/product/${id}/pay`;
+    console.log(payUrl, reqBody);
+
+    const response = await axios.post(payUrl, reqBody);
     console.log(response);
   };
 
@@ -117,7 +139,11 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
                       <h3 className="text-2xl py-3 text-gray-900 ">
                         {product.title} 선물 보내기
                       </h3>
-                      <p className="py-3">금액 : {product.price} </p>
+
+                      <p className="py-3">
+                        금액 :{" "}
+                        {priceETH} ETH{" "}
+                      </p>
 
                       <Inputs
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

@@ -1,6 +1,10 @@
 import { ethers } from "ethers";
 
-export async function runEthers(title: string, content: string, price: string) {
+export async function runEthers(
+  title: string | null = null,
+  content: string | null = null,
+  price: string | null = null
+) {
   try {
     if (!window.ethereum) {
       throw new Error("Ethereum 지갑을 찾을 수 없습니다.");
@@ -20,7 +24,7 @@ export async function runEthers(title: string, content: string, price: string) {
     const message = {
       title,
       content,
-      price: price,
+      price,
     };
 
     const signature = await signer.signMessage(JSON.stringify(message));

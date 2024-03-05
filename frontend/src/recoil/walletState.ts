@@ -7,7 +7,6 @@ export const walletState = atom({
   key: "walletState",
   default: {
     walletAddress: "",
-    isLoggedIn: false,
   },
   effects_UNSTABLE: [persistAtom],
 });

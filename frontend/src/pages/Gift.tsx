@@ -1,5 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
 import GiftList from "../components/templates/GiftList";
 import { useRecoilValue } from "recoil";
 import { walletState } from "../recoil/walletState";
@@ -7,6 +10,8 @@ import { walletState } from "../recoil/walletState";
 export interface Product {
   id: number;
   title: string;
+  content: string;
+  price: string;
   image: string;
   state: string;
   updatedAt: string;
@@ -15,60 +20,125 @@ export interface Product {
 }
 
 const Gift: React.FC = () => {
-  const [receiveProduct, setReceiveProduct] = useState<Product[]>([]);
-  const [payProduct, setPayProduct] = useState<Product[]>([]);
-  const [receivePage, setReceivePage] = useState<number>(1);
-  const [payPage, setPayPage] = useState<number>(1);
-  const [receiveTotalPage, setReceiveTotalPage] = useState<number>(1);
-  const [payTotalPage, setPayTotalPage] = useState<number>(1);
-  const [receiveOrder, setReceiveOrder] = useState<string>("desc");
-  const [payOrder, setPayOrder] = useState<string>("desc");
-  const { walletAddress } = useRecoilValue(walletState);
+  const [
+    receiveProduct,
+    setReceiveProduct,
+  ] = useState<Product[]>([]);
+  const [payProduct, setPayProduct] =
+    useState<Product[]>([]);
+  const [receivePage, setReceivePage] =
+    useState<number>(1);
+  const [payPage, setPayPage] =
+    useState<number>(1);
+  const [
+    receiveTotalPage,
+    setReceiveTotalPage,
+  ] = useState<number>(1);
+  const [
+    payTotalPage,
+    setPayTotalPage,
+  ] = useState<number>(1);
+  const [
+    receiveOrder,
+    setReceiveOrder,
+  ] = useState<string>("desc");
+  const [payOrder, setPayOrder] =
+    useState<string>("desc");
 
-  const recevieGiftData = async (page: number) => {
+  const { walletAddress } =
+    useRecoilValue(walletState);
+
+  const recevieGiftData = async (
+    _walletAddress: string,
+    page: number
+  ) => {
     try {
+      const url = `${
+        process.env.REACT_APP_API ||
+        process.env.REACT_APP_AWS
+      }/gift?receiver=${_walletAddress}&page=${page}&order=${receiveOrder}`;
       const response = await axios.get(
-        `https://naegift.subin.kr/gift?receiver=${walletAddress}&page=${page}&order=${receiveOrder}`
+        url
+      );
+      console.log(
+        `response from ${url}`,
+        response
       );
       console.log(response.data.gifts);
-      setReceiveProduct(response.data.gifts);
-      setReceiveTotalPage(response.data.totalPages);
+      setReceiveProduct(
+        response.data.gifts
+      );
+      setReceiveTotalPage(
+        response.data.totalPages
+      );
     } catch (error) {
       console.log(error);
     }
   };
-  const payGiftData = async (page: number) => {
+  const payGiftData = async (
+    _walletAddress: string,
+    page: number
+  ) => {
     try {
+      const url = `${
+        process.env.REACT_APP_API ||
+        process.env.REACT_APP_AWS
+      }/gift?buyer=${_walletAddress}&page=${page}&order=${payOrder}`;
       const response = await axios.get(
-        `https://naegift.subin.kr/gift?buyer=${walletAddress}&page=${page}&order=${payOrder}`
+        url
+      );
+      console.log(
+        `response from ${url}`,
+        response
       );
       console.log(response.data.gifts);
-      setPayProduct(response.data.gifts);
-      setPayTotalPage(response.data.totalPages);
+      setPayProduct(
+        response.data.gifts
+      );
+      setPayTotalPage(
+        response.data.totalPages
+      );
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect((): void => {
-    recevieGiftData(receivePage);
-    payGiftData(payPage);
-  }, [receivePage, payPage, receiveOrder, payOrder]);
+    recevieGiftData(
+      walletAddress,
+      receivePage
+    );
+    payGiftData(walletAddress, payPage);
+  }, [
+    receivePage,
+    payPage,
+    receiveOrder,
+    payOrder,
+    walletAddress,
+  ]);
 
-  const receivePageChange = (pageNumber: number) => {
+  const receivePageChange = (
+    pageNumber: number
+  ) => {
     setReceivePage(pageNumber);
   };
 
-  const payPageChange = (pageNumber: number) => {
+  const payPageChange = (
+    pageNumber: number
+  ) => {
     console.log(pageNumber);
     setPayPage(pageNumber);
   };
 
-  const receiveOrderChange = (selected: string) => {
+  const receiveOrderChange = (
+    selected: string
+  ) => {
     setReceiveOrder(selected);
   };
 
-  const payOrderChange = (selected: string) => {
+  const payOrderChange = (
+    selected: string
+  ) => {
     setPayOrder(selected);
   };
 
@@ -79,12 +149,20 @@ const Gift: React.FC = () => {
         receiveProducts={receiveProduct}
         payPage={payPage}
         receivePage={receivePage}
-        receiveTotalPage={receiveTotalPage}
+        receiveTotalPage={
+          receiveTotalPage
+        }
         payTotalPage={payTotalPage}
-        onReceivePageChange={receivePageChange}
+        onReceivePageChange={
+          receivePageChange
+        }
         onPayPageChange={payPageChange}
-        onReceiveOrderChange={receiveOrderChange}
-        onPayOrderChange={payOrderChange}
+        onReceiveOrderChange={
+          receiveOrderChange
+        }
+        onPayOrderChange={
+          payOrderChange
+        }
       />
     </>
   );

@@ -31,11 +31,9 @@ const View: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 상품 데이터 가져오기
         const response = await axios.get<Product>(
-          `https://naegift.subin.kr/product/${id}`
+          `${process.env.REACT_APP_AWS}/product/${id}`
         );
-        console.log(response.data);
         setProduct(response.data);
         setLoading(false);
       } catch (error) {
@@ -69,8 +67,12 @@ const View: React.FC = () => {
 
   return (
     <>
-       {loading ? <Loading /> : null}
-      <ViewBox product={product} userWalletAddress={userWalletAddress} />
+       
+      {loading ? (
+        <Loading />
+      ) : (
+        <ViewBox product={product} userWalletAddress={userWalletAddress} />
+      )}
     </>
   );
 };

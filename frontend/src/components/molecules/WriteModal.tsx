@@ -42,10 +42,12 @@ const WriteModal: React.FC<ModalProps> = ({
       // formData.append("seller", userWalletAddress);
 
       const response = await axios.post(
-        "https://naegift.subin.kr/product",
+        `${process.env.REACT_APP_AWS}/product`,
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 

@@ -40,20 +40,20 @@ contract NaegiftEscrow {
         contractState = ContractStateChoices.ACTIVE;
     }
     
-    // 상품 사용 완료
+        // 상품 사용 완료
     function confirmFulfillment() external {
         require(msg.sender == receiver, 'e024');
         require(contractState == ContractStateChoices.ACTIVE, 'e013');
         contractState = ContractStateChoices.FULFILLED;
-        emit FulfillmentConfirmed(msg.sender);
+        emit FulfillmentConfirmed(receiver);
     }
 
     // 상품 수령 확인
-        function confirmProductUsed() external {
+    function confirmProductUsed() external {
         require(msg.sender == market, 'e020'); 
         require(contractState == ContractStateChoices.FULFILLED, 'e021');
         contractState = ContractStateChoices.PRODUCT_USED;
-        emit ProductUsedConfirmed(msg.sender);
+        emit ProductUsedConfirmed(market); 
         distributeFunds(); 
     }
 
@@ -64,8 +64,7 @@ contract NaegiftEscrow {
         uint256 sellerShare = contractPrice - marketShare; 
         payable(market).transfer(marketShare);
         payable(seller).transfer(sellerShare);
-        emit FundsDistributed(market, marketShare, seller, sellerShare);
-        contractState = ContractStateChoices.EXECUTED;
+        emit FundsDistributed(market, marketShare, seller, sellerShare); // 수정됨
     }
 
     // 컨트랙트 상태 조회

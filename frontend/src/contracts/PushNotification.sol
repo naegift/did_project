@@ -8,7 +8,7 @@ contract PushNotificationSender{
   address private constant EPNS_COMM_CONTRACT =
     0x0C34d54a09CFe75BCcd878A469206Ae77E0fe6e7;
   address private constant YOUR_CHANNEL_ADDRESS =
-    0xb2B7Cf04a31d943fBf14ea4575112D9b3Aa2d3e3;
+    0x3C51F308502c5fde8c7C1Fa39d35aA621838F7DF;
 
   function sendPushNotification(
     address recipient,

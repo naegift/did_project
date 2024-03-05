@@ -107,7 +107,7 @@ export class ProductController {
   async putProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqPutProduct: ReqPutProduct,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file?: Express.Multer.File,
   ): Promise<ResPutProduct> {
     const result = await this.productService.putProduct(
       id,

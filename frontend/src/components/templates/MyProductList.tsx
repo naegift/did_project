@@ -49,11 +49,15 @@ const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
             </div>
           </label>
         </div>
+
         {products.map((product) => {
           return (
-            <Link to={`/product/${product.id}`}>
-              <div className="flex flex-col mx-[auto] h-full " key={product.id}>
-                <div className="flex flex-row border rounded-md mt-[20px] mx-10 gap-x-4   hover:scale-90 transition duration-700">
+            <div
+              className="flex flex-col mx-[auto] w-[80%] h-full "
+              key={product.id}
+            >
+              <Link to={`/product/${product.id}`}>
+                <div className="flex flex-row justify-around border rounded-md mt-[20px]  hover:scale-90 transition duration-700">
                   <div className="p-[20px] flex flex-row">
                     <span className="">No.{product.id}</span>
                   </div>
@@ -62,16 +66,15 @@ const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
                     alt={product.title}
                     className=" h-[70px] "
                   />
-                  <div className="w-full">
-                    <h3>{product.title}</h3>
-                    <p>Price: {product.price} WEI</p>
-                    <span className="whitespace-normal overflow-hidden">
-                      {product.seller}
-                    </span>
+                  <div>
+                    <h3 className="truncate">{product.title}</h3>
+                  </div>
+                  <div>
+                    <p className="truncate">{product.price} WEI</p>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </div>
           );
         })}
         <div className="w-5/6 flex flex-row py-2 gap-5 px-20 justify-center items-center">
