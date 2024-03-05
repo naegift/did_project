@@ -44,6 +44,10 @@ export class VcService {
         '@veramo/data-store',
         module,
       )) as typeof import('@veramo/data-store');
+    const { CredentialIssuerEIP712 } = (await dynamicImport(
+      '@veramo/credential-eip712',
+      module,
+    )) as typeof import('@veramo/credential-eip712');
 
     return {
       createAgent,
@@ -60,6 +64,7 @@ export class VcService {
       KeyStore,
       PrivateKeyStore,
       migrations,
+      CredentialIssuerEIP712,
     };
   }
 
@@ -79,6 +84,7 @@ export class VcService {
       KeyStore,
       PrivateKeyStore,
       migrations,
+      CredentialIssuerEIP712,
     } = await this.veramoImport();
 
     const DATABASE_FILE = 'database.sqlite';
@@ -108,13 +114,13 @@ export class VcService {
         }),
         new DIDManager({
           store: new DIDStore(dbConnection),
-          defaultProvider: 'did:ethr:goerli',
+          defaultProvider: 'did:ethr:sepolia',
           providers: {
-            'did:ethr:goerli': new EthrDIDProvider({
+            'did:ethr:sepolia': new EthrDIDProvider({
               defaultKms: 'local',
-              network: 'goerli',
+              network: 'sepolia',
               rpcUrl:
-                'https://goerli.infura.io/v3/' + process.env.INFURA_PROJECT_ID,
+                'https://sepolia.infura.io/v3/' + process.env.INFURA_PROJECT_ID,
             }),
             'did:web': new EthrDIDProvider({
               defaultKms: 'local',
@@ -130,6 +136,7 @@ export class VcService {
           }),
         }),
         new CredentialPlugin(),
+        new CredentialIssuerEIP712(),
       ],
     });
 
@@ -144,6 +151,24 @@ export class VcService {
     }
 
     const identifiers = await agent.didManagerFind();
+
+    const identifier = await agent.didManagerGetByAlias({ alias: 'default' });
+
+    const verifiableCredential = await agent.createVerifiableCredential({
+      credential: {
+        issuer: { id: identifier.did },
+        credentialSubject: {
+          id: 'did:web:example.com',
+          you: 'Rock',
+        },
+      },
+      proofFormat: 'EthereumEip712Signature2021',
+    });
+
+    const result = await agent.verifyCredential({
+      credential: verifiableCredential,
+    });
+    console.log(`Credential verified`, result.verified);
 
     return identifiers[0];
   }
