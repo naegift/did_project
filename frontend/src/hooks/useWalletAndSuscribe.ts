@@ -5,118 +5,114 @@ import { useRecoilState } from "recoil";
 import { walletState } from "../recoil/walletState";
 import { streamIdState } from "../recoil/streamState";
 
-const useWalletAndSuscribe = () => {
+// 사용자 지갑과 구독을 관리하는 커스텀 훅
+const useWalletAndSubscribe = () => {
   const [notificationData, setNotificationData] = useState<any | null>(null);
   const [streamInstance, setStreamInstance] = useState<any | null>(null);
-  const [user, setUser] = useState<any | null>(null); // user 상태 추가
+  const [user, setUser] = useState<any | null>(null);
   const [sellerWallets, setSellerWallets] = useRecoilState(walletState);
   const [streamId, setStreamId] = useRecoilState(streamIdState);
 
-  const connectWallet = async () => {
-    if (!window.ethereum) {
-      alert("메타마스크를 설치해주세요.");
-      return;
-    }
+  // 채널 주소
+  const channelAddress = "0x3C51F308502c5fde8c7C1Fa39d35aA621838F7DF";
 
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-
-      if (sellerWallets.isLoggedIn && sellerWallets.isSubscribed) {
-        console.log("이미 로그인 및 구독 완료 상태입니다.");
-        return;
-      }
-
-      const initializedUser = await PushAPI.initialize(signer, {
-        env: CONSTANTS.ENV.STAGING,
-      });
-
-      setUser(initializedUser);
-
-      const walletAddress = await signer.getAddress();
-      const channelAddress = "0x3C51F308502c5fde8c7C1Fa39d35aA621838F7DF";
-
-      if (!sellerWallets.isSubscribed) {
-        const response = await initializedUser.notification.subscribe(
-          `eip155:11155111:${channelAddress}`
-        );
-        console.log(response);
-
-        setSellerWallets({
-          walletAddress,
-          isLoggedIn: true,
-          isSubscribed: true,
-        });
-      } else {
-        setSellerWallets({
-          ...sellerWallets,
-          walletAddress,
-          isLoggedIn: true,
-        });
-      }
-
-      window.ethereum.on(
-        "accountsChanged",
-        async (...accounts: Array<string>) => {
-          if (accounts.length > 0) {
-            setSellerWallets({
-              walletAddress: accounts[0],
-              isLoggedIn: true,
-            });
-            if (initializedUser) {
-              await initRealTimeNotificationStream(initializedUser);
-            }
-          } else {
-            setSellerWallets({
-              walletAddress: "",
-              isLoggedIn: false,
-            });
-            if (streamInstance) {
-              streamInstance.disconnect();
-            }
-          }
-        }
-      );
-
-      if (initializedUser) {
-        await initRealTimeNotificationStream(initializedUser);
-      }
-    } catch (error) {
-      console.error("구독 처리 오류:", error);
-      alert("메타마스크 연결 실패 또는 구독에 실패했습니다.");
-    }
-  };
-
-  useEffect(() => {
-    connectWallet();
-    if (sellerWallets.isLoggedIn && user) {
-      initRealTimeNotificationStream(user);
-    }
-  }, [sellerWallets.isLoggedIn, user]);
-
+  // 실시간 알림 스트림 초기화
   const initRealTimeNotificationStream = async (user: any) => {
-    if (sellerWallets.isLoggedIn && user) {
+    if (!streamInstance && sellerWallets.walletAddress && user) {
       try {
-        const newStreamInstance = await user.initStream([
-          CONSTANTS.STREAM.NOTIF,
-        ]);
-        newStreamInstance.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
-          console.log("스트림 데이터:", data);
-          setNotificationData(data);
-        });
-        newStreamInstance.connect();
-        setStreamInstance(newStreamInstance);
-        setStreamId(newStreamInstance.id);
+        const newStream = await user.initStream([CONSTANTS.STREAM.NOTIF]);
+        newStream.on(CONSTANTS.STREAM.NOTIF, (data: any) =>
+          setNotificationData(data)
+        );
+        console.log("스트림 초기화 완료:", newStream);
+        newStream.connect();
+        setStreamInstance(newStream);
+        setStreamId(newStream.id);
       } catch (error) {
         console.error("스트림 초기화 중 오류 발생:", error);
       }
     }
   };
 
+  // 지갑 연결
+  const connectWallet = async () => {
+    if (!window.ethereum) {
+      alert("메타마스크를 설치해주세요.");
+      return;
+    }
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    const initializedUser = await PushAPI.initialize(signer, {
+      env: CONSTANTS.ENV.STAGING,
+    });
+    setUser(initializedUser);
+
+    const subscriptions = await initializedUser.notification.subscriptions();
+    const isSubscribed = subscriptions.some(
+      (sub: any) => sub.channel.toLowerCase() === channelAddress.toLowerCase()
+    );
+    if (!isSubscribed) {
+      await initializedUser.notification.subscribe(
+        `eip155:11155111:${channelAddress}`
+      );
+    }
+
+    await initRealTimeNotificationStream(initializedUser);
+  };
+
+  // 계정 변경 감지 및 처리
+  useEffect(() => {
+    const handleAccountsChanged = async (accounts: string[]) => {
+      if (accounts.length > 0) {
+        const newSigner = new ethers.providers.Web3Provider(
+          window.ethereum
+        ).getSigner();
+        const preserved = accounts.map((e) => ethers.utils.getAddress(e));
+        const newUser = await PushAPI.initialize(newSigner, {
+          env: CONSTANTS.ENV.STAGING,
+        });
+        setUser(newUser);
+        setSellerWallets({
+          walletAddress: preserved[0],
+          isSubscribed: false,
+        });
+        console.log(sellerWallets);
+
+        if (streamInstance) {
+          streamInstance.disconnect();
+          setStreamInstance(null);
+        }
+
+        await initRealTimeNotificationStream(newUser);
+      } else {
+        setUser(null);
+        setSellerWallets({ walletAddress: "", isSubscribed: false });
+        if (streamInstance) {
+          streamInstance.disconnect();
+          setStreamInstance(null);
+        }
+      }
+    };
+
+    window.ethereum.on("accountsChanged", handleAccountsChanged);
+
+    return () => {
+      window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
+    };
+  }, [streamInstance, user]);
+
+  // 지갑 연결 및 스트림 초기화
+  useEffect(() => {
+    connectWallet();
+  }, [sellerWallets.walletAddress]);
+
+  // 컴포넌트 언마운트 시 스트림 인스턴스 연결 해제
   useEffect(() => {
     return () => {
       if (streamInstance) {
+        console.log("컴포넌트 언마운트 시 스트림 인스턴스 연결 해제");
         streamInstance.disconnect();
       }
     };
@@ -128,4 +124,4 @@ const useWalletAndSuscribe = () => {
   };
 };
 
-export default useWalletAndSuscribe;
+export default useWalletAndSubscribe;

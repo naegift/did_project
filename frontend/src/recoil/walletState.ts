@@ -7,6 +7,7 @@ export const walletState = atom({
   key: "walletState",
   default: {
     walletAddress: "",
+    isSubscribed: false,
   },
   effects_UNSTABLE: [persistAtom],
 });

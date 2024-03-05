@@ -23,7 +23,7 @@ export class StoreService {
     page: number,
     order: Order,
   ): Promise<ResGetSellerProducts> {
-    const take = 3;
+    const take = 10;
     const skip = take * (page - 1);
     const findAndCount = await this.productRepo.findAndCount({
       where: { seller },
