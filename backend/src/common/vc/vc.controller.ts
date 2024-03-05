@@ -9,4 +9,9 @@ export class VcController {
   async getID() {
     return this.vcService.getID();
   }
+
+  @Get('credentialStatus')
+  async getCredentialStatus() {
+    return false;
+  }
 }

@@ -3,6 +3,7 @@ import { getResolver as webDidResolver } from 'web-did-resolver';
 import { DataSource } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { dynamicImport } from 'tsimportlib';
+import { StatusMethod, StatusEntry } from 'credential-status';
 
 @Injectable()
 export class VcService {
@@ -48,6 +49,10 @@ export class VcService {
       '@veramo/credential-eip712',
       module,
     )) as typeof import('@veramo/credential-eip712');
+    const { CredentialStatusPlugin } = (await dynamicImport(
+      '@veramo/credential-status',
+      module,
+    )) as typeof import('@veramo/credential-status');
 
     return {
       createAgent,
@@ -65,6 +70,7 @@ export class VcService {
       PrivateKeyStore,
       migrations,
       CredentialIssuerEIP712,
+      CredentialStatusPlugin,
     };
   }
 
@@ -85,6 +91,7 @@ export class VcService {
       PrivateKeyStore,
       migrations,
       CredentialIssuerEIP712,
+      CredentialStatusPlugin,
     } = await this.veramoImport();
 
     const DATABASE_FILE = 'database.sqlite';
@@ -98,6 +105,17 @@ export class VcService {
       logging: ['error', 'info', 'warn'],
       entities: Entities,
     }).initialize();
+
+    const statusMethod: StatusMethod = async (credential: {
+      credentialStatus?: StatusEntry;
+    }) => {
+      const response = await fetch(credential.credentialStatus.id, {
+        method: 'get',
+      });
+      const revoked = await response.json();
+
+      return { revoked };
+    };
 
     const agent = createAgent({
       plugins: [
@@ -127,6 +145,9 @@ export class VcService {
             }),
           },
         }),
+        new CredentialPlugin(),
+        new CredentialIssuerEIP712(),
+        new CredentialStatusPlugin({ CredentialStatusList2017: statusMethod }),
         new DIDResolverPlugin({
           resolver: new Resolver({
             ...ethrDidResolver({
@@ -135,8 +156,6 @@ export class VcService {
             ...webDidResolver(),
           }),
         }),
-        new CredentialPlugin(),
-        new CredentialIssuerEIP712(),
       ],
     });
 
@@ -161,9 +180,20 @@ export class VcService {
           id: 'did:web:example.com',
           you: 'Rock',
         },
+        credentialStatus: {
+          type: 'CredentialStatusList2017',
+          id: 'http://localhost:4000/vc/credentialStatus',
+        },
       },
       proofFormat: 'EthereumEip712Signature2021',
     });
+    console.log(verifiableCredential);
+
+    const status = await agent.checkCredentialStatus({
+      credential: verifiableCredential,
+      didDocumentOverride: { id: identifier.did },
+    });
+    console.log(status);
 
     const result = await agent.verifyCredential({
       credential: verifiableCredential,
