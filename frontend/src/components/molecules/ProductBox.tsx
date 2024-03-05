@@ -21,12 +21,12 @@ const ProductBox: React.FC<ProductBox> = ({ product }) => {
           ""
         )}
       >
-        <div className="rounded-md bg-black ">
+        <div className="rounded-md">
           <img
             className={cn(
               "w-[220px] h-[225px] ",
               "tablet:w-[240px] tablet:h-[265px]",
-              " mobile:w-[270px] mobile:h-[295px]"
+              "mobile:w-[250px] mobile:h-[275px]"
             )}
             src={
               product.image && product.image !== "http://example.com"
@@ -36,7 +36,7 @@ const ProductBox: React.FC<ProductBox> = ({ product }) => {
             alt=""
           />
         </div>
-        <p className="py-1">{product.title}</p>
+        <p className="py-2 font-extrabold">{product.title}</p>
         <p className="text-[18px]">{priceETH} ETH</p>
       </div>
     </Link>

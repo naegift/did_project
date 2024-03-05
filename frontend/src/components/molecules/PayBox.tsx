@@ -1,6 +1,7 @@
 import React from "react";
 import { Product } from "../../pages/Gift";
 import DateTime from "./DateTime";
+import { cn } from "../../utils/cn";
 
 interface GiftListData {
   payItem: Product;
@@ -8,14 +9,20 @@ interface GiftListData {
 const PayBox: React.FC<GiftListData> = ({ payItem }) => {
   return (
     <>
-      <div className="shadow-xl bg-slate-200 rounded-xl p-7 flex flex-col gap-1">
-        <p className="text-lg font-extrabold">{payItem.title}</p>
+      <div
+        className={cn(
+          "w-full shadow-xl bg-slate-200 rounded-xl py-9 flex flex-col gap-1 px-7",
+          "mobile:p-5 mobile:gap-3 "
+        )}
+      >
+        <p className="text-lg font-extrabold mobile:text-base">
+          {payItem.title}
+        </p>
         <p>
-          선물 보낸 날짜 :
-          <DateTime dateString={payItem.updatedAt} />
+          선물 보낸 날짜 : <DateTime dateString={payItem.updatedAt} />
         </p>
         <p>상태 : {payItem.state !== "active" ? "사용 완료" : "사용전"}</p>
-        <p>To : {payItem.receiver}</p>
+        <p className="mobile:truncate">To : {payItem.receiver}</p>
       </div>
     </>
   );
