@@ -12,6 +12,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { TransactionsModule } from './MetaTransaction/transactions.module';
 import { TransactionModel } from './__base-code__/entity/transaction.entity';
 import { EthereumService } from './notification/ethereum.service';
+import { NotificationsController } from './notification/notification.controller';
 
 @Module({
   imports: [
@@ -39,7 +40,7 @@ import { EthereumService } from './notification/ethereum.service';
     CommonModule,
     TransactionsModule,
   ],
-  controllers: [],
+  controllers: [NotificationsController],
   providers: [
     EthereumService,
     { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor },
