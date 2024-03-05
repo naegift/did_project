@@ -29,6 +29,7 @@
     "@nestjs/serve-static": "^4.0.1",
     "@nestjs/swagger": "^7.3.0",
     "@nestjs/typeorm": "^10.0.2",
+    "@pushprotocol/restapi": "^1.6.10",
     "@veramo/core": "^5.6.0",
     "@veramo/credential-eip712": "^5.6.0",
     "@veramo/credential-status": "^5.6.0",
