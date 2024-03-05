@@ -128,6 +128,9 @@ describe('ProductService', () => {
   describe('Delete Product', () => {
     it('Return | No content', async () => {
       const reqDeleteProduct: ReqDeleteProduct = {
+        title: product.title,
+        content: product.content,
+        price: product.price,
         signature: MockProductModel.deleteSignature,
       };
 
@@ -137,6 +140,9 @@ describe('ProductService', () => {
     it('Error | Cannot delete other sellers product.', async () => {
       const otherProduct = new MockProductModel().otherProduct;
       const reqDeleteProduct: ReqDeleteProduct = {
+        title: product.title,
+        content: product.content,
+        price: product.price,
         signature: MockProductModel.deleteSignature,
       };
 
