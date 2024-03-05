@@ -19,7 +19,16 @@ import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
 import {
   MinimalUnsignedCredential,
   QueryCredentialsRequestResult,
+  // enableMasca,
 } from '@blockchain-lab-um/masca-connector';
+
+// async function getMasca(): Promise<Masca> {
+//   const { enableMasca } = await (eval(
+//     `import('@blockchain-lab-um/masca-connector')`,
+//   ) as Promise<any>);
+//   return enableMasca;
+// }
+
 import {
   UnsignedCredential,
   VerifiableCredential,
@@ -28,6 +37,7 @@ import {
 import { EIP712 } from './EthereumEIP712Signature2021';
 import { _TypedDataEncoder } from 'ethers/lib/utils';
 import { ReqReceiveGift } from './dto/req-receive-gift.dto';
+import { get } from 'http';
 
 @Injectable()
 export class GiftService {
@@ -83,9 +93,7 @@ export class GiftService {
     const domain = EIP712.domain;
     const types = EIP712.types;
     const signer = new ethers.Wallet(process.env.MARKET_PRIVATE_KEY);
-    console.log('here!');
     const signature = await signer._signTypedData(domain, types, credential);
-    console.log('there!');
     return signature;
   }
 
@@ -237,4 +245,101 @@ export class GiftService {
     // if escrow state changed, update the gift state
     // metatransaction logic
   }
+
+  // async test(
+  //   id: number,
+  //   reqReceiveGift: ReqReceiveGift,
+  // ): Promise<W3CVerifiableCredential> {
+  //   const address = process.env.MARKET_ADDRESS;
+  //   const enableMasca: any = await getMasca();
+  //   const enableResult = enableMasca(address, {
+  //     snapId: 'npm:@blockchain-lab-um/masca',
+  //     version: '1.2.0-beta.2',
+  //   });
+
+  //   // // Check if there was an error and handle it accordingly
+  //   // if (isError(enableResult)) {
+  //   //     // Error message is available under error
+  //   //     console.error(enableResult.error);
+  //   // }
+
+  //   // Now get the Masca API object
+  //   const mascaApi = await enableResult.data.getMascaApi();
+
+  //   await mascaApi.setCurrentAccount({
+  //     account: address,
+  //   });
+
+  //   console.log('api was fed an account address: ', mascaApi);
+
+  //   const gift = await this.getGift(id);
+  //   // check if the gift was already issued and received
+  //   if (gift.state === State.ISSUED)
+  //     throw new BadRequestException(
+  //       'The gift was already issued and received.',
+  //     );
+  //   // signature verified (this is the receiver)
+  //   const message = {
+  //     title: reqReceiveGift.title,
+  //     content: reqReceiveGift.content,
+  //     price: reqReceiveGift.price,
+  //   };
+
+  //   const signature = reqReceiveGift.signature;
+
+  //   const signer = ethers.utils.verifyMessage(
+  //     JSON.stringify(message),
+  //     signature,
+  //   );
+  //   if (signer !== gift.receiver)
+  //     throw new UnauthorizedException('Invalid signature.');
+
+  //   // escrow contract call (existEscrow)
+  //   const provider = new ethers.providers.JsonRpcProvider(
+  //     process.env.NETWORK_RPC || MockGiftModel.network,
+  //   );
+  //   const escrowFactory = new ethers.Contract(
+  //     process.env.PROXY_CONTRACT,
+  //     FACTORY_ABI,
+  //     provider,
+  //   );
+  //   const result = await escrowFactory.existEscrow(gift.contract);
+  //   if (!result) throw new NotFoundException('Cannot find escrow.');
+  //   // if true, hand over the VC to the receiver
+  //   const payload: MinimalUnsignedCredential = {
+  //     type: ['VerifiableCredential', 'DigitalVoucher'],
+  //     credentialSubject: {
+  //       id: `did:ethr:0xaa36a7:${gift.receiver}`,
+  //       type: 'DigitalVoucher',
+  //       voucher: {
+  //         giftID: gift.id,
+  //         contract: gift.contract,
+  //         buyer: gift.buyer,
+  //         receiver: gift.receiver,
+  //         title: gift.title,
+  //         content: gift.content,
+  //         image: gift.image,
+  //         price: gift.price,
+  //         seller: gift.seller,
+  //       },
+  //     },
+  //     credentialSchema: {
+  //       type: 'JsonSchemaValidator2018',
+  //     },
+  //     '@context': ['https://www.w3.org/2018/credentials/v1'],
+  //   };
+
+  //   const vc = await mascaApi.createCredential({
+  //     minimalUnsignedCredential: payload,
+  //     proofFormat: 'EthereumEip712Signature2021',
+  //     options: {
+  //       // save: true,
+  //       // store: ["snap"],
+  //     },
+  //   });
+
+  //   console.log('created: ', vc);
+
+  //   return vc;
+  // }
 }

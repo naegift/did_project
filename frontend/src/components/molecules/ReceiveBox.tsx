@@ -65,6 +65,16 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
           element?.data?.credentialSubject?.voucher?.giftID === receivedItem.id
       );
 
+<!--     const verifyTest =
+      await mascaApi.verifyData({
+        credential: targetVc.data,
+        verbose: true,
+      });
+    console.log(
+      "verification at the front",
+      verifyTest
+    ); -->
+
       const verifyRes = await axios.patch(
         `${process.env.REACT_APP_API || process.env.REACT_APP_AWS}/gift/${
           receivedItem.id
