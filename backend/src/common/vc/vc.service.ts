@@ -147,7 +147,7 @@ export class VcService {
         }),
         new CredentialPlugin(),
         new CredentialIssuerEIP712(),
-        new CredentialStatusPlugin({ CredentialStatusList2017: statusMethod }),
+        new CredentialStatusPlugin({ StatusList2021Entry: statusMethod }),
         new DIDResolverPlugin({
           resolver: new Resolver({
             ...ethrDidResolver({
@@ -181,7 +181,7 @@ export class VcService {
           you: 'Rock',
         },
         credentialStatus: {
-          type: 'CredentialStatusList2017',
+          type: 'StatusList2021Entry',
           id: 'http://localhost:4000/vc/credentialStatus',
         },
       },
