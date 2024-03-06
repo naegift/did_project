@@ -4,9 +4,10 @@ import { GiftController } from './gift.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { DataModule } from 'src/common/data/data.module';
+import { VcModule } from 'src/common/vc/vc.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([GiftModel]), DataModule],
+  imports: [TypeOrmModule.forFeature([GiftModel]), DataModule, VcModule],
   controllers: [GiftController],
   providers: [GiftService],
 })

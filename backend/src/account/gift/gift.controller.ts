@@ -6,6 +6,7 @@ import {
   ParseEnumPipe,
   ParseIntPipe,
   Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 import { GiftService } from './gift.service';
@@ -68,6 +69,15 @@ export class GiftController {
     @Body() reqReceiveGift: ReqReceiveGift,
   ) {
     return this.giftService.receiveGift(id, reqReceiveGift);
+  }
+
+  @Post(':id/issue')
+  @ApiOperation({ summary: '[작업중] VC 상태 ISSUED로 전환' })
+  async issueVC(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() saveResponse: any,
+  ) {
+    return this.giftService.checkSavedCredential(id, saveResponse);
   }
 
   @Patch(':id/use')

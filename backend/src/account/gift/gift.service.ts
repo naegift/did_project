@@ -19,15 +19,7 @@ import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
 import {
   MinimalUnsignedCredential,
   QueryCredentialsRequestResult,
-  // enableMasca,
 } from '@blockchain-lab-um/masca-connector';
-
-// async function getMasca(): Promise<Masca> {
-//   const { enableMasca } = await (eval(
-//     `import('@blockchain-lab-um/masca-connector')`,
-//   ) as Promise<any>);
-//   return enableMasca;
-// }
 
 import {
   UnsignedCredential,
@@ -38,6 +30,7 @@ import { EIP712 } from './EthereumEIP712Signature2021';
 import { _TypedDataEncoder } from 'ethers/lib/utils';
 import { ReqReceiveGift } from './dto/req-receive-gift.dto';
 import { get } from 'http';
+import { VcService } from 'src/common/vc/vc.service';
 
 @Injectable()
 export class GiftService {
@@ -45,7 +38,9 @@ export class GiftService {
     @InjectRepository(GiftModel)
     private readonly giftRepo: Repository<GiftModel>,
     private readonly dataService: DataService,
+    private readonly vcService: VcService,
   ) {}
+
   async getGift(id: number): Promise<GiftModel> {
     const gift = await this.giftRepo.findOne({ where: { id } });
     if (!gift) throw new NotFoundException('Cannot find gift.');
@@ -89,72 +84,73 @@ export class GiftService {
     return { state: stateCode[code] };
   }
 
-  async signCredential(credential: UnsignedCredential) {
-    const domain = EIP712.domain;
-    const types = EIP712.types;
-    const signer = new ethers.Wallet(process.env.MARKET_PRIVATE_KEY);
-    const signature = await signer._signTypedData(domain, types, credential);
-    return signature;
-  }
+  // async signCredential(credential: UnsignedCredential) {
+  //   const domain = EIP712.domain;
+  //   const types = EIP712.types;
+  //   const signer = new ethers.Wallet(process.env.MARKET_PRIVATE_KEY);
+  //   const signature = await signer._signTypedData(domain, types, credential);
+  //   return signature;
+  // }
 
-  async verifyCredential(
-    id: number,
-    VcRes: QueryCredentialsRequestResult,
-  ): Promise<boolean> {
-    // revoke mechanism
+  // async verifyCredential(
+  //   id: number,
+  //   VcRes: QueryCredentialsRequestResult,
+  // ): Promise<boolean> {
 
-    // const VDR = [];
-    // console.log(VcRes);
-    // console.log('VDR: ', VDR);
-    // console.log(VcRes.metadata.id);
-    // if (VDR.includes(VcRes.metadata.id))
-    //   throw new BadRequestException('Already used credential.');
-    // VDR.push(VcRes.metadata.id);
+  //   const { proof, ...unsignedCredential } = VcRes.data as VerifiableCredential;
 
-    const { proof, ...unsignedCredential } = VcRes.data as VerifiableCredential;
+  //   if (!proof || !proof.proofValue || !proof.verificationMethod) {
+  //     throw new UnauthorizedException('Invalid credential proof structure.');
+  //   }
 
-    if (!proof || !proof.proofValue || !proof.verificationMethod) {
-      throw new UnauthorizedException('Invalid credential proof structure.');
-    }
+  //   const domain = EIP712.domain;
+  //   const types = EIP712.types;
+  //   const message = unsignedCredential;
+  //   const signerAddress = process.env.MARKET_ADDRESS;
+  //   try {
+  //     const recoveredAddress = ethers.utils.verifyTypedData(
+  //       domain,
+  //       types,
+  //       message,
+  //       proof.proofValue,
+  //     );
+  //     console.log(recoveredAddress, signerAddress);
 
-    const domain = EIP712.domain;
-    const types = EIP712.types;
-    const message = unsignedCredential;
-    const signerAddress = process.env.MARKET_ADDRESS;
-    try {
-      const recoveredAddress = ethers.utils.verifyTypedData(
-        domain,
-        types,
-        message,
-        proof.proofValue,
-      );
-      console.log(recoveredAddress, signerAddress);
+  //     const result =
+  //       recoveredAddress.toLowerCase() === signerAddress.toLowerCase();
+  //     if (result) {
+  //       // const gift = await this.getGift(id);
+  //       // const provider = new ethers.providers.JsonRpcProvider(
+  //       //   process.env.NETWORK_RPC || MockGiftModel.network,
+  //       // );
+  //       // const escrowContract = new ethers.Contract(
+  //       //   gift.contract,
+  //       //   ESCROW_ABI,
+  //       //   provider,
+  //       // );
+  //       // const escrowFulfilled = await escrowContract.confirmFulfillment();
+  //       // console.log(escrowFulfilled)
+  //       this.giftRepo.update(id, { state: State.FULFILLED });
+  //     }
+  //     // push notification to the seller
 
-      const result =
-        recoveredAddress.toLowerCase() === signerAddress.toLowerCase();
-      if (result) {
-        // const gift = await this.getGift(id);
-        // const provider = new ethers.providers.JsonRpcProvider(
-        //   process.env.NETWORK_RPC || MockGiftModel.network,
-        // );
-        // const escrowContract = new ethers.Contract(
-        //   gift.contract,
-        //   ESCROW_ABI,
-        //   provider,
-        // );
-        // const escrowFulfilled = await escrowContract.confirmFulfillment();
-        // console.log(escrowFulfilled)
-        this.giftRepo.update(id, { state: State.FULFILLED });
-      }
-      // push notification to the seller
+  //     // seller sends the item to the receiver
 
-      // seller sends the item to the receiver
+  //     // receiver confirms the receipt
 
-      // receiver confirms the receipt
+  //     return result;
+  //   } catch (e) {
+  //     throw new UnauthorizedException('Invalid credential proof.');
+  //   }
+  // }
 
-      return result;
-    } catch (e) {
-      throw new UnauthorizedException('Invalid credential proof.');
+  async checkSavedCredential(id: number, saveResponse: any) {
+    console.log(saveResponse);
+    if (saveResponse.success) {
+      await this.giftRepo.update(id, { state: State.ISSUED });
+      return { success: true };
+    } else {
+      return { success: false };
     }
   }
 
@@ -168,7 +164,7 @@ export class GiftService {
       throw new BadRequestException(
         'The gift was already issued and received.',
       );
-    // signature verified (this is the receiver)
+    // signature verified
     const message = {
       title: reqReceiveGift.title,
       content: reqReceiveGift.content,
@@ -184,60 +180,80 @@ export class GiftService {
     if (signer !== gift.receiver)
       throw new UnauthorizedException('Invalid signature.');
 
-    // escrow contract call (existEscrow)
-    const provider = new ethers.providers.JsonRpcProvider(
-      process.env.NETWORK_RPC || MockGiftModel.network,
-    );
-    const escrowFactory = new ethers.Contract(
-      process.env.PROXY_CONTRACT,
-      FACTORY_ABI,
-      provider,
-    );
-    const result = await escrowFactory.existEscrow(gift.contract);
-    if (!result) throw new NotFoundException('Cannot find escrow.');
-    // if true, hand over the VC to the receiver
-    const payload: UnsignedCredential = {
+    const agent = await this.vcService.getAgent();
+
+    await agent.didManagerGetOrCreate({
+      alias: 'market',
+    });
+
+    const identifier = await agent.didManagerGetByAlias({
+      alias: 'market',
+    });
+
+    const payload: MinimalUnsignedCredential = {
       type: ['VerifiableCredential', 'DigitalVoucher'],
+      issuer: { id: identifier.did },
       credentialSubject: {
         id: `did:ethr:0xaa36a7:${gift.receiver}`,
         type: 'DigitalVoucher',
-        voucher: {
-          giftID: gift.id,
-          contract: gift.contract,
-          buyer: gift.buyer,
-          receiver: gift.receiver,
-          title: gift.title,
-          content: gift.content,
-          image: gift.image,
-          price: gift.price,
-          seller: gift.seller,
-        },
+        giftID: gift.id,
+        contract: gift.contract,
+        buyer: gift.buyer,
+        receiver: gift.receiver,
+        title: gift.title,
+        content: gift.content,
+        image: gift.image,
+        price: gift.price,
+        seller: gift.seller,
       },
-      credentialSchema: {
-        type: 'JsonSchemaValidator2018',
+      credentialStatus: {
+        type: 'CredentialStatusList2017',
+        id: 'http://localhost:4000/vc/credentialStatus',
       },
       '@context': ['https://www.w3.org/2018/credentials/v1'],
-      issuer: `did:ethr:0xaa36a7:${process.env.MARKET_ADDRESS}`,
-      issuanceDate: new Date().toISOString(),
+      proofFormat: 'EthereumEip712Signature2021',
     };
 
-    const signedProof = await this.signCredential(payload);
+    const verifiableCredential = await agent.createVerifiableCredential({
+      credential: payload,
+      proofFormat: 'EthereumEip712Signature2021',
+    });
 
-    const toBeAssigned = {
-      proof: {
-        verificationMethod: `did:ethr:0xaa36a7:${process.env.MARKET_ADDRESS}#controller`,
-        created: payload.issuanceDate,
-        proofPurpose: 'assertionMethod',
-        type: 'EthereumEip712Signature2021',
-        proofValue: `${signedProof}`,
-        eip712: EIP712,
-      },
-    };
+    const status = await agent.checkCredentialStatus({
+      credential: verifiableCredential,
+      didDocumentOverride: { id: identifier.did },
+    });
+    console.log('Is this revoked?', status);
 
-    const vc = Object.assign(payload, toBeAssigned);
-    this.giftRepo.update(id, { state: State.ISSUED });
+    const result = await agent.verifyCredential({
+      credential: verifiableCredential,
+    });
+    console.log('Is this verified? ', result);
 
-    return vc;
+    return verifiableCredential;
+
+    // const signedProof = await this.signCredential(payload);
+
+    // const toBeAssigned = {
+    //   proof: {
+    //     verificationMethod: `did:ethr:0xaa36a7:${process.env.MARKET_ADDRESS}#controller`,
+    //     created: payload.issuanceDate,
+    //     proofPurpose: 'assertionMethod',
+    //     type: 'EthereumEip712Signature2021',
+    //     proofValue: `${signedProof}`,
+    //     eip712: EIP712,
+    //   },
+    // };
+  }
+
+  async verifyCredential(id: number, VcRes: QueryCredentialsRequestResult) {
+    const agent = await this.vcService.getAgent();
+
+    const verificationResult = await agent.verifyCredential({
+      credential: VcRes.data,
+    });
+
+    return verificationResult;
   }
 
   async confirm() {
@@ -245,101 +261,4 @@ export class GiftService {
     // if escrow state changed, update the gift state
     // metatransaction logic
   }
-
-  // async test(
-  //   id: number,
-  //   reqReceiveGift: ReqReceiveGift,
-  // ): Promise<W3CVerifiableCredential> {
-  //   const address = process.env.MARKET_ADDRESS;
-  //   const enableMasca: any = await getMasca();
-  //   const enableResult = enableMasca(address, {
-  //     snapId: 'npm:@blockchain-lab-um/masca',
-  //     version: '1.2.0-beta.2',
-  //   });
-
-  //   // // Check if there was an error and handle it accordingly
-  //   // if (isError(enableResult)) {
-  //   //     // Error message is available under error
-  //   //     console.error(enableResult.error);
-  //   // }
-
-  //   // Now get the Masca API object
-  //   const mascaApi = await enableResult.data.getMascaApi();
-
-  //   await mascaApi.setCurrentAccount({
-  //     account: address,
-  //   });
-
-  //   console.log('api was fed an account address: ', mascaApi);
-
-  //   const gift = await this.getGift(id);
-  //   // check if the gift was already issued and received
-  //   if (gift.state === State.ISSUED)
-  //     throw new BadRequestException(
-  //       'The gift was already issued and received.',
-  //     );
-  //   // signature verified (this is the receiver)
-  //   const message = {
-  //     title: reqReceiveGift.title,
-  //     content: reqReceiveGift.content,
-  //     price: reqReceiveGift.price,
-  //   };
-
-  //   const signature = reqReceiveGift.signature;
-
-  //   const signer = ethers.utils.verifyMessage(
-  //     JSON.stringify(message),
-  //     signature,
-  //   );
-  //   if (signer !== gift.receiver)
-  //     throw new UnauthorizedException('Invalid signature.');
-
-  //   // escrow contract call (existEscrow)
-  //   const provider = new ethers.providers.JsonRpcProvider(
-  //     process.env.NETWORK_RPC || MockGiftModel.network,
-  //   );
-  //   const escrowFactory = new ethers.Contract(
-  //     process.env.PROXY_CONTRACT,
-  //     FACTORY_ABI,
-  //     provider,
-  //   );
-  //   const result = await escrowFactory.existEscrow(gift.contract);
-  //   if (!result) throw new NotFoundException('Cannot find escrow.');
-  //   // if true, hand over the VC to the receiver
-  //   const payload: MinimalUnsignedCredential = {
-  //     type: ['VerifiableCredential', 'DigitalVoucher'],
-  //     credentialSubject: {
-  //       id: `did:ethr:0xaa36a7:${gift.receiver}`,
-  //       type: 'DigitalVoucher',
-  //       voucher: {
-  //         giftID: gift.id,
-  //         contract: gift.contract,
-  //         buyer: gift.buyer,
-  //         receiver: gift.receiver,
-  //         title: gift.title,
-  //         content: gift.content,
-  //         image: gift.image,
-  //         price: gift.price,
-  //         seller: gift.seller,
-  //       },
-  //     },
-  //     credentialSchema: {
-  //       type: 'JsonSchemaValidator2018',
-  //     },
-  //     '@context': ['https://www.w3.org/2018/credentials/v1'],
-  //   };
-
-  //   const vc = await mascaApi.createCredential({
-  //     minimalUnsignedCredential: payload,
-  //     proofFormat: 'EthereumEip712Signature2021',
-  //     options: {
-  //       // save: true,
-  //       // store: ["snap"],
-  //     },
-  //   });
-
-  //   console.log('created: ', vc);
-
-  //   return vc;
-  // }
 }
