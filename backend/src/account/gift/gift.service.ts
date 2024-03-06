@@ -267,20 +267,25 @@ export class GiftService {
 
     if (verificationResult.verified) {
       const gift = await this.getGift(id);
-      const provider = new ethers.providers.JsonRpcProvider(
-        process.env.NETWORK_RPC || MockGiftModel.network,
-      );
-      const privateKey = process.env.MARKET_PRIVATE_KEY;
-      if (!privateKey) throw new Error('No private key.');
-      const signer = new ethers.Wallet(privateKey, provider);
+      try {
+        const provider = new ethers.providers.JsonRpcProvider(
+          process.env.NETWORK_RPC || MockGiftModel.network,
+        );
+        const privateKey = process.env.MARKET_PRIVATE_KEY;
+        if (!privateKey) throw new Error('No private key.');
+        const signer = new ethers.Wallet(privateKey, provider);
 
-      const escrowContract = new ethers.Contract(
-        gift.contract,
-        ESCROW_ABI,
-        signer,
-      );
-      const escrowFulfilled = await escrowContract.confirmFulfillment();
-      console.log(escrowFulfilled);
+        const escrowContract = new ethers.Contract(
+          gift.contract,
+          ESCROW_ABI,
+          signer,
+        );
+        const escrowFulfilled = await escrowContract.confirmFulfillment();
+        console.log(escrowFulfilled);
+      } catch (e) {
+        throw e;
+      }
+      if (true) return { success: true };
       await this.giftRepo.update(id, { state: State.FULFILLED });
       // push notification to the seller
       await this.notificationService.sendNotification(gift.seller);
