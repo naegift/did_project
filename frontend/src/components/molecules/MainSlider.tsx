@@ -16,6 +16,7 @@ const MainSlider = () => {
     autoplay: true,
     speed: 5000,
     autoplaySpeed: 500,
+    arrows: false,
   };
   return (
     <div className="slick-slider pb-5">
