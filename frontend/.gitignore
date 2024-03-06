@@ -60,4 +60,5 @@ node_modules
 /compiled_contracts/
 /frontend/src/contracts/
 /frontend/src/contracts/artifacts/
+@artifacts/
 

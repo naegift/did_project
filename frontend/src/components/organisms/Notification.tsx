@@ -1,44 +1,53 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { NotificationItem } from "@pushprotocol/uiweb";
+import "../../styles/notification.css";
 
-function Notification() {
-  const [notificationData, setNotificationData] = useState([]);
+const NotificationContent = ({ data }: { data: any }) => {
+  const [visible, setVisible] = useState(true);
 
-  useEffect(() => {
-    const fetchNotificationData = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/notifications");
-        console.log("알림 데이터를 가져왔습니다.", response);
-        setNotificationData(response.data);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setVisible(false);
+  //   }, 5000);
 
-        response.data.forEach((notification: any) => {
-          toast(`${notification.title || "알림"}: ${notification.body}`, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        });
-      } catch (error) {
-        console.error("알림 데이터를 가져오는데 실패했습니다.", error);
-        toast.error("알림 데이터를 가져오는데 실패했습니다.");
-      }
-    };
+  //   return () => clearTimeout(timer);
+  // }, []);
 
-    // 30초마다 알림 데이터를 가져옵니다.
-    const intervalId = setInterval(fetchNotificationData, 30000);
+  if (!visible) return null;
 
-    // 컴포넌트가 언마운트될 때 인터벌을 정리합니다.
-    return () => clearInterval(intervalId);
-  }, []);
+  const notificationTitle = data.message.payload.title || "알림";
+  const notificationBody = data.message.payload.body || "내용이 없습니다.";
 
-  // NotificationContent 컴포넌트와 기존 렌더링 로직은 이제 필요 없습니다.
+  return (
+    <div>
+      <NotificationItem
+        notificationTitle={notificationTitle}
+        notificationBody={notificationBody}
+        chainName={"ETH_TEST_SEPOLIA"}
+        icon={""}
+        app={"TEST"}
+        cta={"자세히 보기"}
+        image={"이미지_URL"}
+        url={"알림_링크_URL"}
+      />
+      {/* <div
+        className="progress-bar"
+        style={{ animation: "shrink 5s linear" }}
+      ></div> */}
+    </div>
+  );
+};
 
-  return null; // 토스트 알림만을 사용하므로, 별도의 렌더링은 필요 없습니다.
+function Notification({ notificationData }: { notificationData: any[] }) {
+  return (
+    <div className="fixed bottom-0 right-0 mb-4 mr-4 z-50">
+      {notificationData.map((data, index) => (
+        <div key={index} className="w-72 text-white rounded-lg mb-4 shadow-lg">
+          <NotificationContent data={data} />
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default Notification;

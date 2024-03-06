@@ -7,9 +7,10 @@ import { logo } from "../../images";
 import { menuIcon } from "../../images/Icon";
 import { walletState } from "../../recoil/walletState";
 import { cn } from "../../utils/cn";
+import Notification from "./Notification";
 
 const Header: React.FC = () => {
-  const { connectWallet } = useWalletAndSuscribe();
+  const { connectWallet, notificationData } = useWalletAndSuscribe();
   const [sellerWallets, setSellerWallets] = useRecoilState(walletState);
   // const [welcomeMessage, setWelcomeMessage] = useState<string>("");
 
@@ -33,6 +34,7 @@ const Header: React.FC = () => {
 
   return (
     <div className="flex flex-row justify-between p-5 border-b items-center ">
+      <Notification notificationData={notificationData} />
       <div>
         <Link to="/">
           <img

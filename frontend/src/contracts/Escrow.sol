@@ -42,7 +42,7 @@ contract NaegiftEscrow {
     
         // 상품 사용 완료
     function confirmFulfillment() external {
-        require(msg.sender == receiver, 'e024');
+        require(msg.sender == market, 'e024');
         require(contractState == ContractStateChoices.ACTIVE, 'e013');
         contractState = ContractStateChoices.FULFILLED;
         emit FulfillmentConfirmed(receiver);
