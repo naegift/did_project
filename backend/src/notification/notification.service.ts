@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { PushAPI, CONSTANTS } from '@pushprotocol/restapi';
 
 @Injectable()
-export class EthereumService {
+export class NotificationService {
   private wallet: ethers.Wallet;
   private provider: ethers.providers.JsonRpcProvider;
   private notifications: any[] = [];
@@ -20,7 +20,7 @@ export class EthereumService {
   }
 
   // 알림 전송 함수
-  async sendNotification(recipients) {
+  async sendNotification(recipients: string) {
     const market = await PushAPI.initialize(this.wallet, {
       env: CONSTANTS.ENV.STAGING,
     });

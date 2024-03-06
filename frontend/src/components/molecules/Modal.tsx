@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router";
 import { v4 as uuid } from "uuid";
 import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
 
 import Inputs from "../atoms/inputs";
 import Button from "../atoms/button";
@@ -24,92 +25,73 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
   const [receiverInput, setReceiverInput] = useState<string>("");
   const { walletAddress } = useRecoilValue(walletState);
   const priceETH = formatEther(product.price);
-
+  const navigate = useNavigate();
 
   const runEthers = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    console.log("provider: ", provider);
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const address = walletAddress;
+      const signer = provider.getSigner(address);
+      const UUID = uuid();
+      const PROXY_CONTRACT = process.env.REACT_APP_PROXY_CONTRACT;
+      const buyer = address;
+      const seller = product.seller;
+      const receiver = receiverInput;
+      const market = process.env.REACT_APP_MARKET_ADDRESS;
 
-    const address = walletAddress;
-    console.log(address);
+      // const price = product.price;
+      // console.log(price);
+      // const priceETH = ethers.utils.parseUnits(price, "ether").toString();
+      // console.log(priceETH);
 
-    const signer = provider.getSigner(address);
-    console.log(signer);
-
-
-    const UUID = uuid();
-    console.log(UUID);
-
-    const PROXY_CONTRACT =
-      process.env
-        .REACT_APP_PROXY_ADDRESS;
-
-    const contract =
-      new ethers.Contract(
+      const contract = new ethers.Contract(
         PROXY_CONTRACT as string,
         FACTORY_ABI,
         provider
       );
 
-    const buyer = address;
-    console.log(buyer);
-
-    const seller = product.seller;
-    console.log("seller :", seller);
-    // const price = product.price;
-    // console.log(price);
-    // const priceETH = ethers.utils.parseUnits(price, "ether").toString();
-    // console.log(priceETH);
-
-    const receiver = receiverInput;
-
-    const market =
-      process.env
-        .REACT_APP_MARKET_ADDRESS;
-
-    const transaction = {
-      to: PROXY_CONTRACT,
-      data: contract.interface.encodeFunctionData(
-        "createEscrow",
-        [
+      const transaction = {
+        to: PROXY_CONTRACT,
+        data: contract.interface.encodeFunctionData("createEscrow", [
           buyer,
           seller,
           receiver,
           market,
-          ethers.utils
-            .parseUnits(
-              "0.001",
-              "ether"
-            )
-            .toString(),
+          ethers.utils.parseUnits("0.001", "ether").toString(),
           UUID,
-        ]
-      ),
-      value: ethers.utils
-        .parseUnits("0.001", "ether")
-        .toString(),
-      gasLimit: 3000000,
-    };
-    console.log(transaction);
+        ]),
+        value: ethers.utils.parseUnits("0.001", "ether").toString(),
+        gasLimit: 3000000,
+      };
+      console.log(transaction);
 
-    await signer.sendTransaction(transaction);
-    console.log("Transaction sign post body: ", {
-      buyer,
-      receiver,
-      uuid: UUID,
-    });
+      await signer.sendTransaction(transaction);
+      console.log("Transaction sign post body: ", {
+        buyer,
+        receiver,
+        uuid: UUID,
+      });
 
-    const reqBody = {
-      buyer,
-      receiver,
-      uuid: UUID,
-    };
+      const reqBody = {
+        buyer,
+        receiver,
+        uuid: UUID,
+      };
 
-    const payUrl = `${process.env.REACT_APP_API}/product/${id}/pay`;
-    console.log(payUrl, reqBody);
+      const payUrl = `${process.env.REACT_APP_AWS}/product/${id}/pay`;
+      console.log(payUrl, reqBody);
 
-    const response = await axios.post(payUrl, reqBody);
-    console.log(response);
+      const response = await axios.post(payUrl, reqBody);
+      console.log(response);
+
+      if (response) {
+        alert("정상적으로 선물을 보냈습니다! 선물함으로 이동합니다.");
+        navigate("/gift");
+      }
+    } catch (error) {
+      console.log("선물보내기에서 오류", error);
+      alert("선물을 보내지못했습니다ㅠㅠ");
+    }
   };
 
   const sendGift = async () => {
@@ -140,10 +122,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
                         {product.title} 선물 보내기
                       </h3>
 
-                      <p className="py-3">
-                        금액 :{" "}
-                        {priceETH} ETH{" "}
-                      </p>
+                      <p className="py-3">금액 : {priceETH} ETH </p>
 
                       <Inputs
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

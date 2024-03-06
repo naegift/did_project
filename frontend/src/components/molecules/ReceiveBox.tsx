@@ -89,19 +89,19 @@ const ReceiveBox: React.FC<
           ) =>
             element?.data
               ?.credentialSubject
-              ?.voucher?.giftID ===
+              ?.giftID ===
             receivedItem.id
         );
 
-      // const verifyTest =
-      //   await mascaApi.verifyData({
-      //     credential: targetVc.data,
-      //     verbose: true,
-      //   });
-      // console.log(
-      //   "verification at the front",
-      //   verifyTest
-      // );
+      const verifyTest =
+        await mascaApi.verifyData({
+          credential: targetVc.data,
+          verbose: true,
+        });
+      console.log(
+        "verification at the front",
+        verifyTest
+      );
 
       const verifyRes =
         await axios.patch(
@@ -122,7 +122,7 @@ const ReceiveBox: React.FC<
         error
       );
       alert(
-        "오류가 발생했습니다: " + error
+        "상품 사용하기에 실패했습니다."
       );
     }
   };
@@ -168,18 +168,21 @@ const ReceiveBox: React.FC<
             price: message.price,
           }
         );
-      await mascaApi.saveCredential(
-        response.data
-      );
-      console.log(
-        "VC was handed over",
-        response.data
-      );
-     // 수정하기
-      const saveVC = await mascaApi.saveCredential(response.data);
-      console.log("확인!!!!!", saveVC);
+      // 수정하기
+      const saveVC =
+        await mascaApi.saveCredential(
+          response.data
+        );
+      console.log("VC saved: ", saveVC);
 
-      const successRes = await axios.post(`url/`, { success: saveVC.success });
+      const issueVcUrl = `${
+        process.env.REACT_APP_API ||
+        process.env.REACT_APP_AWS
+      }/gift/${receivedItem.id}/issue`;
+      const successRes =
+        await axios.post(issueVcUrl, {
+          success: saveVC.success,
+        });
 
       if (successRes.data.success) {
         setBtnState("issued");
@@ -189,9 +192,6 @@ const ReceiveBox: React.FC<
           "디지털 바우처 발급을 거절하셨습니다. 선물을 받으시려면 승인이 필요합니다."
         );
       }
-
-      // console.log("VC was handed over", response.data);
-
     } catch (error) {
       console.error(
         "선물받기에서 오류 발생:",
@@ -237,11 +237,14 @@ const ReceiveBox: React.FC<
         className={cn(
           "w-full shadow-xl bg-slate-200 rounded-xl py-9 px-7",
           "flex flex-row gap-10 justify-between items-center",
+          "note:py-7",
           "tablet:flex-col tablet:flex-wrap tablet:p-5 gap-5"
         )}
       >
         <div className="flex flex-col gap-1 ">
-          <p className="text-lg font-extrabold">{receivedItem.title}</p>
+          <p className="text-lg font-extrabold">
+            {receivedItem.title}
+          </p>
           <p>
             선물 받은 날짜 :{" "}
             <DateTime

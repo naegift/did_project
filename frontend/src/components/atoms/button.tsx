@@ -13,7 +13,8 @@ export const ButtonVariants = cva(
       variant: {
         default: "",
         iconBtn: "border border-slate-400 text-slate-600",
-        iconTextBtn: "border border-slate-400 text-slate-600",
+        iconTextBtn:
+          "border border-slate-400 text-slate-600 tablet:hidden mobile:hidden",
         sendBtn1: "bg-[#ff4400]",
         sendBtn2: "bg-gradient-to-r from-[#ec4609] to-[#FFA787]",
         basicBtn: "bg-white text-slate-600",

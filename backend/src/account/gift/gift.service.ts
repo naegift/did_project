@@ -29,8 +29,8 @@ import {
 import { EIP712 } from './EthereumEIP712Signature2021';
 import { _TypedDataEncoder } from 'ethers/lib/utils';
 import { ReqReceiveGift } from './dto/req-receive-gift.dto';
-import { get } from 'http';
 import { VcService } from 'src/common/vc/vc.service';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class GiftService {
@@ -39,6 +39,7 @@ export class GiftService {
     private readonly giftRepo: Repository<GiftModel>,
     private readonly dataService: DataService,
     private readonly vcService: VcService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async getGift(id: number): Promise<GiftModel> {
@@ -118,20 +119,20 @@ export class GiftService {
 
   //     const result =
   //       recoveredAddress.toLowerCase() === signerAddress.toLowerCase();
-  //     if (result) {
-  //       // const gift = await this.getGift(id);
-  //       // const provider = new ethers.providers.JsonRpcProvider(
-  //       //   process.env.NETWORK_RPC || MockGiftModel.network,
-  //       // );
-  //       // const escrowContract = new ethers.Contract(
-  //       //   gift.contract,
-  //       //   ESCROW_ABI,
-  //       //   provider,
-  //       // );
-  //       // const escrowFulfilled = await escrowContract.confirmFulfillment();
-  //       // console.log(escrowFulfilled)
-  //       this.giftRepo.update(id, { state: State.FULFILLED });
-  //     }
+  // if (result) {
+  //   const gift = await this.getGift(id);
+  //   const provider = new ethers.providers.JsonRpcProvider(
+  //     process.env.NETWORK_RPC || MockGiftModel.network,
+  //   );
+  //   const escrowContract = new ethers.Contract(
+  //     gift.contract,
+  //     ESCROW_ABI,
+  //     provider,
+  //   );
+  //   const escrowFulfilled = await escrowContract.confirmFulfillment();
+  //   console.log(escrowFulfilled)
+  //   this.giftRepo.update(id, { state: State.FULFILLED });
+  // }
   //     // push notification to the seller
 
   //     // seller sends the item to the receiver
@@ -144,7 +145,7 @@ export class GiftService {
   //   }
   // }
 
-  async checkSavedCredential(id: number, saveResponse: any) {
+  async checkSavedCredential(id: number, saveResponse: { success: boolean }) {
     console.log(saveResponse);
     if (saveResponse.success) {
       await this.giftRepo.update(id, { state: State.ISSUED });
@@ -207,8 +208,8 @@ export class GiftService {
         seller: gift.seller,
       },
       credentialStatus: {
-        type: 'CredentialStatusList2017',
-        id: 'http://localhost:4000/vc/credentialStatus',
+        type: 'StatusList2021Entry',
+        id: `http://localhost:4000/gift/${gift.id}/credentialStatus`,
       },
       '@context': ['https://www.w3.org/2018/credentials/v1'],
       proofFormat: 'EthereumEip712Signature2021',
@@ -248,17 +249,66 @@ export class GiftService {
 
   async verifyCredential(id: number, VcRes: QueryCredentialsRequestResult) {
     const agent = await this.vcService.getAgent();
+    const verifiableCredential = VcRes.data as VerifiableCredential;
+
+    // check if this is revoked
+    const status = await agent.checkCredentialStatus({
+      credential: verifiableCredential,
+    });
+    console.log('Is this revoked?', status);
+
+    if (status.revoked) throw new UnauthorizedException('Revoked.');
 
     const verificationResult = await agent.verifyCredential({
-      credential: VcRes.data,
+      credential: verifiableCredential,
     });
 
-    return verificationResult;
+    console.log(verificationResult);
+
+    if (verificationResult.verified) {
+      const gift = await this.getGift(id);
+      const provider = new ethers.providers.JsonRpcProvider(
+        process.env.NETWORK_RPC || MockGiftModel.network,
+      );
+      const privateKey = process.env.MARKET_PRIVATE_KEY;
+      if (!privateKey) throw new Error('No private key.');
+      const signer = new ethers.Wallet(privateKey, provider);
+
+      const escrowContract = new ethers.Contract(
+        gift.contract,
+        ESCROW_ABI,
+        signer,
+      );
+      const escrowFulfilled = await escrowContract.confirmFulfillment();
+      console.log(escrowFulfilled);
+      await this.giftRepo.update(id, { state: State.FULFILLED });
+      // push notification to the seller
+      await this.notificationService.sendNotification(gift.seller);
+
+      return 'Fulfilled: notified to the seller.';
+    } else throw new UnauthorizedException('Not fulfilled.');
   }
 
-  async confirm() {
+  async confirm(id: number) {
     // escrow contract call (confirmProductUsed)
+    const gift = await this.getGift(id);
+
+    const provider = new ethers.providers.JsonRpcProvider(
+      process.env.NETWORK_RPC || MockGiftModel.network,
+    );
+    const privateKey = process.env.MARKET_PRIVATE_KEY;
+    if (!privateKey) throw new Error('No private key.');
+    const signer = new ethers.Wallet(privateKey, provider);
+
+    const escrowContract = new ethers.Contract(
+      gift.contract,
+      ESCROW_ABI,
+      signer,
+    );
+    const confirmProductUsed = await escrowContract.confirmProductUsed();
+    console.log(confirmProductUsed);
     // if escrow state changed, update the gift state
+    await this.giftRepo.update(id, { state: State.EXECUTED });
     // metatransaction logic
   }
 }

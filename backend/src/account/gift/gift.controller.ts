@@ -27,6 +27,7 @@ import { ResGetGifts } from './dto/res-get-gifts.dto';
 import { Order } from 'src/__base-code__/enum/order.enum';
 import { VerifiableCredential } from '@veramo/core';
 import { QueryCredentialsRequestResult } from '@blockchain-lab-um/masca-connector';
+import { State } from 'src/__base-code__/enum/state.enum';
 
 @ApiTags('Account | Gift')
 @Controller('gift')
@@ -75,7 +76,7 @@ export class GiftController {
   @ApiOperation({ summary: '[작업중] VC 상태 ISSUED로 전환' })
   async issueVC(
     @Param('id', ParseIntPipe) id: number,
-    @Body() saveResponse: any,
+    @Body() saveResponse: { success: boolean },
   ) {
     return this.giftService.checkSavedCredential(id, saveResponse);
   }
@@ -97,5 +98,15 @@ export class GiftController {
   async confirmGift(
     @Param('id', ParseIntPipe) id: number,
     @Body() reqConfirmGift: ReqConfirmGift,
-  ) {}
+  ) {
+    await this.giftService.confirm(id);
+  }
+
+  @Get(':id/credentialStatus')
+  @ApiOperation({ summary: 'VC 상태 확인' })
+  async checkCredentialStatus(@Param('id', ParseIntPipe) id: number) {
+    const current = await this.giftService.getState(id);
+    if (current.state === State.EXECUTED) return true;
+    else return false;
+  }
 }

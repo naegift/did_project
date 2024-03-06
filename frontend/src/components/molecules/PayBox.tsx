@@ -12,7 +12,9 @@ const PayBox: React.FC<GiftListData> = ({ payItem }) => {
       <div
         className={cn(
           "w-full shadow-xl bg-slate-200 rounded-xl py-9 flex flex-col gap-1 px-7",
-          "mobile:p-5 mobile:gap-3 "
+
+          "tablet:py-6",
+          "mobile:p-5 mobile:gap-1 "
         )}
       >
         <p className="text-lg font-extrabold mobile:text-base">

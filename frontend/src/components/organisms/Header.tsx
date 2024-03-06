@@ -66,7 +66,6 @@ const Header: React.FC = () => {
             size="md"
             label="Connect"
             onClick={handleLoginButtonClick}
-            className="tablet:hidden mobile:hidden"
           />
         )}
 
