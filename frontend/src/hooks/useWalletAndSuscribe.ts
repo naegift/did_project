@@ -7,7 +7,7 @@ import { streamIdState } from "../recoil/streamState";
 
 // 사용자 지갑과 구독을 관리하는 커스텀 훅
 const useWalletAndSubscribe = () => {
-  const [notificationData, setNotificationData] = useState<any | null>(null);
+  const [notificationData, setNotificationData] = useState<any[]>([]);
   const [streamInstance, setStreamInstance] = useState<any | null>(null);
   const [user, setUser] = useState<any | null>(null);
   const [sellerWallets, setSellerWallets] = useRecoilState(walletState);
@@ -21,9 +21,10 @@ const useWalletAndSubscribe = () => {
     if (!streamInstance && sellerWallets.walletAddress && user) {
       try {
         const newStream = await user.initStream([CONSTANTS.STREAM.NOTIF]);
-        newStream.on(CONSTANTS.STREAM.NOTIF, (data: any) =>
-          setNotificationData(data)
-        );
+        newStream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
+          console.log("받은 데이터:", data.message.notification);
+          setNotificationData((oldData: any) => [...oldData, data]);
+        });
         console.log("스트림 초기화 완료:", newStream);
         newStream.connect();
         setStreamInstance(newStream);

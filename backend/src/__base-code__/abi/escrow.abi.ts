@@ -36,25 +36,6 @@ export const ESCROW_ABI = [
       {
         indexed: true,
         internalType: 'address',
-        name: 'buyer',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'DepositConfirmed',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
         name: 'market',
         type: 'address',
       },
@@ -108,19 +89,6 @@ export const ESCROW_ABI = [
   },
   {
     inputs: [],
-    name: 'ContractState',
-    outputs: [
-      {
-        internalType: 'enum naegift_escrow.ContractStateChoices',
-        name: '',
-        type: 'uint8',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'buyer',
     outputs: [
       {
@@ -161,10 +129,23 @@ export const ESCROW_ABI = [
   },
   {
     inputs: [],
+    name: 'contractState',
+    outputs: [
+      {
+        internalType: 'enum NaegiftEscrow.ContractStateChoices',
+        name: '',
+        type: 'uint8',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'escrowStatus',
     outputs: [
       {
-        internalType: 'enum naegift_escrow.ContractStateChoices',
+        internalType: 'enum NaegiftEscrow.ContractStateChoices',
         name: '',
         type: 'uint8',
       },
