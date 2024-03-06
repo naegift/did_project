@@ -3,21 +3,11 @@ import { ethers } from 'ethers';
 import { ConfigService } from '@nestjs/config';
 import { PushAPI, CONSTANTS } from '@pushprotocol/restapi';
 
-// 객체 구조
-// {
-//   channel: {
-//     send: function(recipients, message) { ... }
-//   },
-//   notification: {
-//     subscribe: function(channelAddress) { ... },
-//     subscriptions: function() { ... }
-//   }
-// }
-
 @Injectable()
 export class EthereumService {
   private wallet: ethers.Wallet;
   private provider: ethers.providers.JsonRpcProvider;
+  private notifications: any[] = [];
 
   constructor(private configService: ConfigService) {
     this.provider = new ethers.providers.JsonRpcProvider(
@@ -29,6 +19,7 @@ export class EthereumService {
     );
   }
 
+  // 알림 전송 함수
   async sendNotification(recipients) {
     const market = await PushAPI.initialize(this.wallet, {
       env: CONSTANTS.ENV.STAGING,
@@ -40,18 +31,33 @@ export class EthereumService {
           body: '1번 기프트가 사용되었습니다.',
         },
       });
-      console.log('전송된 메시지:', notificationResult);
+      const parsedData = JSON.parse(notificationResult.config.data);
+      const identityStr = parsedData.identity.substring(2);
+      const parsedIdentity = JSON.parse(identityStr);
+
+      const notificationData = {
+        title: parsedIdentity.notification.title,
+        body: parsedIdentity.notification.body,
+        source: parsedData.source,
+      };
+      console.log('알림 전송에 성공했습니다:', notificationData);
+      this.notifications.push(notificationData);
     } catch (error) {
       console.error('알림 전송에 실패했습니다:', error);
     }
   }
 
+  // 알림 데이터 조회 함수
+  getNotifications(): any[] {
+    return this.notifications;
+  }
+
   // 메시지 서명 함수
   async signMessage(message: string): Promise<string> {
-    const messageHash = ethers.utils.id(message); // 메시지의 해시 생성
+    const messageHash = ethers.utils.id(message);
     const flatSig = await this.wallet.signMessage(
       ethers.utils.arrayify(messageHash),
-    ); // 메시지 해시에 대한 서명 생성
+    );
     return flatSig;
   }
 }
