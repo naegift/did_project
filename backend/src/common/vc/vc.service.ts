@@ -189,16 +189,16 @@ export class VcService {
     });
     console.log(verifiableCredential);
 
-    const status = await agent.checkCredentialStatus({
-      credential: verifiableCredential,
-      didDocumentOverride: { id: identifier.did },
-    });
-    console.log(status);
+    // const status = await agent.checkCredentialStatus({
+    //   credential: verifiableCredential,
+    //   didDocumentOverride: { id: identifier.did },
+    // });
+    // console.log(status);
 
-    const result = await agent.verifyCredential({
-      credential: verifiableCredential,
-    });
-    console.log(`Credential verified`, result.verified);
+    // const result = await agent.verifyCredential({
+    //   credential: verifiableCredential,
+    // });
+    // console.log(`Credential verified`, result.verified);
 
     return identifiers[0];
   }
