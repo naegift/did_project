@@ -51,8 +51,9 @@ const GiftList: React.FC<GiftData> = ({
     <div
       className={cn(
         "w-full px-20 flex flex-row py-8 gap-8",
+        "note:px-7",
         "tablet:flex-col tablet:px-10 ",
-        "mobile:px-0 mobile:gap-5 mobile:py-3 mobile:flex-col"
+        "mobile:flex-col mobile:gap-1 mobile:py-2 mobile:px-0"
       )}
     >
       <div
@@ -71,17 +72,13 @@ const GiftList: React.FC<GiftData> = ({
       <div className="w-1/2 px-8 note:px-3 tablet:mx-auto tablet:w-full mobile:w-full">
         <div
           className={cn(
-            "w-full bg-slate-50 rounded-md p-5 shadow-md ",
-            "h-[700px] tablet:h-[890px] tablet:p-7",
-            "mobile:p-5"
+            "w-full bg-slate-50 rounded-md p-5 shadow-md h-[700px]",
+            "note:h-[690px] tablet:p-7 tablet:py-0",
+            "mobile:px-2 mobile:py-5"
           )}
         >
           <div
-            className={cn(
-              "flex justify-between items-center ",
-              "tablet:py-3",
-              "mobile:flex-col mobile:gap-4"
-            )}
+            className={cn("flex justify-between items-center ", "tablet:py-3")}
           >
             <h2 className="text-xl mobile:text-base">🎁보낸 선물 내역</h2>
             <div className="flex flex-row gap-5 mobile:hidden">
@@ -127,8 +124,7 @@ const GiftList: React.FC<GiftData> = ({
       <div className="w-1/2 px-8 note:px-3 tablet:hidden mobile:hidden">
         <div
           className={cn(
-            "w-full bg-slate-50 rounded-md p-5 shadow-md ",
-            "h-[700px] tablet:h-[890px]"
+            "w-full bg-slate-50 rounded-md p-5 shadow-md h-[700px] note:h-[690px] "
           )}
         >
           <div className="flex justify-between items-center tablet:flex-col tablet:gap-5">

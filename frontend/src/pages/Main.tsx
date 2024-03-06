@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Pagination from "react-js-pagination";
 
-import { bannerImg1, bannerImg2 } from "../images/Banner";
+import { bannerImg2 } from "../images/Banner";
 import ProductList from "../components/templates/ProductList";
 import Button from "../components/atoms/button";
 import { cn } from "../utils/cn";
+import MainSlider from "../components/molecules/MainSlider";
 
 export interface Data {
   nextPage: number;
@@ -58,9 +59,7 @@ const Main: React.FC = () => {
 
   return (
     <>
-      <div className="w-pull">
-        <img src={bannerImg1} alt="" className="w-[100%] mobile:h-[150px]" />
-      </div>
+      <MainSlider />
 
       <div
         className={cn(
@@ -96,6 +95,7 @@ const Main: React.FC = () => {
       >
         <ProductList products={product} />
       </div>
+
       <div
         className={cn(
           "w-4/5 flex flex-row py-5 gap-5 mx-auto justify-center items-center",
@@ -115,6 +115,7 @@ const Main: React.FC = () => {
           activeClass="pagination-active text-black"
         />
       </div>
+
       <div className="w-pull">
         <img src={bannerImg2} alt="" className="w-[100%] mobile:h-[150px]" />
       </div>
