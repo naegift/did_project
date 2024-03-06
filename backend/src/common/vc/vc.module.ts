@@ -3,6 +3,7 @@ import { VcService } from './vc.service';
 import { VcController } from './vc.controller';
 
 @Module({
+  exports: [VcService],
   controllers: [VcController],
   providers: [VcService],
 })
