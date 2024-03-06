@@ -113,9 +113,17 @@ const ReceiveBox: React.FC<
           }/use`,
           targetVc
         );
-      console.log(verifyRes);
-      setBtnState("fulfilled");
-      setItem("상품 준비중");
+      console.log(
+        "verified result: ",
+        verifyRes
+      );
+
+      if (verifyRes.data.success) {
+        setBtnState("fulfilled");
+        setItem("상품 준비중");
+      } else {
+        alert("검증 로직 서버 에러.");
+      }
     } catch (error) {
       console.error(
         "사용하기에서 오류 발생:",
