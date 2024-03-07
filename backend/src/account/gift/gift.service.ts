@@ -80,7 +80,7 @@ export class GiftService {
     const escrow = new ethers.Contract(gift.contract, ESCROW_ABI, provider);
 
     const code = Number(await escrow.escrowStatus());
-    await this.giftRepo.update(id, { state: stateCode[code] });
+    // await this.giftRepo.update(id, { state: stateCode[code] });
 
     return { state: stateCode[code] };
   }
@@ -284,30 +284,33 @@ export class GiftService {
           ESCROW_ABI,
           signer,
         );
-        const escrowFulfilled = await escrowContract.confirmFulfillment({
+
+        await escrowContract.confirmFulfillment({
           gasLimit: '1000000',
         });
 
-        console.log(escrowFulfilled);
-
         escrowContract.on('FulfillmentConfirmed', async () => {
-          console.log('에스크로 상태 변함');
+          console.log('Fulfilled 상태 전환');
+          await this.giftRepo.update(id, { state: State.FULFILLED });
+          // push notification to the seller
+          await this.notificationService.sendNotification(gift.seller);
         });
       } catch (e) {
         throw e;
       }
-      if (true) return { success: false };
-      await this.giftRepo.update(id, { state: State.FULFILLED });
-      // push notification to the seller
-      await this.notificationService.sendNotification(gift.seller);
 
-      return 'Fulfilled: notified to the seller.';
+      // const escrowStatus = await this.escrowStateCheck(id);
+
+      return { success: true };
     } else throw new UnauthorizedException('Not fulfilled.');
   }
 
   async confirm(id: number) {
     // escrow contract call (confirmProductUsed)
     const gift = await this.getGift(id);
+
+    if (gift.state === State.EXECUTED)
+      throw new BadRequestException('Already executed.');
 
     const provider = new ethers.providers.JsonRpcProvider(
       process.env.NETWORK_RPC || MockGiftModel.network,
@@ -321,10 +324,32 @@ export class GiftService {
       ESCROW_ABI,
       signer,
     );
-    const confirmProductUsed = await escrowContract.confirmProductUsed();
-    console.log(confirmProductUsed);
+
+    await escrowContract.confirmProductUsed({
+      gasLimit: '1000000',
+    });
+
     // if escrow state changed, update the gift state
-    await this.giftRepo.update(id, { state: State.EXECUTED });
-    // metatransaction logic
+
+    escrowContract.on('FundsDistributed', async () => {
+      console.log('정산 함수가 정상적으로 실행됨');
+      await this.giftRepo.update(id, { state: State.EXECUTED });
+    });
+
+    // const escrowStatus = await this.escrowStateCheck(id);
+
+    return { success: true };
+  }
+
+  async escrowStateCheck(id: number) {
+    const gift = await this.getGift(id);
+    const provider = new ethers.providers.JsonRpcProvider(
+      process.env.NETWORK_RPC || MockGiftModel.network,
+    );
+    const escrow = new ethers.Contract(gift.contract, ESCROW_ABI, provider);
+
+    const result = await escrow.contractState();
+    console.log('Contract state: ', result);
+    return result;
   }
 }
