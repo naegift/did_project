@@ -97,9 +97,9 @@ export class GiftController {
   })
   async confirmGift(
     @Param('id', ParseIntPipe) id: number,
-    @Body() reqConfirmGift: ReqConfirmGift,
+    // @Body() reqConfirmGift: ReqConfirmGift,
   ) {
-    await this.giftService.confirm(id);
+    return this.giftService.confirm(id);
   }
 
   @Get(':id/credentialStatus')
