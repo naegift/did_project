@@ -9,6 +9,10 @@ import closeBtn from "./popup_close_btn.png";
 import arrowBTN from "./arrowBTN.png";
 import loadingCat from "./loadingCat.gif";
 import copyIcon from "./copyIcon.png";
+import itemIcon from "./itemIcon.png";
+import personIcon from "./personIcon.png";
+import saleIcon from "./saleIcon.png";
+import messageIcon from "./messageIcon.png";
 
 export {
   userIcon,
@@ -22,4 +26,8 @@ export {
   arrowBTN,
   loadingCat,
   copyIcon,
+  itemIcon,
+  personIcon,
+  saleIcon,
+  messageIcon,
 };
