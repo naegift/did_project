@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import Pagination from "react-js-pagination";
 import Button from "../components/atoms/button";
 import { copyIcon } from "../images/Icon";
+import { personIcon } from "../images/Icon";
 import StoreBanner from "../components/molecules/StoreBanner";
 
 export interface Data {
@@ -126,8 +127,9 @@ const MyStoreList: React.FC = () => {
           showBanner ? "opacity-0" : "opacity-100"
         }`}
       >
-        <div className="flex flex-col border w-[500px] h-[300px]">
+        <div className="flex flex-col  w-[500px] h-[300px] sticky top-10">
           <div className="flex flex-row justify-around border p-2 ">
+            <img src={personIcon} alt="" className="w-[30px] h-[30px]" />
             <h1>소유자 주소</h1>
             <div className="overflow-hidden text-ellipsis whitespace-nowrap w-[170px]">
               {seller}
@@ -136,6 +138,7 @@ const MyStoreList: React.FC = () => {
               variant="basicBtn2"
               size="sm"
               onClick={() => copyToClipboard(seller)}
+              className="w-[30px] h-[30px]"
             >
               <img src={copyIcon} />
             </Button>
