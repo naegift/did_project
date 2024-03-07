@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
 import Button from "../atoms/button";
 import { Product } from "../../pages/View";
 import axios from "axios";
@@ -12,40 +15,77 @@ interface viewBoxData {
   userWalletAddress: string;
 }
 
-const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [updatedData, setUpdatedData] = useState<Product>(product);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [currentProduct, setCurrentProduct] = useState<Product>(product);
-  const [isInputValid, setIsInputValid] = useState(false);
+const ViewBox: React.FC<
+  viewBoxData
+> = ({
+  product,
+  userWalletAddress,
+}) => {
+  const [modalOpen, setModalOpen] =
+    useState(false);
+  const [updatedData, setUpdatedData] =
+    useState<Product>(product);
+  const [isEditMode, setIsEditMode] =
+    useState(false);
+  const [imageFile, setImageFile] =
+    useState<File | null>(null);
+  const [
+    currentProduct,
+    setCurrentProduct,
+  ] = useState<Product>(product);
+  const [
+    isInputValid,
+    setIsInputValid,
+  ] = useState(false);
 
   const openModal = () => {
     setModalOpen(true);
   };
 
-  const handleEditProduct = async (productId: number) => {
+  const handleEditProduct = async (
+    productId: number
+  ) => {
     try {
       const formData = new FormData();
-      const { message, signature } = await runEthers(
-        updatedData.title,
-        updatedData.content,
+      const { message, signature } =
+        await runEthers(
+          updatedData.title,
+          updatedData.content,
+          updatedData.price
+        );
+      formData.append(
+        "title",
+        updatedData.title
+      );
+      formData.append(
+        "price",
         updatedData.price
       );
-      formData.append("title", updatedData.title);
-      formData.append("price", updatedData.price);
-      formData.append("content", updatedData.content);
-      formData.append("signature", signature);
+      formData.append(
+        "content",
+        updatedData.content
+      );
+      formData.append(
+        "signature",
+        signature
+      );
       if (imageFile) {
-        formData.append("file", imageFile);
+        formData.append(
+          "file",
+          imageFile
+        );
       }
 
       const response = await axios.put(
-        `${process.env.REACT_APP_AWS}/product/${productId}`,
+        `${
+          process.env.REACT_APP_API ||
+          process.env.REACT_APP_AWS
+        }/product/${productId}`,
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type":
+              "multipart/form-data",
           },
         }
       );
@@ -54,37 +94,64 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
 
       setCurrentProduct(response.data);
     } catch (error) {
-      console.error("Error updating product:", error);
+      console.error(
+        "Error updating product:",
+        error
+      );
     }
   };
 
-  const handleDeleteProduct = async (productId: number) => {
+  const handleDeleteProduct = async (
+    productId: number
+  ) => {
     try {
-      const { signature } = await runEthers("delete", "delete", "delete");
-      if (product.seller === userWalletAddress) {
-        const response = await axios.delete(
-          `${process.env.REACT_APP_AWS}/product/${productId}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "*/*",
-            },
-            data: {
-              title: "delete",
-              content: "delete",
-              price: "delete",
-              signature,
-            },
-          }
+      const { signature } =
+        await runEthers(
+          "delete",
+          "delete",
+          "delete"
         );
-        console.log("Product deleted successfully:", response.data);
+      if (
+        product.seller ===
+        userWalletAddress
+      ) {
+        const response =
+          await axios.delete(
+            `${
+              process.env
+                .REACT_APP_API ||
+              process.env.REACT_APP_AWS
+            }/product/${productId}`,
+            {
+              headers: {
+                "Content-Type":
+                  "application/json",
+                Accept: "*/*",
+              },
+              data: {
+                title: "delete",
+                content: "delete",
+                price: "delete",
+                signature,
+              },
+            }
+          );
+        console.log(
+          "Product deleted successfully:",
+          response.data
+        );
         window.location.href = `/store`;
       } else {
-        console.error("Cannot delete other seller's product.");
+        console.error(
+          "Cannot delete other seller's product."
+        );
         window.location.href = `/`;
       }
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.error(
+        "Error deleting product:",
+        error
+      );
       window.location.href = `/`;
     }
   };
@@ -94,24 +161,37 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
     setIsEditMode(true);
   };
 
-  const handleDeleteButtonClick = () => {
-    handleDeleteProduct(product.id);
-  };
+  const handleDeleteButtonClick =
+    () => {
+      handleDeleteProduct(product.id);
+    };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+  const handleImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (
+      e.target.files &&
+      e.target.files[0]
+    ) {
       setImageFile(e.target.files[0]);
     }
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      | HTMLInputElement
+      | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
 
     if (name === "price") {
-      const validNumberRegex = /^[0-9.]+$/;
-      if (value === "" || validNumberRegex.test(value)) {
+      const validNumberRegex =
+        /^[0-9.]+$/;
+      if (
+        value === "" ||
+        validNumberRegex.test(value)
+      ) {
         setUpdatedData((prevData) => ({
           ...prevData,
           [name]: value,
@@ -124,15 +204,18 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
       }));
     }
     setIsInputValid(
-      !!updatedData.title && !!updatedData.price && !!updatedData.content
+      !!updatedData.title &&
+        !!updatedData.price &&
+        !!updatedData.content
     );
   };
 
-  const handleCompleteButtonClick = () => {
-    if (isInputValid) {
-      handleEditProduct(product.id);
-    }
-  };
+  const handleCompleteButtonClick =
+    () => {
+      if (isInputValid) {
+        handleEditProduct(product.id);
+      }
+    };
 
   return (
     <>
@@ -142,7 +225,11 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
             <img
               className="w-full y-full bg-white"
               src={
-                imageFile ? URL.createObjectURL(imageFile) : updatedData.image
+                imageFile
+                  ? URL.createObjectURL(
+                      imageFile
+                    )
+                  : updatedData.image
               }
               alt=""
             />
@@ -150,7 +237,9 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleImageChange}
+                onChange={
+                  handleImageChange
+                }
               />
             )}
           </div>
@@ -163,8 +252,12 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
                 <input
                   type="text"
                   name="title"
-                  value={updatedData.title}
-                  onChange={handleChange}
+                  value={
+                    updatedData.title
+                  }
+                  onChange={
+                    handleChange
+                  }
                   className="border w-full"
                 />
               </div>
@@ -173,8 +266,12 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
                 <input
                   type="text"
                   name="price"
-                  value={updatedData.price}
-                  onChange={handleChange}
+                  value={
+                    updatedData.price
+                  }
+                  onChange={
+                    handleChange
+                  }
                   className="border w-full"
                 />
               </div>
@@ -182,22 +279,35 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
                 <p>내용</p>
                 <textarea
                   name="content"
-                  value={updatedData.content}
-                  onChange={handleChange}
+                  value={
+                    updatedData.content
+                  }
+                  onChange={
+                    handleChange
+                  }
                   className="border w-full h-[200px] resize-none"
                 />
               </div>
             </div>
           ) : (
             <>
-              <p className="text-3xl py-5">{updatedData.title}</p>
-              <p className="text-2xl ">
-                {formatEther(updatedData.price).toString()} ETH
+              <p className="text-3xl py-5">
+                {updatedData.title}
               </p>
-              <p className="py-7">{updatedData.content}</p>
+              <p className="text-2xl ">
+                {formatEther(
+                  updatedData.price
+                ).toString()}{" "}
+                ETH
+              </p>
+              <p className="py-7">
+                {updatedData.content}
+              </p>
             </>
           )}
-          <p className="py-7">Seller: {updatedData.seller}</p>
+          <p className="py-7">
+            Seller: {updatedData.seller}
+          </p>
           <>
             {isEditMode ? (
               <></>
@@ -212,36 +322,55 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
           </>
 
           <div className="flex flex-row  gap-10 mt-6">
-            {product.seller === userWalletAddress && (
+            {product.seller ===
+              userWalletAddress && (
               <>
                 {isEditMode ? (
                   <Button
                     variant="basicBtn2"
                     size="mm"
                     label="완료"
-                    onClick={handleCompleteButtonClick}
-                    disabled={!isInputValid}
-                    style={{ opacity: isInputValid ? 1 : 0.5 }}
+                    onClick={
+                      handleCompleteButtonClick
+                    }
+                    disabled={
+                      !isInputValid
+                    }
+                    style={{
+                      opacity:
+                        isInputValid
+                          ? 1
+                          : 0.5,
+                    }}
                   />
                 ) : (
                   <Button
                     variant="iconBtn"
                     size="mm"
                     label="수정"
-                    onClick={handleEditButtonClick}
+                    onClick={
+                      handleEditButtonClick
+                    }
                   />
                 )}
                 <Button
                   variant="basicBtn2"
                   size="mm"
                   label="삭제"
-                  onClick={handleDeleteButtonClick}
+                  onClick={
+                    handleDeleteButtonClick
+                  }
                 />
               </>
             )}
 
             {modalOpen && (
-              <Modal product={product} onClose={() => setModalOpen(false)} />
+              <Modal
+                product={product}
+                onClose={() =>
+                  setModalOpen(false)
+                }
+              />
             )}
           </div>
         </div>
