@@ -1,7 +1,6 @@
 import Slider from "react-slick";
-
-import "../../style/slider.css";
-import "../../style/slider2.css";
+import "../../styles/slider.css";
+import "../../styles/slider2.css";
 import {
   bannerImg3,
   bannerImg4,

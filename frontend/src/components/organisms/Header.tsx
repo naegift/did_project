@@ -8,73 +8,89 @@ import { menuIcon } from "../../images/Icon";
 import { walletState } from "../../recoil/walletState";
 import { cn } from "../../utils/cn";
 import Notification from "./Notification";
+import Menu from "../molecules/Menu";
 
 const Header: React.FC = () => {
-  const { connectWallet, notificationData } = useWalletAndSuscribe();
-  const [sellerWallets, setSellerWallets] = useRecoilState(walletState);
-  // const [welcomeMessage, setWelcomeMessage] = useState<string>("");
+    const { connectWallet, notificationData } = useWalletAndSuscribe();
+    const [sellerWallets, setSellerWallets] = useRecoilState(walletState);
+    const [menu, setMenu] = useState(false);
+    // const [welcomeMessage, setWelcomeMessage] = useState<string>("");
 
-  // useEffect(() => {
-  //   if (sellerWallets.isLoggedIn && sellerWallets.user) {
-  //     setWelcomeMessage(`환영합니다, ${sellerWallets.user.name}님`);
-  //   } else {
-  //     setWelcomeMessage("");
-  //   }
-  // }, [sellerWallets]);
+    // useEffect(() => {
+    //   if (sellerWallets.isLoggedIn && sellerWallets.user) {
+    //     setWelcomeMessage(`환영합니다, ${sellerWallets.user.name}님`);
+    //   } else {
+    //     setWelcomeMessage("");
+    //   }
+    // }, [sellerWallets]);
 
-  const handleLoginButtonClick = async () => {
-    if (!sellerWallets.walletAddress) {
-      try {
-        await connectWallet();
-      } catch (error) {
-        console.error("로그인 에러:", error);
-      }
-    }
-  };
+    const handleLoginButtonClick = async () => {
+        if (!sellerWallets.walletAddress) {
+            try {
+                await connectWallet();
+            } catch (error) {
+                console.error("로그인 에러:", error);
+            }
+        }
+    };
+    const menuOpen = () => {
+        setMenu(!menu);
+    };
 
-  return (
-    <div className="flex flex-row justify-between p-5 border-b items-center ">
-      <Notification notificationData={notificationData} />
-      <div>
-        <Link to="/">
-          <img
-            src={logo}
-            alt=""
-            className=" tablet:w-[120px] mobile:w-[150px]"
-          />
-        </Link>
-      </div>
-      <div className="flex flex-row gap-10 items-center">
-        <Link to="/product" className="tablet:hidden mobile:hidden">
-          <Button variant="sendBtn2" size="mdl" label="상품등록하기" />
-        </Link>
-        <Link to="/store" className="tablet:hidden mobile:hidden">
-          <Button variant="sendBtn2" size="mdl" label="SELLER" />
-        </Link>
+    return (
+        <div className="flex flex-row justify-between p-5 border-b items-center ">
+            <Notification notificationData={notificationData} />
+            <div>
+                <Link to="/">
+                    <img
+                        src={logo}
+                        alt=""
+                        className=" tablet:w-[120px] mobile:w-[150px]"
+                    />
+                </Link>
+            </div>
+            {menu && <Menu menu={menu} setMenu={setMenu} />}
+            <div className="flex flex-row gap-10 items-center">
+                <Link to="/product" className="tablet:hidden mobile:hidden">
+                    <Button
+                        variant="sendBtn2"
+                        size="mdl"
+                        label="상품등록하기"
+                    />
+                </Link>
+                <Link to="/store" className="tablet:hidden mobile:hidden">
+                    <Button variant="sendBtn2" size="mdl" label="SELLER" />
+                </Link>
 
-        <Link to="/gift" className="tablet:hidden mobile:hidden">
-          <Button variant="sendBtn2" size="mdl" label="선물함" />
-        </Link>
+                <Link to="/gift" className="tablet:hidden mobile:hidden">
+                    <Button variant="sendBtn2" size="mdl" label="선물함" />
+                </Link>
 
-        {sellerWallets.walletAddress ? (
-          <div className="flex items-center tablet:hidden mobile:hidden">
-            <span className="mr-2">환영합니다</span>
-          </div>
-        ) : (
-          <Button
-            variant="iconTextBtn"
-            size="md"
-            label="Connect"
-            onClick={handleLoginButtonClick}
-          />
-        )}
+                {sellerWallets.walletAddress ? (
+                    <div className="flex items-center tablet:hidden mobile:hidden">
+                        <span className="mr-2">환영합니다</span>
+                    </div>
+                ) : (
+                    <Button
+                        variant="iconTextBtn"
+                        size="md"
+                        label="Connect"
+                        onClick={handleLoginButtonClick}
+                    />
+                )}
 
-        <button className={cn("hidden tablet:inline-block", "mobile:block")}>
-          <img src={menuIcon} alt="" className="w-[25px]" />
-        </button>
-      </div>
-    </div>
-  );
+                <div
+                    className={cn(
+                        "hidden cursor-pointer tablet:inline-block",
+                        "mobile:block"
+                    )}
+                    onClick={menuOpen}
+                >
+                    <img src={menuIcon} alt="" className="w-[25px]" />
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default Header;

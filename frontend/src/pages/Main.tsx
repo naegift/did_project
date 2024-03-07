@@ -5,7 +5,7 @@ import React, {
 import axios from "axios";
 import Pagination from "react-js-pagination";
 
-import { bannerImg2 } from "../images/Banner";
+import { bannerImg2, copy1, copy2 } from "../images/Banner";
 import ProductList from "../components/templates/ProductList";
 import Button from "../components/atoms/button";
 import { cn } from "../utils/cn";
@@ -26,14 +26,11 @@ export interface Product {
 }
 
 const Main: React.FC = () => {
-  const [product, setProduct] =
-    useState<Product[]>([]);
-  const [page, setPage] =
-    useState<number>(1);
-  const [totalPage, setTotalPage] =
-    useState<number>(1);
-  const [order, setOrder] =
-    useState<string>("desc");
+  const [product, setProduct] = useState<Product[]>([]);
+  const [latestProduct, setLatestProduct] = useState<Product[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const [order, setOrder] = useState<string>("asc");
 
   const changePage = async (
     pageNumber: number
@@ -68,8 +65,23 @@ const Main: React.FC = () => {
     }
   };
 
+  const latestData = async () => {
+    try {
+      const latestRes = await axios.get<Data>(
+        `${
+          process.env.REACT_APP_AWS || process.env.REACT_APP_API
+        }/?page=1&order=desc`
+      );
+      console.log(latestRes.data.products);
+      setLatestProduct(latestRes.data.products);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect((): void => {
     mainData(page);
+    latestData();
   }, [page, order]);
 
   const orderChange = (
@@ -84,15 +96,45 @@ const Main: React.FC = () => {
 
       <div
         className={cn(
+          "w-4/5 flex flex-row gap-5 py-8 px-20 mx-auto items-center justify-between ",
+          "note:w-full",
+          "tablet:w-full tablet:px-14",
+          "mobile:px-5 mobile:flex-col"
+        )}
+      >
+        <span className="text-xl font-extrabold">지금 올라온 NEW!</span>
+      </div>
+
+      <div
+        className={cn(
+          "w-4/5 flex flex-row pb-10 gap-7 px-20 mx-auto",
+          "note:w-full",
+          "tablet:w-full tablet:flex-wrap tablet:px-16 tablet:gap-12",
+          "mobile:flex-wrap mobile:px-6"
+        )}
+      >
+        <ProductList products={latestProduct} />
+      </div>
+
+      <div
+        className={cn(
+          "w-4/5 flex flex-row justify-evenly mx-auto gap-20 px-20 py-10",
+          "tablet:flex-col tablet:gap-5 tablet:px-10",
+          "mobile:flex-col mobile:gap-5  mobile:px-0 mobile:py-2"
+        )}
+      >
+        <img src={copy2} alt="" />
+        <img src={copy1} alt="" />
+      </div>
+      <div
+        className={cn(
           "w-4/5 flex flex-row py-5 gap-5 px-20 mx-auto items-center justify-between",
           "note:w-full",
           "tablet:w-full tablet:px-14",
           "mobile:px-5 mobile:flex-col"
         )}
       >
-        <span className="text-xl">
-          전체 상품 리스트
-        </span>
+        <span className="text-xl font-extrabold">전체 상품 리스트</span>
         <div className="flex flex-row gap-8">
           <Button
             variant="basicBtn2"
@@ -112,6 +154,7 @@ const Main: React.FC = () => {
           />
         </div>
       </div>
+
       <div
         className={cn(
           "w-4/5 flex flex-row py-4 gap-7 px-20 mx-auto ",

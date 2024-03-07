@@ -7,6 +7,8 @@ import bannerImg6 from "./banner6.png";
 import giftImage3 from "./giftImage3.jpg";
 import giftImage4 from "./giftImage4.jpg";
 import giftImage6 from "./giftImage6.jpg";
+import copy1 from "./copy1.jpg";
+import copy2 from "./copy2.png";
 
 export {
   bannerImg1,
@@ -18,4 +20,6 @@ export {
   giftImage3,
   giftImage4,
   giftImage6,
+  copy1,
+  copy2,
 };
