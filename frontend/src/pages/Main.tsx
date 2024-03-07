@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
 import axios from "axios";
 import Pagination from "react-js-pagination";
 
@@ -23,27 +26,43 @@ export interface Product {
 }
 
 const Main: React.FC = () => {
-  const [product, setProduct] = useState<Product[]>([]);
-  const [page, setPage] = useState<number>(1);
-  const [totalPage, setTotalPage] = useState<number>(1);
-  const [order, setOrder] = useState<string>("desc");
+  const [product, setProduct] =
+    useState<Product[]>([]);
+  const [page, setPage] =
+    useState<number>(1);
+  const [totalPage, setTotalPage] =
+    useState<number>(1);
+  const [order, setOrder] =
+    useState<string>("desc");
 
-  const changePage = async (pageNumber: number) => {
+  const changePage = async (
+    pageNumber: number
+  ) => {
     setPage(pageNumber);
   };
 
-  const mainData = async (page: number) => {
+  const mainData = async (
+    page: number
+  ) => {
     try {
-      const response = await axios.get<Data>(
-        `${
-          process.env.REACT_APP_AWS || process.env.REACT_APP_API
-        }/?page=${page}&order=${order}`
-      );
+      const response =
+        await axios.get<Data>(
+          `${
+            process.env.REACT_APP_API ||
+            process.env.REACT_APP_AWS
+          }/?page=${page}&order=${order}`
+        );
 
       console.log(response.data);
-      console.log(response.data.products);
-      setProduct(response.data.products);
-      setTotalPage(response.data.totalPages);
+      console.log(
+        response.data.products
+      );
+      setProduct(
+        response.data.products
+      );
+      setTotalPage(
+        response.data.totalPages
+      );
     } catch (error) {
       console.log(error);
     }
@@ -53,7 +72,9 @@ const Main: React.FC = () => {
     mainData(page);
   }, [page, order]);
 
-  const orderChange = (selected: string) => {
+  const orderChange = (
+    selected: string
+  ) => {
     setOrder(selected);
   };
 
@@ -69,19 +90,25 @@ const Main: React.FC = () => {
           "mobile:px-5 mobile:flex-col"
         )}
       >
-        <span className="text-xl">전체 상품 리스트</span>
+        <span className="text-xl">
+          전체 상품 리스트
+        </span>
         <div className="flex flex-row gap-8">
           <Button
             variant="basicBtn2"
             size="md"
             label="최신순"
-            onClick={() => orderChange("desc")}
+            onClick={() =>
+              orderChange("desc")
+            }
           />
           <Button
             variant="basicBtn2"
             size="md"
             label="과거순"
-            onClick={() => orderChange("asc")}
+            onClick={() =>
+              orderChange("asc")
+            }
           />
         </div>
       </div>
@@ -93,7 +120,9 @@ const Main: React.FC = () => {
           "mobile:flex-wrap mobile:px-6"
         )}
       >
-        <ProductList products={product} />
+        <ProductList
+          products={product}
+        />
       </div>
 
       <div
@@ -105,11 +134,15 @@ const Main: React.FC = () => {
         <Pagination
           activePage={page}
           itemsCountPerPage={5}
-          totalItemsCount={totalPage * 5}
+          totalItemsCount={
+            totalPage * 5
+          }
           pageRangeDisplayed={5}
           prevPageText={"‹"}
           nextPageText={"›"}
-          onChange={(pageNumber) => changePage(pageNumber)}
+          onChange={(pageNumber) =>
+            changePage(pageNumber)
+          }
           innerClass="flex flex-row py-5 justify-center items-center gap-2 mobile:gap-[5px] moblie:w-full"
           itemClass="inline-block w-10 h-10 border border-gray-300 flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white hover:border-none"
           activeClass="pagination-active text-black"
@@ -117,7 +150,11 @@ const Main: React.FC = () => {
       </div>
 
       <div className="w-pull">
-        <img src={bannerImg2} alt="" className="w-[100%] mobile:h-[150px]" />
+        <img
+          src={bannerImg2}
+          alt=""
+          className="w-[100%] mobile:h-[150px]"
+        />
       </div>
     </>
   );
