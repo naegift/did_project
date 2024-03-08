@@ -1,41 +1,58 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
+import { Repository, LessThan } from 'typeorm';
 import { TransactionModel } from '../__base-code__/entity/transaction.entity';
 
 @Injectable()
 export class DatabaseService {
   constructor(
-    private configService: ConfigService,
     @InjectRepository(TransactionModel)
-    private transactionRepository: Repository<TransactionModel>,
+    private readonly transactionRepository: Repository<TransactionModel>,
   ) {}
 
-  async getPendingTransactions(): Promise<TransactionModel[]> {
+  async getTransactionsForStatusUpdate(): Promise<TransactionModel[]> {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
     return this.transactionRepository.find({
-      where: { status: 'pending' },
+      where: {
+        status: 'fulfilled',
+        // statusUpdatedAt: LessThan(oneWeekAgo.toISOString()),
+      },
     });
   }
 
-  async updateTransactionStatus(
+  async updateTransactionStatusToExecuted(
     transactionIds: number[],
-    newStatus: string,
   ): Promise<void> {
-    await this.transactionRepository
-      .createQueryBuilder()
-      .update(TransactionModel)
-      .set({ status: newStatus })
-      .where('id IN (:...ids)', { ids: transactionIds })
-      .execute();
+    try {
+      await this.transactionRepository
+        .createQueryBuilder()
+        .update(TransactionModel)
+        .set({ status: 'EXECUTED', statusUpdatedAt: () => 'CURRENT_TIMESTAMP' })
+        .where('id IN (:...ids)', { ids: transactionIds })
+        .execute();
+    } catch (error) {
+      console.error('Error updating transaction status to EXECUTED:', error);
+      throw error;
+    }
   }
 
-  async saveTransactionData(data: {
-    walletAddress: string;
-    message: string;
-    signature: string;
-  }): Promise<void> {
-    const transaction = this.transactionRepository.create(data);
-    await this.transactionRepository.save(transaction);
+  async updateFulfilledTransactions(): Promise<void> {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    try {
+      await this.transactionRepository
+        .createQueryBuilder()
+        .update(TransactionModel)
+        .set({ status: 'EXECUTED' })
+        .where('status = :status', { status: 'fulfilled' })
+        .andWhere('statusUpdatedAt <= :date', { date: oneWeekAgo })
+        .execute();
+    } catch (error) {
+      console.error('Error updating fulfilled transactions:', error);
+      throw error;
+    }
   }
 }
