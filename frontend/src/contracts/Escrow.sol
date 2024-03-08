@@ -64,7 +64,7 @@ contract NaegiftEscrow {
         uint256 sellerShare = contractPrice - marketShare; 
         payable(market).transfer(marketShare);
         payable(seller).transfer(sellerShare);
-        emit FundsDistributed(market, marketShare, seller, sellerShare); // 수정됨
+        emit FundsDistributed(market, marketShare, seller, sellerShare);
     }
 
     // 컨트랙트 상태 조회

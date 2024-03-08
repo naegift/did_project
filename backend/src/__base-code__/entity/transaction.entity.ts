@@ -16,4 +16,7 @@ export class TransactionModel {
 
   @Column({ default: 'pending', length: 255 })
   status: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  statusUpdatedAt: Date;
 }
