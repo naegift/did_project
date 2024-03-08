@@ -1,10 +1,16 @@
-import React from "react";
 import { giftImage4 } from "../../images/Banner/";
 import { itemIcon } from "../../images/Icon";
 import { saleIcon } from "../../images/Icon";
 import { messageIcon } from "../../images/Icon";
 
 const StoreBanner = () => {
+  const scrollToComponent = (products: string) => {
+    const element = document.getElementById(products);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="relative  w-full">
       <img
@@ -18,6 +24,7 @@ const StoreBanner = () => {
             src={itemIcon}
             alt=""
             className="mobile:h-[30px] mobile:w-[30px]"
+            onClick={() => scrollToComponent("myProductList")}
           />
           <p className="">아이템</p>
         </button>
@@ -26,6 +33,7 @@ const StoreBanner = () => {
             src={saleIcon}
             alt=""
             className="mobile:h-[30px] mobile:w-[30px]"
+            onClick={() => scrollToComponent("MyVerifiedBox")}
           />
           <p>활동</p>
         </button>

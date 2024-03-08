@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MyProductList from "../components/templates/MyProductList";
+import MyVerifiedBox from "../components/templates/MyVerifiedBox";
 import axios from "axios";
 import { ethers } from "ethers";
 import Pagination from "react-js-pagination";
@@ -23,18 +24,45 @@ export interface Product {
   seller: string;
 }
 
+export interface DataGift {
+  nextPage: number;
+  gifts: [];
+  productsCount: number;
+  totalPages: number;
+}
+
+export interface Gift {
+  id: number;
+  title: string;
+  content: string;
+  image: string;
+  price: string;
+  seller: string;
+  buyer: string;
+  receiver: string;
+  contract: string;
+  state: string;
+  updatedAt: string;
+}
+
 const MyStoreList: React.FC = () => {
   const [product, setProduct] = useState<Product[]>([]);
+  const [gifts, setGifts] = useState<Gift[]>([]);
   const [userAddress, setUserAddress] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [order, setOrder] = useState<string>("desc");
   const [seller, setSeller] = useState<string>("");
   const [totalPage, setTotalPage] = useState<number>(1);
+  const [giftTotalPage, setGiftTotalPage] = useState<number>(1);
   const [copied, setCopied] = useState<boolean>(false);
   const [scrollPosition, setScrollPosition] = useState<number>(0);
   const [showBanner, setShowBanner] = useState<boolean>(true);
 
   const changePage = async (pageNumber: number) => {
+    setPage(pageNumber);
+  };
+
+  const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
   };
 
@@ -77,13 +105,35 @@ const MyStoreList: React.FC = () => {
       console.error("데이터를 불러오는 중 에러 발생:", error);
     }
   };
+
+  const fetchGifts = async () => {
+    try {
+      const responseGift = await axios.get<DataGift>(
+        `${
+          // process.env.REACT_APP_API ||
+          process.env.REACT_APP_AWS
+        }/store/verified?seller=${seller}&page=${page}&order=${order}`
+      );
+      setGifts(responseGift.data.gifts);
+      setGiftTotalPage(responseGift.data.totalPages);
+      console.log("기프트", responseGift.data);
+    } catch (error) {
+      console.error("Error fetching gifts:", error);
+    }
+  };
+
   const orderChange = (selected: string) => {
+    setOrder(selected);
+  };
+
+  const orderChangeGift = (selected: string) => {
     setOrder(selected);
   };
 
   useEffect((): void => {
     if (seller) {
       fetchData();
+      fetchGifts();
     }
   }, [seller, page, order]);
 
@@ -99,7 +149,7 @@ const MyStoreList: React.FC = () => {
     const handleScroll = () => {
       const position = window.pageYOffset;
       setScrollPosition(position);
-      if (position > 200) {
+      if (position > 500) {
         setShowBanner(false);
       } else {
         setShowBanner(true);
@@ -113,7 +163,7 @@ const MyStoreList: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <div className="mt-[97px]">
       <div
         className={`transition-opacity duration-500 ${
           showBanner ? "opacity-100" : "opacity-0"
@@ -156,20 +206,6 @@ const MyStoreList: React.FC = () => {
         </div>
 
         <div className="h-full w-[70%] ">
-          <div className="w-full flex flex-row py-2 gap-5 justify-center items-center">
-            <Pagination
-              activePage={page}
-              itemsCountPerPage={10}
-              totalItemsCount={totalPage * 10}
-              pageRangeDisplayed={5}
-              prevPageText={"‹"}
-              nextPageText={"›"}
-              onChange={(pageNumber) => changePage(pageNumber)}
-              innerClass="flex flex-row py-5 justify-center items-center gap-8"
-              itemClass="inline-block w-10 h-10 border rounded flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white hover:border-none"
-              activeClass="pagination-active text-black"
-            />
-          </div>
           <label>
             <div className="flex flex-row py-5 gap-5 px-20 mx-auto items-center">
               <Button
@@ -186,12 +222,57 @@ const MyStoreList: React.FC = () => {
               />
             </div>
           </label>
-          {product.length && (
-            <MyProductList products={product} userAddress={userAddress} />
-          )}
+          <MyProductList products={product} userAddress={userAddress} />
+          <div className="w-full flex flex-row py-2 gap-5 justify-center items-center">
+            <Pagination
+              activePage={page}
+              itemsCountPerPage={10}
+              totalItemsCount={totalPage * 10}
+              pageRangeDisplayed={5}
+              prevPageText={"‹"}
+              nextPageText={"›"}
+              onChange={(pageNumber) => changePage(pageNumber)}
+              innerClass="flex flex-row py-5 justify-center items-center gap-8"
+              itemClass="inline-block w-10 h-10 border rounded flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white hover:border-none"
+              activeClass="pagination-active text-black"
+            />
+          </div>
+          <div className="mt-[100px]">
+            <label>
+              <div className="flex flex-row py-5 gap-5 px-20 mx-auto items-center">
+                <Button
+                  variant="basicBtn2"
+                  size="md"
+                  label="최신순"
+                  onClick={() => orderChangeGift("desc")}
+                />
+                <Button
+                  variant="basicBtn2"
+                  size="md"
+                  label="과거순"
+                  onClick={() => orderChangeGift("asc")}
+                />
+              </div>
+            </label>
+            <MyVerifiedBox gifts={gifts} />
+            <div className="w-full flex flex-row py-2 gap-5 justify-center items-center">
+              <Pagination
+                activePage={page}
+                itemsCountPerPage={10}
+                totalItemsCount={giftTotalPage * 10}
+                pageRangeDisplayed={5}
+                prevPageText={"‹"}
+                nextPageText={"›"}
+                onChange={(pageNumber) => handlePageChange(pageNumber)}
+                innerClass="flex flex-row py-5 justify-center items-center gap-8"
+                itemClass="inline-block w-10 h-10 border rounded flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white hover:border-none"
+                activeClass="pagination-active text-black"
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
