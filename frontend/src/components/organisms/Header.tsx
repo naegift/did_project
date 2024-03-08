@@ -38,7 +38,12 @@ const Header: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-row justify-between p-5 border-b items-center ">
+        <div
+            className={cn(
+                "flex flex-row justify-between p-5 border-b items-center ",
+                "fixed top-0 right-0 w-full bg-white z-[10] h-[97px]"
+            )}
+        >
             <Notification notificationData={notificationData} />
             <div>
                 <Link to="/">
