@@ -45,6 +45,31 @@ const useWalletAndSubscribe = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
+
+    const handleChainChanged = async (chainId: string) => {
+      console.log(chainId);
+
+      if (chainId !== "0xaa36a7") {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [
+            {
+              chainId: "0xaa36a7",
+            },
+          ],
+        });
+        window.location.reload();
+      }
+    };
+
+    const chainId = await window.ethereum.request({ method: "eth_chainId" });
+    handleChainChanged(chainId);
+
+    window.ethereum.on("chainChanged", async () => {
+      const chainId = await window.ethereum.request({ method: "eth_chainId" });
+      handleChainChanged(chainId);
+    });
+
     const initializedUser = await PushAPI.initialize(signer, {
       env: CONSTANTS.ENV.STAGING,
     });
@@ -77,7 +102,7 @@ const useWalletAndSubscribe = () => {
         setUser(newUser);
         setSellerWallets({
           walletAddress: preserved[0],
-          isSubscribed: false,
+          isSubscribed: true,
         });
         console.log(sellerWallets);
 
@@ -107,7 +132,7 @@ const useWalletAndSubscribe = () => {
   // 지갑 연결 및 스트림 초기화
   useEffect(() => {
     connectWallet();
-  }, [sellerWallets.walletAddress]);
+  }, []);
 
   // 컴포넌트 언마운트 시 스트림 인스턴스 연결 해제
   useEffect(() => {
