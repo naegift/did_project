@@ -8,13 +8,11 @@ import ProductWrite from "../pages/ProductWrite";
 import MyStoreList from "../pages/MyStoreList";
 import Gift from "../pages/Gift";
 import Footer from "../components/organisms/Footer";
-// import Notification from "../components/organisms/Notification";
 
 const App: React.FC = () => {
   return (
     <>
       <Header />
-      {/* <Notification /> */}
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/product/:id" element={<View />} />

@@ -204,7 +204,6 @@ const MyStoreList: React.FC = () => {
           )}
           <div>Total Items: </div>
         </div>
-
         <div className="h-full w-[70%] ">
           <label>
             <div className="flex flex-row py-5 gap-5 px-20 mx-auto items-center">
