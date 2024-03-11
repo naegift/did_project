@@ -4,22 +4,55 @@ import "../../styles/notification.css";
 
 const NotificationContent = ({ data }: { data: any }) => {
   const [visible, setVisible] = useState(true);
+  const [shouldRender, setShouldRender] = useState(true);
+  const [progressPaused, setProgressPaused] = useState(false);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setVisible(false);
-  //   }, 5000);
+  let timer: NodeJS.Timeout;
 
-  //   return () => clearTimeout(timer);
-  // }, []);
+  useEffect(() => {
+    startTimer();
 
-  if (!visible) return null;
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
+  const startTimer = () => {
+    setProgressPaused(false);
+    timer = setTimeout(() => {
+      setVisible(false);
+      setTimeout(() => setShouldRender(false), 200);
+    }, 5000);
+  };
+
+  const stopTimer = () => {
+    clearTimeout(timer);
+    setProgressPaused(true);
+  };
+
+  const handleAnimationEnd = () => {
+    if (!visible) {
+      setShouldRender(false);
+    }
+  };
+
+  if (!shouldRender) return null;
 
   const notificationTitle = data.message.payload.title || "알림";
   const notificationBody = data.message.payload.body || "내용이 없습니다.";
-
+  const containerClasses = `notification-container ${
+    visible ? "slide-in-right" : "slide-out-right"
+  }`;
+  const progressBarClasses = `progress-bar ${
+    progressPaused ? "progress-bar-paused" : ""
+  }`;
   return (
-    <div>
+    <div
+      className={containerClasses}
+      onMouseEnter={stopTimer}
+      onMouseLeave={startTimer}
+      onAnimationEnd={handleAnimationEnd}
+    >
       <NotificationItem
         notificationTitle={notificationTitle}
         notificationBody={notificationBody}
@@ -30,10 +63,7 @@ const NotificationContent = ({ data }: { data: any }) => {
         image={"이미지_URL"}
         url={"알림_링크_URL"}
       />
-      {/* <div
-        className="progress-bar"
-        style={{ animation: "shrink 5s linear" }}
-      ></div> */}
+      <div className={progressBarClasses}></div>
     </div>
   );
 };

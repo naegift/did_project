@@ -9,8 +9,6 @@ import { ProductModel } from './__base-code__/entity/product.entity';
 import { GiftModel } from './__base-code__/entity/gift.entity';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { TransactionsModule } from './MetaTransaction/transactions.module';
-import { TransactionModel } from './__base-code__/entity/transaction.entity';
 import { NotificationModule } from './notification/notification.module';
 
 @Module({
@@ -23,7 +21,7 @@ import { NotificationModule } from './notification/notification.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [ProductModel, GiftModel, TransactionModel],
+      entities: [ProductModel, GiftModel],
       synchronize: true,
       ssl: process.env.DB_AWS_HOSTNAME && {
         rejectUnauthorized: false,
@@ -37,7 +35,6 @@ import { NotificationModule } from './notification/notification.module';
     AccountModule,
     MarketModule,
     CommonModule,
-    TransactionsModule,
     NotificationModule,
   ],
   providers: [

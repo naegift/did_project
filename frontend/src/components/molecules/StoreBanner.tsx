@@ -1,15 +1,21 @@
+import { useState } from "react";
 import { giftImage4 } from "../../images/Banner/";
 import { itemIcon } from "../../images/Icon";
 import { saleIcon } from "../../images/Icon";
 import { messageIcon } from "../../images/Icon";
+import MyNotificationBox from "../templates/MyNotificationBox";
 
 const StoreBanner = () => {
+  const [showModal, setShowModal] = useState(false);
+
   const scrollToComponent = (products: string) => {
     const element = document.getElementById(products);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const toggleModal = () => setShowModal(!showModal);
 
   return (
     <div className="relative  w-full">
@@ -42,10 +48,15 @@ const StoreBanner = () => {
             src={messageIcon}
             alt=""
             className="mobile:h-[30px] mobile:w-[30px]"
+            onClick={toggleModal}
           />
           <p>메세지</p>
         </button>
       </div>
+
+      {showModal && (
+        <MyNotificationBox showModal={showModal} toggleModal={toggleModal} />
+      )}
 
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-xl font-bold">
         Welcome to our store

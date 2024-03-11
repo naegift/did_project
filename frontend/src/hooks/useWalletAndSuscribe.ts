@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
 import { ethers } from "ethers";
-import { useRecoilState } from "recoil";
+import { useRecoilState /* useSetRecoilState */ } from "recoil";
 import { walletState } from "../recoil/walletState";
 import { streamIdState } from "../recoil/streamState";
-
+/* import { pushAPIState } from "../recoil/pushAPIState";
+ */
 // 사용자 지갑과 구독을 관리하는 커스텀 훅
 const useWalletAndSubscribe = () => {
   const [notificationData, setNotificationData] = useState<any[]>([]);
@@ -12,7 +13,8 @@ const useWalletAndSubscribe = () => {
   const [user, setUser] = useState<any | null>(null);
   const [sellerWallets, setSellerWallets] = useRecoilState(walletState);
   const [streamId, setStreamId] = useRecoilState(streamIdState);
-
+  /*   const setPushAPI = useSetRecoilState(pushAPIState);
+   */
   // 채널 주소
   const channelAddress = "0x3C51F308502c5fde8c7C1Fa39d35aA621838F7DF";
 
@@ -73,8 +75,10 @@ const useWalletAndSubscribe = () => {
     const initializedUser = await PushAPI.initialize(signer, {
       env: CONSTANTS.ENV.STAGING,
     });
+    console.log(initializedUser);
     setUser(initializedUser);
-
+    /*     setPushAPI(initializedUser);
+     */
     const subscriptions = await initializedUser.notification.subscriptions();
     const isSubscribed = subscriptions.some(
       (sub: any) => sub.channel.toLowerCase() === channelAddress.toLowerCase()

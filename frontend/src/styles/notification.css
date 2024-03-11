@@ -1,42 +1,88 @@
 /* styles/global.css */
+.notification-container {
+  border-radius: 10px !important;
+  border: none !important;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 0 !important;
+  will-change: transform, opacity;
+  box-shadow: none;
+}
+
 .notification__Container-sc-v9nuxx-6,
 cDwvNG {
   margin: 0px !important;
-  border-radius: 10px 10px 0px 0px !important;
+  border: none;
+  border-bottom: 0px !important;
 }
 
 .notification__ContentSection-sc-v9nuxx-0,
 fBEiRK {
   height: 200px !important;
   padding: 15px 16px !important;
+  border: none !important;
 }
 
 @keyframes shrink {
   from {
     width: 100%;
+    display: block;
   }
   to {
     width: 0%;
+    display: none;
   }
 }
 
 .progress-bar {
-  height: 5px;
+  height: 7px;
   background-color: #4caf50;
   width: 100%;
+  z-index: 99999;
+  opacity: 1;
+  border-radius: 0px;
+  border: none;
+  animation: shrink 5s linear forwards;
+  position: absolute;
+  bottom: 0;
+}
+
+.progress-bar-paused {
+  animation-play-state: paused;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 @keyframes slideOutRight {
   from {
     transform: translateX(0);
     opacity: 1;
+    visibility: visible;
   }
   to {
     transform: translateX(100%);
     opacity: 0;
+    visibility: hidden;
   }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s forwards;
+  transform: translate3d(0, 0, 0); /* GPU 가속 활성화 */
 }
 
 .slide-out-right {
   animation: slideOutRight 0.5s forwards;
+  transform: translate3d(0, 0, 0); /* GPU 가속 활성화 */
 }
