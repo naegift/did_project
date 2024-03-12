@@ -12,13 +12,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@main
-      - name: change directory
-        run: cd frontend
       - name: Install npm packages
-        run: npm i
+        run: cd frontend && npm i
       - name: Build
-        run: npm run build
+        run: cd frontend && npm run build
       - name: Kill process
         run: fuser -k 3000/tcp || true
       - name: Run background
-        run: RUNNER_TRACKING_ID="" && nohup npm run start &
+        run: RUNNER_TRACKING_ID="" && cd frontend && nohup npm run start &
