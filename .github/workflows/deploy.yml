@@ -15,7 +15,7 @@ jobs:
       - name: change directory
         run: cd frontend
       - name: Install npm packages
-        run: npm ci
+        run: npm i
       - name: Build
         run: npm run build
       - name: Kill process
