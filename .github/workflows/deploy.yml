@@ -19,7 +19,7 @@ jobs:
           node-version: "16.x"
       - name: Install npm packages
         working-directory: frontend
-        run: npm install
+        run: npm install --force
       - name: Build
         working-directory: frontend
         run: npm run build
