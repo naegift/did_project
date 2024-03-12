@@ -10,12 +10,14 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 jobs:
   deploy:
-    runs-on: "self-hosted"
+    runs-on: ["self-hosted", "Linux", "X64"]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install npm packages
         run: cd frontend && npm i
+      - name: Build static file
+        run: cd frontend && npm run build
       - name: Upload files to S3
         run: |
           aws s3 sync \
