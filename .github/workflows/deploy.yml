@@ -8,6 +8,7 @@ env:
   REACT_APP_PROXY_CONTRACT: ${{ secrets.REACT_APP_PROXY_CONTRACT }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  NODE_OPTIONS: --max_old_space_size=8192
 jobs:
   deploy:
     runs-on: ["self-hosted", "Linux", "X64"]
