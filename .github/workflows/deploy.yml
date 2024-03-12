@@ -1,0 +1,24 @@
+name: deploy
+on:
+  push:
+    branches: [main]
+env:
+  REACT_APP_AWS: ${{ secrets.REACT_APP_AWS }}
+  REACT_APP_MARKET_ADDRESS: ${{ secrets.REACT_APP_MARKET_ADDRESS }}
+  REACT_APP_PROXY_CONTRACT: ${{ secrets.REACT_APP_PROXY_CONTRACT }}
+jobs:
+  deploy:
+    runs-on: ["self-hosted", "Linux", "X64"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: change directory
+        run: cd frontend
+      - name: Install npm packages
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Kill process
+        run: fuser -k 3000/tcp || true
+      - name: Run background
+        run: RUNNER_TRACKING_ID="" && nohup npm run start &
