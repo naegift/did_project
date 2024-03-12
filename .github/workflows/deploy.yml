@@ -21,7 +21,7 @@ jobs:
           node-version: "16.x"
           npm: ">=7.0.0"
       - name: Install npm packages
-        run: cd frontend && npm i
+        run: cd frontend && npm install --force --legacy-peer-deps
       - name: Build static file
         run: cd frontend && npm run build
       - name: Upload files to S3
