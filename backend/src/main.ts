@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
       credentials: true,
-      origin: ['http://localhost:3000', 'http://nae-gift.com'],
+      origin: ['http://localhost:3000', 'https://nae-gift.com'],
     },
   });
 
