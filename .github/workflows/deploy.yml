@@ -6,8 +6,6 @@ env:
   REACT_APP_AWS: ${{ secrets.REACT_APP_AWS }}
   REACT_APP_MARKET_ADDRESS: ${{ secrets.REACT_APP_MARKET_ADDRESS }}
   REACT_APP_PROXY_CONTRACT: ${{ secrets.REACT_APP_PROXY_CONTRACT }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   NODE_OPTIONS: --max_old_space_size=8192
 jobs:
   deploy:
@@ -19,12 +17,24 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16.x"
-          npm: ">=7.0.0"
       - name: Install npm packages
-        run: cd frontend && npm install --force --legacy-peer-deps
-      - name: Build static file
-        run: cd frontend && npm run build
+        working-directory: frontend
+        run: npm install
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+      - name: SHOW AWS CLI VERSION
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_EC2_METADATA_DISABLED: true
+        run: |
+          aws --version
       - name: Upload files to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_EC2_METADATA_DISABLED: true
         run: |
           aws s3 sync \
             --region us-east-1 \
