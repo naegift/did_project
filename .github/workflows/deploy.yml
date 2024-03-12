@@ -6,6 +6,8 @@ env:
   REACT_APP_AWS: ${{ secrets.REACT_APP_AWS }}
   REACT_APP_MARKET_ADDRESS: ${{ secrets.REACT_APP_MARKET_ADDRESS }}
   REACT_APP_PROXY_CONTRACT: ${{ secrets.REACT_APP_PROXY_CONTRACT }}
+  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 jobs:
   deploy:
     runs-on: ["self-hosted", "Linux", "X64"]
@@ -16,7 +18,12 @@ jobs:
         run: cd frontend && npm i
       - name: Build
         run: cd frontend && npm run build
-      - name: Kill process
-        run: fuser -k 3000/tcp || true
-      - name: Run background
-        run: RUNNER_TRACKING_ID="" && cd frontend && nohup npm run start &
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+      - name: Upload files to S3
+        run: |
+          aws s3 sync \
+            --region us-east-1 \
+            frontend/build \
+            s3://naegiftdid \
+            --delete
