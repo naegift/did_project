@@ -108,33 +108,27 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
         <>
             {onClose && (
                 <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-70 z-50">
-                    <div className="p-8 bg-white rounded-xl w-[30%]">
-                        <div className=" float-right">
+                    <div className="p-8 bg-white rounded-xl w-[30%] flex flex-col gap-2">
+                        <div className="flex justify-end">
                             <button onClick={onClose}>
                                 <img src={closeBtn} alt="" />
                             </button>
                         </div>
-                        <div className="py-5">
-                            <div>
-                                <div className="mt-3 text-center ">
-                                    <h3 className="text-2xl py-3 text-gray-900 ">
-                                        {product.title} 선물 보내기
-                                    </h3>
+                        <div className="py-2 text-center">
+                            <h3 className="text-2xl py-3 text-gray-900 ">
+                                {product.title} 선물 보내기
+                            </h3>
 
-                                    <p className="py-3">
-                                        금액 : {priceETH} ETH{" "}
-                                    </p>
+                            <p className="py-3">금액 : {priceETH} ETH </p>
 
-                                    <Inputs
-                                        onChange={(
-                                            e: React.ChangeEvent<HTMLInputElement>
-                                        ) => setReceiverInput(e.target.value)}
-                                        type="text"
-                                        size="xlg"
-                                        placeholder="받는 사람 지갑 주소를 입력해주세요"
-                                    />
-                                </div>
-                            </div>
+                            <Inputs
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => setReceiverInput(e.target.value)}
+                                type="text"
+                                size="xlg"
+                                placeholder="받는 사람 지갑 주소를 입력해주세요"
+                            />
                         </div>
                         <div className="px-4 py-3 flex justify-center ">
                             {loading ? (
