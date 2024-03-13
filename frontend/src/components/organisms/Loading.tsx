@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { loadingCat } from "../../images/Icon";
 
 const Loading = () => {

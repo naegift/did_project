@@ -15,10 +15,8 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
   const [content, setContent] = useState<string>("");
   const [image, setImage] = useState<File | null>(null);
   const [price, setPrice] = useState<string>("0");
-  const [signature, setSignature] = useState<string>("");
+  const [signature] = useState<string>("");
   const [imagePreview, setImagePreview] = useState<string>("");
-  const inputField = document.getElementById("inputField");
-  const spanElement = document.getElementById("spanElement");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
