@@ -8,10 +8,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install dependencies
-        run: cd frontend && npm install
-      - name: Build static file
-        run: cd frontend && npm run build
       - name: .env setting
         run: |
           echo "REACT_APP_AWS=${{ secrets.REACT_APP_AWS }}" >> .env
