@@ -43,4 +43,4 @@ jobs:
             frontend/build \
             s3://naegiftdid \
             --delete
-        working-directory: ./frontdend
+        working-directory: ./frontend
