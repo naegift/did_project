@@ -6,11 +6,11 @@ import { viewImg1 } from "../../images/Product";
 import { formatEther } from "@ethersproject/units";
 import { cn } from "../../utils/cn";
 
-interface ProductBox {
+interface iProductBox {
   product: Product;
 }
 
-const ProductBox: React.FC<ProductBox> = ({ product }) => {
+const ProductBox: React.FC<iProductBox> = ({ product }) => {
   const priceETH = formatEther(product.price);
 
   return (
