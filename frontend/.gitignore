@@ -9,7 +9,7 @@
 /coverage
 
 # production
-/build
+# /build
 
 # misc
 .DS_Store
@@ -55,7 +55,7 @@ node_modules
 /coverage.json
 
 # Compiled contract artifacts
-/build/
+# /build/
 /artifacts/
 /compiled_contracts/
 /frontend/src/contracts/
