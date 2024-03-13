@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import RegistrationNFT from "../organisms/RegistrationNFT";
 import Button from "../atoms/button";
-import { ethers } from "ethers";
 import WriteModal from "../molecules/WriteModal";
 
 const RegistSellNft: React.FC = () => {
@@ -19,24 +18,6 @@ const RegistSellNft: React.FC = () => {
     price: "0",
   });
   const [modalOpen, setModalOpen] = useState(false);
-  // const [userWalletAddress, setUserWalletAddress] = useState<string>("");
-
-  // useEffect(() => {
-  //   const fetchUserWalletAddress = async () => {
-  //     if (window.ethereum) {
-  //       await window.ethereum.enable();
-  //       const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //       const signer = provider.getSigner();
-  //       const address = await signer.getAddress();
-  //       setUserWalletAddress(address);
-  //     } else {
-  //       console.error("MetaMask 또는 유사한 지갑이 설치되어 있지 않습니다.");
-  //     }
-  //   };
-
-  //   fetchUserWalletAddress();
-  // }, []);
-
   const openWriteModal = () => {
     if (
       !productData.title ||
