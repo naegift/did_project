@@ -55,6 +55,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
         }
       );
       setIsEditMode(false);
+      return response;
     } catch (error) {
       console.error("Error updating product:", error);
     }

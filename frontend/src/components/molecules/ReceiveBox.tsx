@@ -40,7 +40,7 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
     } else {
       console.error(`state: ${receivedItem.state}`);
     }
-  }, [receivedItem]);
+  }, [receivedItem, states]);
 
   const confirm = async () => {
     try {

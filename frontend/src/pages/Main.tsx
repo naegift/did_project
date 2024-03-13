@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Pagination from "react-js-pagination";
 
@@ -33,22 +33,24 @@ const Main: React.FC = () => {
     setPage(pageNumber);
   };
 
-  const mainData = async (page: number) => {
-    try {
-      const response = await axios.get<Data>(
-        `${
-          process.env.REACT_APP_API || process.env.REACT_APP_AWS
-        }/?page=${page}&order=${order}`
-      );
+  const mainData = useCallback(
+    async (page: number) => {
+      try {
+        const response = await axios.get<Data>(
+          `${
+            process.env.REACT_APP_API || process.env.REACT_APP_AWS
+          }/?page=${page}&order=${order}`
+        );
 
-      setProduct(response.data.products);
-      setTotalPage(response.data.totalPages);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const latestData = async () => {
+        setProduct(response.data.products);
+        setTotalPage(response.data.totalPages);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [order]
+  );
+  const latestData = useCallback(async () => {
     try {
       const latestRes = await axios.get<Data>(
         `${
@@ -60,7 +62,7 @@ const Main: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
 
   useEffect((): void => {
     mainData(page);

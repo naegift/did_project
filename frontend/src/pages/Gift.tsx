@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import GiftList from "../components/templates/GiftList";
 import { useRecoilValue } from "recoil";
 import { walletState } from "../recoil/walletState";
@@ -28,20 +28,23 @@ const Gift: React.FC = () => {
 
   const { walletAddress } = useRecoilValue(walletState);
 
-  const recevieGiftData = async (_walletAddress: string, page: number) => {
-    try {
-      const url = `${
-        process.env.REACT_APP_API || process.env.REACT_APP_AWS
-      }/gift?receiver=${_walletAddress}&page=${page}&order=${receiveOrder}`;
-      const response = await axios.get(url);
-      console.log(`response from ${url}`, response);
-      console.log(response.data.gifts);
-      setReceiveProduct(response.data.gifts);
-      setReceiveTotalPage(response.data.totalPages);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const recevieGiftData = useCallback(
+    async (_walletAddress: string, page: number) => {
+      try {
+        const url = `${
+          process.env.REACT_APP_API || process.env.REACT_APP_AWS
+        }/gift?receiver=${_walletAddress}&page=${page}&order=${receiveOrder}`;
+        const response = await axios.get(url);
+        console.log(`response from ${url}`, response);
+        console.log(response.data.gifts);
+        setReceiveProduct(response.data.gifts);
+        setReceiveTotalPage(response.data.totalPages);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [receiveOrder]
+  );
   const payGiftData = async (_walletAddress: string, page: number) => {
     try {
       const url = `${

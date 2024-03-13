@@ -2,6 +2,8 @@ name: deploy
 on:
   push:
     branches: [main]
+env:
+  CI: false
 jobs:
   deploy:
     runs-on: ["self-hosted", "Linux", "X64"]

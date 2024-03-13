@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import MyProductList from "../components/templates/MyProductList";
 import MyVerifiedBox from "../components/templates/MyVerifiedBox";
 import axios from "axios";
@@ -48,7 +48,7 @@ export interface Gift {
 const MyStoreList: React.FC = () => {
   const [product, setProduct] = useState<Product[]>([]);
   const [gifts, setGifts] = useState<Gift[]>([]);
-  const [userAddress, setUserAddress] = useState<string>("");
+  const [userAddress] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [order, setOrder] = useState<string>("desc");
   const [seller, setSeller] = useState<string>("");
@@ -61,6 +61,8 @@ const MyStoreList: React.FC = () => {
   const changePage = async (pageNumber: number) => {
     setPage(pageNumber);
   };
+
+  console.log(scrollPosition);
 
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
@@ -89,7 +91,7 @@ const MyStoreList: React.FC = () => {
     getWalletAddress();
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get<Data>(
         `${
@@ -104,9 +106,9 @@ const MyStoreList: React.FC = () => {
     } catch (error) {
       console.error("데이터를 불러오는 중 에러 발생:", error);
     }
-  };
+  }, [seller, page, order]);
 
-  const fetchGifts = async () => {
+  const fetchGifts = useCallback(async () => {
     try {
       const responseGift = await axios.get<DataGift>(
         `${
@@ -120,7 +122,7 @@ const MyStoreList: React.FC = () => {
     } catch (error) {
       console.error("Error fetching gifts:", error);
     }
-  };
+  }, [seller, page, order]);
 
   const orderChange = (selected: string) => {
     setOrder(selected);
@@ -149,7 +151,7 @@ const MyStoreList: React.FC = () => {
     const handleScroll = () => {
       const position = window.pageYOffset;
       setScrollPosition(position);
-      if (position > 500) {
+      if (position > 600) {
         setShowBanner(false);
       } else {
         setShowBanner(true);
