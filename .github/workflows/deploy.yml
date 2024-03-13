@@ -10,9 +10,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Configure AWS Credentials Upload files to S3
         uses: aws-actions/configure-aws-credentials@v1
-        with:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: .env setting
+        run: |
+          echo "REACT_APP_AWS=${{ secrets.REACT_APP_AWS }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
       - name: Upload files to S3
         run: |
           aws s3 sync \
