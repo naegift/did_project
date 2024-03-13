@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 interface RegistrationNFTProps {
   onChange: (data: {
@@ -17,6 +17,8 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
   const [price, setPrice] = useState<string>("0");
   const [signature, setSignature] = useState<string>("");
   const [imagePreview, setImagePreview] = useState<string>("");
+  const inputField = document.getElementById("inputField");
+  const spanElement = document.getElementById("spanElement");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -40,13 +42,13 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
 
   return (
     <div className="flex flex-col border w-full">
-      <label className="h-[200px] relative">
+      <label className="h-[300px] relative">
         {imagePreview && (
           <div className=" ">
             <img
               src={imagePreview}
               alt="Preview"
-              className="absolute inset-0 object-cover w-[180px] h-[180px]  mx-[auto] my-[auto]"
+              className="absolute inset-0 object-cover w-[250px] h-[250px]  mx-[auto] my-[auto]"
             />
           </div>
         )}
@@ -61,12 +63,13 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
           {!imagePreview && <span className="text-gray-500">Select Image</span>}
         </label>
       </label>
-      <label className="p-5 border">
-        <p>Title</p>
+      <div className="relative w-[300px] ml-[50px] mt-[100px]">
         <input
-          className="border w-full"
+          className="text-base text-gray-800 w-full border-b border-gray-300 pb-2 pl-2 focus:outline-none "
+          placeholder="Title"
           type="text"
           value={title}
+          id="inputField"
           onChange={(e) => {
             setTitle(e.target.value);
             onChange({
@@ -78,8 +81,12 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
             });
           }}
         />
-      </label>
-      <label className="p-5 border">
+        <label className="absolute text-gray-500 left-2 text-lg bottom-2 transition-all duration-200">
+          Title
+        </label>
+        <span className="block absolute bottom-0 left-0 bg-gray-600 w-0 h-2 transition-all duration-500"></span>
+      </div>
+      <label className="mt-[20px] p-5 border">
         <p>ETH</p>
         <input
           className="border w-full"
