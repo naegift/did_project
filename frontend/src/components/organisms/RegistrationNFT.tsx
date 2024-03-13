@@ -81,9 +81,9 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
             });
           }}
         />
-        <label className="absolute text-gray-500 left-2 text-lg bottom-2 transition-all duration-200">
+        {/* <label className="absolute text-gray-500 left-2 text-lg bottom-2 transition-all duration-200">
           Title
-        </label>
+        </label> */}
         <span className="block absolute bottom-0 left-0 bg-gray-600 w-0 h-2 transition-all duration-500"></span>
       </div>
       <label className="mt-[20px] p-5 border">
