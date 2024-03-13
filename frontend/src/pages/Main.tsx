@@ -165,7 +165,7 @@ const Main: React.FC = () => {
                 />
             </div>
 
-            <div className="w-pull">
+            <div className="w-full">
                 <img
                     src={bannerImg2}
                     alt=""
