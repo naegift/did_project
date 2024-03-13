@@ -17,6 +17,7 @@ const useWalletAndSubscribe = () => {
    */
   // 채널 주소
   const channelAddress = "0x3C51F308502c5fde8c7C1Fa39d35aA621838F7DF";
+  console.log(streamId);
 
   // 실시간 알림 스트림 초기화
   const initRealTimeNotificationStream = async (user: any) => {

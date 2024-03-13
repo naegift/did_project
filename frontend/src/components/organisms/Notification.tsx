@@ -6,28 +6,30 @@ const NotificationContent = ({ data }: { data: any }) => {
   const [visible, setVisible] = useState(true);
   const [shouldRender, setShouldRender] = useState(true);
   const [progressPaused, setProgressPaused] = useState(false);
-
-  let timer: NodeJS.Timeout;
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     startTimer();
 
     return () => {
-      clearTimeout(timer);
+      if (timer) clearTimeout(timer);
     };
-  }, []);
+  }, [timer]);
 
   const startTimer = () => {
     setProgressPaused(false);
-    timer = setTimeout(() => {
+    const newTimer = setTimeout(() => {
       setVisible(false);
       setTimeout(() => setShouldRender(false), 200);
     }, 5000);
+    setTimer(newTimer);
   };
 
   const stopTimer = () => {
-    clearTimeout(timer);
-    setProgressPaused(true);
+    if (timer) {
+      clearTimeout(timer);
+      setProgressPaused(true);
+    }
   };
 
   const handleAnimationEnd = () => {
