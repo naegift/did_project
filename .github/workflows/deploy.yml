@@ -8,10 +8,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Configure AWS Credentials Upload files to S3
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-region: us-east-1
       - name: .env setting
         run: |
           echo "REACT_APP_AWS=${{ secrets.REACT_APP_AWS }}" >> .env
