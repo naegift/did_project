@@ -4,6 +4,8 @@ import axios from "axios";
 import Loading from "../components/organisms/Loading";
 import ViewBox from "../components/molecules/ViewBox";
 import { ethers } from "ethers";
+import ViewDetail from "../components/molecules/ViewDetail";
+import { bannerImg1 } from "../images/Banner";
 
 export interface Product {
     id: number;
@@ -71,15 +73,22 @@ const View: React.FC = () => {
 
     return (
         <div className="mt-[97px]">
-             
             {loading ? (
                 <Loading />
             ) : (
-                <div className="w-full h-[90vh] mt-10">
+                <div className="w-full">
                     <ViewBox
                         product={product}
                         userWalletAddress={userWalletAddress}
                     />
+                    <ViewDetail />
+                    <div className="pt-20">
+                        <img
+                            src={bannerImg1}
+                            alt=""
+                            className="w-full h-[250px] mobile:h-[150px]"
+                        />
+                    </div>
                 </div>
             )}
         </div>

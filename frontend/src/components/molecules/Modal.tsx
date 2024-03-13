@@ -108,7 +108,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
         <>
             {onClose && (
                 <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-70 z-50">
-                    <div className="p-8 bg-white rounded-xl w-[30%] flex flex-col gap-2">
+                    <div className="p-8 bg-white rounded-xl w-1/3 flex flex-col gap-2">
                         <div className="flex justify-end">
                             <button onClick={onClose}>
                                 <img src={closeBtn} alt="" />
