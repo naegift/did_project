@@ -60,10 +60,10 @@ const NotificationContent = ({ data }: { data: any }) => {
         notificationBody={notificationBody}
         chainName={"ETH_TEST_SEPOLIA"}
         icon={""}
-        app={"TEST"}
-        cta={"자세히 보기"}
-        image={"이미지_URL"}
-        url={"알림_링크_URL"}
+        app={"NAEGIFT"}
+        cta={""}
+        image={""}
+        url={""}
       />
       <div className={progressBarClasses}></div>
     </div>

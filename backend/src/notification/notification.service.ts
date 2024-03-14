@@ -20,7 +20,7 @@ export class NotificationService {
   }
 
   // 알림 전송 함수
-  async sendNotification(recipients: string) {
+  async sendNotification(recipients: string, giftTitle: string) {
     const market = await PushAPI.initialize(this.wallet, {
       env: CONSTANTS.ENV.STAGING,
     });
@@ -28,7 +28,7 @@ export class NotificationService {
       const notificationResult = await market.channel.send([recipients], {
         notification: {
           title: '기프트 사용완료',
-          body: '1번 기프트가 사용되었습니다.',
+          body: `${giftTitle} 기프트가 사용되었습니다.`,
         },
       });
       const parsedData = JSON.parse(notificationResult.config.data);
