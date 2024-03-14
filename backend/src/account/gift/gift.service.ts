@@ -306,7 +306,10 @@ export class GiftService {
         if (allEvents.length) {
           console.log(allEvents, '과거 이벤트 참조로 Fulfilled 상태 전환');
           await this.giftRepo.update(id, { state: State.FULFILLED });
-          await this.notificationService.sendNotification(gift.seller);
+          await this.notificationService.sendNotification(
+            gift.seller,
+            gift.title,
+          );
           await this.escrowStateCheck(id);
           return { success: true };
         } else {
@@ -315,7 +318,10 @@ export class GiftService {
               try {
                 console.log('Fulfilled 상태 전환');
                 await this.giftRepo.update(id, { state: State.FULFILLED });
-                await this.notificationService.sendNotification(gift.seller);
+                await this.notificationService.sendNotification(
+                  gift.seller,
+                  gift.title,
+                );
                 await this.escrowStateCheck(id);
                 resolve({ success: true });
               } catch (error) {
