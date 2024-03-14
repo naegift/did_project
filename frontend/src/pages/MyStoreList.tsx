@@ -62,8 +62,6 @@ const MyStoreList: React.FC = () => {
     setPage(pageNumber);
   };
 
-  console.log(scrollPosition);
-
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
   };
