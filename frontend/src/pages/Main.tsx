@@ -37,7 +37,7 @@ const Main: React.FC = () => {
     try {
       const response = await axios.get<Data>(
         `${
-          process.env.REACT_APP_API || process.env.REACT_APP_AWS
+          process.env.REACT_APP_AWS || process.env.REACT_APP_API
         }/?page=${page}&order=${order}`
       );
 

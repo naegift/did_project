@@ -93,7 +93,7 @@ const MyStoreList: React.FC = () => {
     try {
       const response = await axios.get<Data>(
         `${
-          process.env.REACT_APP_API || process.env.REACT_APP_AWS
+          process.env.REACT_APP_AWS || process.env.REACT_APP_API
         }/store?seller=${seller}&page=${page}&order=${order}`
       );
 
@@ -109,7 +109,7 @@ const MyStoreList: React.FC = () => {
     try {
       const responseGift = await axios.get<DataGift>(
         `${
-          process.env.REACT_APP_API || process.env.REACT_APP_AWS
+          process.env.REACT_APP_AWS || process.env.REACT_APP_API
         }/store/verified?seller=${seller}&page=${page}&order=${order}`
       );
       setGifts(responseGift.data.gifts);
