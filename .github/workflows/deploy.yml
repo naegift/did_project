@@ -14,13 +14,9 @@ jobs:
   deploy:
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout source code.
-        uses: actions/checkout@main
       - name: Install npm packages
-        working-directory: ./frontend
         run: npm install --legacy-peer-deps
       - name: Build
-        working-directory: ./frontend
         run: npm run build
       - name: Sync Bucket
         uses: aws-actions/configure-aws-credentials@v2
@@ -29,4 +25,4 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Upload to S3
-        run: aws s3 sync frontend/build s3://naegiftdid --delete
+        run: aws s3 sync build s3://naegiftdid --delete
