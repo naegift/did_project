@@ -216,7 +216,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"frontend/src/contracts/Escrow.sol": "NaegiftEscrow"
+			"Escrow.sol": "NaegiftEscrow"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -230,12 +230,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"frontend/src/contracts/Escrow.sol": {
-			"keccak256": "0x4039b1ec13e67c7715b890813782d1f7e35c9d1053bb8c2230bbecc375ddb27a",
+		"Escrow.sol": {
+			"keccak256": "0xd9e61351eecd7b9ec5e3b80e022e8c4caf73f18dff5d96479767919b1741aa34",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7964b104070b76ff96c614dd77655a58966a74e80b8a0b28f2af9267785b1847",
-				"dweb:/ipfs/QmQSdrPcwd8eM5F2P4KTndQPGYVvYTdohAYVz33p5XGd6j"
+				"bzz-raw://f6c142eb92553c624bbf6778210cc04b62b1e07f4becb7db50f6d34b2fc09340",
+				"dweb:/ipfs/QmVtcHXsrZTHkEkavFSSbQrn7eKRmkWDHCYbKNobXu1nQS"
 			]
 		}
 	},

@@ -73,7 +73,7 @@ export class GiftController {
   }
 
   @Post(':id/issue')
-  @ApiOperation({ summary: '[작업중] VC 상태 ISSUED로 전환' })
+  @ApiOperation({ summary: 'VC 상태 ISSUED로 전환' })
   async issueVC(
     @Param('id', ParseIntPipe) id: number,
     @Body() saveResponse: { success: boolean },
@@ -82,7 +82,7 @@ export class GiftController {
   }
 
   @Patch(':id/use')
-  @ApiOperation({ summary: '[작업중] 선물 사용하기' })
+  @ApiOperation({ summary: '선물 사용하기' })
   async useGift(
     @Param('id', ParseIntPipe) id: number,
     // @Body() reqUseGift: ReqUseGift,
@@ -93,7 +93,7 @@ export class GiftController {
 
   @Patch(':id/confirm')
   @ApiOperation({
-    summary: '[작업중] 선물 수령확인',
+    summary: '선물 수령확인',
   })
   async confirmGift(
     @Param('id', ParseIntPipe) id: number,

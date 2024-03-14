@@ -137,8 +137,7 @@ export class VcService {
             'did:ethr:sepolia': new EthrDIDProvider({
               defaultKms: 'local',
               network: 'sepolia',
-              rpcUrl:
-                'https://sepolia.infura.io/v3/' + process.env.INFURA_PROJECT_ID,
+              rpcUrl: process.env.INFURA + '/' + process.env.INFURA_PROJECT_ID,
             }),
             'did:web': new EthrDIDProvider({
               defaultKms: 'local',

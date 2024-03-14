@@ -28,6 +28,23 @@ export const PROXY_ABI = [
     type: 'fallback',
   },
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_newFactoryImplementation',
+        type: 'address',
+      },
+    ],
+    name: 'updateFactoryImplementation',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    stateMutability: 'payable',
+    type: 'receive',
+  },
+  {
     inputs: [],
     name: 'factoryImplementation',
     outputs: [
@@ -52,22 +69,5 @@ export const PROXY_ABI = [
     ],
     stateMutability: 'view',
     type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_newFactoryImplementation',
-        type: 'address',
-      },
-    ],
-    name: 'updateFactoryImplementation',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    stateMutability: 'payable',
-    type: 'receive',
   },
 ];
