@@ -24,7 +24,9 @@ jobs:
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
 
       - name: install npm dependencies
+        working-directory: ./did_project
         run: npm install
+
       - name: Build
         run: npm run build
       - name: Sync Bucket
