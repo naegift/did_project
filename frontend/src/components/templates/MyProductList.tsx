@@ -18,7 +18,7 @@ interface MyProductListProps {
 const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
   return (
     <>
-      <div id="myProductList">
+      <div>
         {products.map((product) => {
           const priceETH = formatEther(product.price);
           return (
