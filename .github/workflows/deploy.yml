@@ -6,17 +6,14 @@ env:
   CI: false
 jobs:
   deploy:
-    runs-on: ["self-hosted", "Linux", "X64"]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-  build:
     runs-on: ubuntu-20.04
     steps:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "16.x"
+      - name: Checkout source code.
+        uses: actions/checkout@main
       - name: .env setting
         run: |
           echo "REACT_APP_AWS=${{ secrets.REACT_APP_AWS }}" >> frontend/.env
@@ -25,7 +22,6 @@ jobs:
           echo "REACT_APP_PROXY_CONTRACT=${{ secrets.REACT_APP_PROXY_CONTRACT }}" >> frontend/.env
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> frontend/.env
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> frontend/.env
-
       - name: Install npm packages
         working-directory: ./frontend
         run: npm install --legacy-peer-deps
