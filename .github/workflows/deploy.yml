@@ -7,9 +7,6 @@ env:
 jobs:
   deploy:
     runs-on: ["self-hosted", "Linux", "X64"]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
   build:
     runs-on: ubuntu-20.04
     steps:
@@ -18,7 +15,7 @@ jobs:
         with:
           node-version: "16.x"
       - name: Checkout source code.
-        uses: actions/checkout@v2
+        uses: actions/checkout@main
       - name: .env setting
         run: |
           echo "REACT_APP_AWS=${{ secrets.REACT_APP_AWS }}" >> frontend/.env
