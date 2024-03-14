@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import MyProductList from "../components/templates/MyProductList";
 import MyVerifiedBox from "../components/templates/MyVerifiedBox";
 import axios from "axios";
@@ -62,8 +62,6 @@ const MyStoreList: React.FC = () => {
     setPage(pageNumber);
   };
 
-  console.log(scrollPosition);
-
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
   };
@@ -91,12 +89,11 @@ const MyStoreList: React.FC = () => {
     getWalletAddress();
   }, []);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     try {
       const response = await axios.get<Data>(
         `${
-          // process.env.REACT_APP_API ||
-          process.env.REACT_APP_AWS
+          process.env.REACT_APP_AWS || process.env.REACT_APP_API
         }/store?seller=${seller}&page=${page}&order=${order}`
       );
 
@@ -106,14 +103,13 @@ const MyStoreList: React.FC = () => {
     } catch (error) {
       console.error("데이터를 불러오는 중 에러 발생:", error);
     }
-  }, [seller, page, order]);
+  };
 
-  const fetchGifts = useCallback(async () => {
+  const fetchGifts = async () => {
     try {
       const responseGift = await axios.get<DataGift>(
         `${
-          // process.env.REACT_APP_API ||
-          process.env.REACT_APP_AWS
+          process.env.REACT_APP_AWS || process.env.REACT_APP_API
         }/store/verified?seller=${seller}&page=${page}&order=${order}`
       );
       setGifts(responseGift.data.gifts);
@@ -122,7 +118,7 @@ const MyStoreList: React.FC = () => {
     } catch (error) {
       console.error("Error fetching gifts:", error);
     }
-  }, [seller, page, order]);
+  };
 
   const orderChange = (selected: string) => {
     setOrder(selected);
@@ -179,7 +175,7 @@ const MyStoreList: React.FC = () => {
           showBanner ? "opacity-0" : "opacity-100"
         }`}
       >
-        <div className="flex flex-col  w-[500px] h-[300px] sticky top-10">
+        <div className="flex flex-col  w-[500px] h-[300px] sticky top-[200px]">
           <div className="flex flex-row justify-around border p-2 ">
             <img src={personIcon} alt="" className="w-[30px] h-[30px]" />
             <h1>소유자 주소</h1>
@@ -206,7 +202,7 @@ const MyStoreList: React.FC = () => {
           )}
           <div>Total Items: </div>
         </div>
-        <div className="h-full w-[70%] ">
+        <div className="h-full w-[70%] " id="myProductList">
           <label>
             <div className="flex flex-row py-5 gap-5 px-20 mx-auto items-center">
               <Button
@@ -238,7 +234,7 @@ const MyStoreList: React.FC = () => {
               activeClass="pagination-active text-black"
             />
           </div>
-          <div className="mt-[100px]">
+          <div className="mt-[100px]" id="MyVerifiedBox">
             <label>
               <div className="flex flex-row py-5 gap-5 px-20 mx-auto items-center">
                 <Button

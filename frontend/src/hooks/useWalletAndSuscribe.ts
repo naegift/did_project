@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
 import { ethers } from "ethers";
-import { useRecoilState /* useSetRecoilState */ } from "recoil";
+import { useRecoilState } from "recoil";
 import { walletState } from "../recoil/walletState";
 import { streamIdState } from "../recoil/streamState";
-/* import { pushAPIState } from "../recoil/pushAPIState";
- */
+
 // 사용자 지갑과 구독을 관리하는 커스텀 훅
 const useWalletAndSubscribe = () => {
   const [notificationData, setNotificationData] = useState<any[]>([]);
@@ -13,11 +12,9 @@ const useWalletAndSubscribe = () => {
   const [user, setUser] = useState<any | null>(null);
   const [sellerWallets, setSellerWallets] = useRecoilState(walletState);
   const [streamId, setStreamId] = useRecoilState(streamIdState);
-  /*   const setPushAPI = useSetRecoilState(pushAPIState);
-   */
+
   // 채널 주소
   const channelAddress = "0x3C51F308502c5fde8c7C1Fa39d35aA621838F7DF";
-  console.log(streamId);
 
   // 실시간 알림 스트림 초기화
   const initRealTimeNotificationStream = async (user: any) => {
@@ -35,6 +32,43 @@ const useWalletAndSubscribe = () => {
       } catch (error) {
         console.error("스트림 초기화 중 오류 발생:", error);
       }
+    }
+  };
+
+  // 체인 변경 처리 로직
+  const handleChainChanged = async (chainId: string) => {
+    console.log(chainId);
+    if (chainId !== process.env.REACT_APP_TARGET_CHAINID?.toLowerCase()) {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: process.env.REACT_APP_TARGET_CHAINID }],
+      });
+    }
+  };
+
+  // 사용자 및 스트림 인스턴스 초기화 로직
+  const initializeUserAndStream = async (signer: any): Promise<void> => {
+    try {
+      const initializedUser = await PushAPI.initialize(signer, {
+        env: CONSTANTS.ENV.STAGING,
+      });
+      console.log(initializedUser);
+      setUser(initializedUser);
+
+      const subscriptions = await initializedUser.notification.subscriptions();
+      const isSubscribed = subscriptions.some(
+        (sub: { channel: string }) =>
+          sub.channel.toLowerCase() === channelAddress.toLowerCase()
+      );
+      if (!isSubscribed) {
+        await initializedUser.notification.subscribe(
+          `eip155:11155111:${channelAddress}`
+        );
+      }
+
+      await initRealTimeNotificationStream(initializedUser);
+    } catch (error) {
+      console.error("사용자 및 스트림 초기화 중 오류 발생:", error);
     }
   };
 
@@ -66,31 +100,11 @@ const useWalletAndSubscribe = () => {
     };
 
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
-    handleChainChanged(chainId);
+    await handleChainChanged(chainId);
 
-    window.ethereum.on("chainChanged", async () => {
-      const chainId = await window.ethereum.request({ method: "eth_chainId" });
-      handleChainChanged(chainId);
-    });
+    window.ethereum.on("chainChanged", handleChainChanged);
 
-    const initializedUser = await PushAPI.initialize(signer, {
-      env: CONSTANTS.ENV.STAGING,
-    });
-    console.log(initializedUser);
-    setUser(initializedUser);
-    /*     setPushAPI(initializedUser);
-     */
-    const subscriptions = await initializedUser.notification.subscriptions();
-    const isSubscribed = subscriptions.some(
-      (sub: any) => sub.channel.toLowerCase() === channelAddress.toLowerCase()
-    );
-    if (!isSubscribed) {
-      await initializedUser.notification.subscribe(
-        `eip155:11155111:${channelAddress}`
-      );
-    }
-
-    await initRealTimeNotificationStream(initializedUser);
+    await initializeUserAndStream(signer);
   };
 
   // 계정 변경 감지 및 처리
@@ -101,10 +115,6 @@ const useWalletAndSubscribe = () => {
           window.ethereum
         ).getSigner();
         const preserved = accounts.map((e) => ethers.utils.getAddress(e));
-        const newUser = await PushAPI.initialize(newSigner, {
-          env: CONSTANTS.ENV.STAGING,
-        });
-        setUser(newUser);
         setSellerWallets({
           walletAddress: preserved[0],
           isSubscribed: true,
@@ -116,7 +126,7 @@ const useWalletAndSubscribe = () => {
           setStreamInstance(null);
         }
 
-        await initRealTimeNotificationStream(newUser);
+        await initializeUserAndStream(newSigner);
       } else {
         setUser(null);
         setSellerWallets({ walletAddress: "", isSubscribed: false });
@@ -132,7 +142,7 @@ const useWalletAndSubscribe = () => {
     return () => {
       window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
     };
-  }, [streamInstance, user]);
+  }, [streamInstance, user, sellerWallets]);
 
   // 지갑 연결 및 스트림 초기화
   useEffect(() => {
