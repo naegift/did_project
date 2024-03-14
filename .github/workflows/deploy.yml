@@ -19,12 +19,12 @@ jobs:
           node-version: "16.x"
       - name: .env setting
         run: |
-          echo "REACT_APP_AWS: ${{ secrets.REACT_APP_AWS }}" >> frontend/.env
-          echo "REACT_APP_TARGET_CHAINID: ${{ secrets.REACT_APP_TARGET_CHAINID }}" >> frontend/.env
-          echo "REACT_APP_MARKET_ADDRESS: ${{ secrets.REACT_APP_MARKET_ADDRESS }}" >> frontend/.env
-          echo "REACT_APP_PROXY_CONTRACT: ${{ secrets.REACT_APP_PROXY_CONTRACT }}" >> frontend/.env
-          echo "AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}" >> frontend/.env
-          echo "AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> frontend/.env
+          echo "REACT_APP_AWS: ${{ secrets.REACT_APP_AWS }}" >> .env
+          echo "REACT_APP_TARGET_CHAINID: ${{ secrets.REACT_APP_TARGET_CHAINID }}" >> .env
+          echo "REACT_APP_MARKET_ADDRESS: ${{ secrets.REACT_APP_MARKET_ADDRESS }}" >> .env
+          echo "REACT_APP_PROXY_CONTRACT: ${{ secrets.REACT_APP_PROXY_CONTRACT }}" >> .env
+          echo "AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
       - name: Checkout source code.
         uses: actions/checkout@v2
       - name: Install npm packages
