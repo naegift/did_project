@@ -55,7 +55,7 @@ node_modules
 /coverage.json
 
 # Compiled contract artifacts
-# /build/
+/build/
 /artifacts/
 /compiled_contracts/
 /frontend/src/contracts/
