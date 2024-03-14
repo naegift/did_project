@@ -12,9 +12,11 @@ jobs:
         uses: actions/checkout@v2
       - name: .env setting
         run: |
+          echo "REACT_APP_API=${{ secrets.REACT_APP_API }}" >> .env
           echo "REACT_APP_AWS=${{ secrets.REACT_APP_AWS }}" >> .env
+          echo "REACT_APP_TARGET_CHAINID=${{ secrets.REACT_APP_TARGET_CHAINID }}" >> .env
           echo "REACT_APP_MARKET_ADDRESS=${{ secrets.REACT_APP_MARKET_ADDRESS }}" >> .env
-          echo "REACT_APP_PROXY_CONTRACT=${{ secrets.REACT_APP_PROXY_CONTRACT }}" >> .env
+          echo "REACT_APP_PROXY_CONTRACT=${{ secrets.REACT_APP_PROXY_ADDRESS }}" >> .env
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
   build:
