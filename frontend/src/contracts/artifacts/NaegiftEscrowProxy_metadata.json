@@ -90,7 +90,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"frontend/src/contracts/EscrowProxy.sol": "NaegiftEscrowProxy"
+			"EscrowProxy.sol": "NaegiftEscrowProxy"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -104,28 +104,28 @@
 		"remappings": []
 	},
 	"sources": {
-		"frontend/src/contracts/Escrow.sol": {
-			"keccak256": "0x4039b1ec13e67c7715b890813782d1f7e35c9d1053bb8c2230bbecc375ddb27a",
+		"Escrow.sol": {
+			"keccak256": "0xd9e61351eecd7b9ec5e3b80e022e8c4caf73f18dff5d96479767919b1741aa34",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7964b104070b76ff96c614dd77655a58966a74e80b8a0b28f2af9267785b1847",
-				"dweb:/ipfs/QmQSdrPcwd8eM5F2P4KTndQPGYVvYTdohAYVz33p5XGd6j"
+				"bzz-raw://f6c142eb92553c624bbf6778210cc04b62b1e07f4becb7db50f6d34b2fc09340",
+				"dweb:/ipfs/QmVtcHXsrZTHkEkavFSSbQrn7eKRmkWDHCYbKNobXu1nQS"
 			]
 		},
-		"frontend/src/contracts/EscrowFactory.sol": {
-			"keccak256": "0x0dda253d8edb2faeda9161c3006be56eb4c90c1024cf7b82e1c1525237e66b0d",
+		"EscrowFactory.sol": {
+			"keccak256": "0x72e31a3279235b3baa567546b6d17a408ad0582b876f0b6eb68c3ec255ed18a7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d7a0a52b991236b8e9f65f76ffe095ce06a49fe6f8a0e7b9692fc54a3ab870de",
-				"dweb:/ipfs/QmPCbiz7hQ4t5reFq5SikJGoyMHKjQpcMennLpc12MHCAo"
+				"bzz-raw://e75bd667235044717bd02f05ba41a5bbd38a5e8307124515626b807c1e61888c",
+				"dweb:/ipfs/QmcVbJ69N8YN37LoR1zEooLWMtLz578KpDYgVDPeC3rdqW"
 			]
 		},
-		"frontend/src/contracts/EscrowProxy.sol": {
-			"keccak256": "0x2fcb69a599af721949d2c190632eeac6ec5fa45ac8ed25bea04bc2d014f8b81b",
+		"EscrowProxy.sol": {
+			"keccak256": "0x4baf9ba306742c9e63334b7b7b3346baecd23bdba28a32aaccb2f1cfde8d94a8",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://78c9dbedf784d0128500c9d2c765b39f52ea929c1bb2d486b8da388896165817",
-				"dweb:/ipfs/QmdRL416aYcZKxQxx7Ymr1dvQ3rM8DwPRNanMi7jhX4Sau"
+				"bzz-raw://b1dbc265bca2224d94e342ddf7801644c004fc5750843f36dbc6c64f074b68ba",
+				"dweb:/ipfs/QmNiPFKWvT1pdXG1T4GFrYbzUB3vLqoCQfL6vWeEfvqkqf"
 			]
 		}
 	},

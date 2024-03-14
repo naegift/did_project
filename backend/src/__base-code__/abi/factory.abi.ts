@@ -1,24 +1,5 @@
 export const FACTORY_ABI = [
   {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'escrowAddress',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'uuid',
-        type: 'string',
-      },
-    ],
-    name: 'EscrowCreated',
-    type: 'event',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -55,6 +36,25 @@ export const FACTORY_ABI = [
     outputs: [],
     stateMutability: 'payable',
     type: 'function',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'escrowAddress',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'uuid',
+        type: 'string',
+      },
+    ],
+    name: 'EscrowCreated',
+    type: 'event',
   },
   {
     inputs: [
