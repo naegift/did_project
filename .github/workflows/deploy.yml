@@ -18,6 +18,7 @@ jobs:
           echo "REACT_APP_PROXY_CONTRACT=${{ secrets.REACT_APP_PROXY_ADDRESS }}" >> .env
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+        working-directory: ./frontend
   build:
     runs-on: ubuntu-20.04
     steps:
