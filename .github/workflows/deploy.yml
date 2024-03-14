@@ -4,12 +4,6 @@ on:
     branches: [main]
 env:
   CI: false
-  REACT_APP_AWS: ${{ secrets.REACT_APP_AWS }}
-  REACT_APP_TARGET_CHAINID: ${{ secrets.REACT_APP_TARGET_CHAINID }}
-  REACT_APP_MARKET_ADDRESS: ${{ secrets.REACT_APP_MARKET_ADDRESS }}
-  REACT_APP_PROXY_CONTRACT: ${{ secrets.REACT_APP_PROXY_ADDRESS }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 jobs:
   deploy:
     runs-on: ["self-hosted", "Linux", "X64"]
@@ -29,6 +23,13 @@ jobs:
         run: npm install --legacy-peer-deps
         working-directory: ./frontend
       - name: Build
+        env:
+          REACT_APP_AWS: ${{ secrets.REACT_APP_AWS }}
+          REACT_APP_TARGET_CHAINID: ${{ secrets.REACT_APP_TARGET_CHAINID }}
+          REACT_APP_MARKET_ADDRESS: ${{ secrets.REACT_APP_MARKET_ADDRESS }}
+          REACT_APP_PROXY_CONTRACT: ${{ secrets.REACT_APP_PROXY_ADDRESS }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: npm run build
         working-directory: ./frontend
       - name: Sync Bucket
