@@ -14,7 +14,22 @@ jobs:
           node-version: "16.x"
       - name: Checkout source code.
         uses: actions/checkout@main
-
+      - name: Generate
+        working-directory: ./frontend
+        run: |
+          echo "REACT_APP_AWS=${{ secrets.REACT_APP_AWS }}" >> .env.production
+          echo "REACT_APP_TARGET_CHAINID=${{ secrets.REACT_APP_TARGET_CHAINID }}" >> .env.production
+          echo "REACT_APP_MARKET_ADDRESS=${{ secrets.REACT_APP_MARKET_ADDRESS }}" >> .env.production
+          echo "REACT_APP_PROXY_CONTRACT=${{ secrets.REACT_APP_PROXY_CONTRACT }}" >> .env.production
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env.production
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env.production
+        env:
+          REACT_APP_AWS: ${{ secrets.REACT_APP_AWS }}
+          REACT_APP_TARGET_CHAINID: ${{ secrets.REACT_APP_TARGET_CHAINID }}
+          REACT_APP_MARKET_ADDRESS: ${{ secrets.REACT_APP_MARKET_ADDRESS }}
+          REACT_APP_PROXY_CONTRACT: ${{ secrets.REACT_APP_PROXY_CONTRACT }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install npm packages
         working-directory: ./frontend
         run: npm install --legacy-peer-deps
