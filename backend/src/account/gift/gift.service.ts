@@ -206,51 +206,44 @@ export class GiftService {
 
         await escrowContract.confirmFulfillment();
 
-        await this.escrowStateCheck(id);
+        const currentBlock = await provider.getBlockNumber();
 
-        // Under construction
+        const range = 1000;
+        const fromBlock = Math.max(currentBlock - range, 0);
+        const toBlock = currentBlock + range;
 
-        // const currentBlock = await provider.getBlockNumber();
+        const allEvents = await escrowContract.queryFilter(
+          escrowContract.filters.FulfillmentConfirmed(),
+          fromBlock,
+          toBlock,
+        );
 
-        // const range = 1000;
-        // const fromBlock = Math.max(currentBlock - range, 0);
-        // const toBlock = currentBlock + range;
-
-        // const allEvents = await escrowContract.queryFilter(
-        //   escrowContract.filters.FulfillmentConfirmed(),
-        //   fromBlock,
-        //   toBlock,
-        // );
-
-        // if (allEvents.length) {
-        //   console.log(allEvents, '과거 이벤트 참조로 Fulfilled 상태 전환');
-        //   await this.giftRepo.update(id, { state: State.FULFILLED });
-        //   await this.notificationService.sendNotification(
-        //     gift.seller,
-        //     gift.title,
-        //   );
-        //   await this.escrowStateCheck(id);
-        //   // return { success: true };
-        // } else {
-        const result = new Promise((resolve, reject) => {
-          escrowContract.once('FulfillmentConfirmed', async () => {
-            try {
-              console.log('Fulfilled 상태 전환');
-              await this.giftRepo.update(id, { state: State.FULFILLED });
-              await this.notificationService.sendNotification(
-                gift.seller,
-                gift.title,
-              );
-              await this.escrowStateCheck(id);
-              resolve({ success: true });
-            } catch (error) {
-              reject(error);
-            }
+        if (allEvents.length) {
+          console.log(allEvents, '과거 이벤트 참조로 Fulfilled 상태 전환');
+          await this.giftRepo.update(id, { state: State.FULFILLED });
+          await this.notificationService.sendNotification(
+            gift.seller,
+            gift.title,
+          );
+        } else {
+          const result = new Promise((resolve, reject) => {
+            escrowContract.once('FulfillmentConfirmed', async () => {
+              try {
+                console.log('Fulfilled 상태 전환');
+                await this.giftRepo.update(id, { state: State.FULFILLED });
+                await this.notificationService.sendNotification(
+                  gift.seller,
+                  gift.title,
+                );
+                resolve({ success: true });
+              } catch (error) {
+                reject(error);
+              }
+            });
           });
-        });
 
-        return result;
-        // }
+          return result;
+        }
       } catch (e) {
         throw e;
       }
@@ -276,37 +269,29 @@ export class GiftService {
       signer,
     );
 
-    await this.escrowStateCheck(id);
-
     await escrowContract.confirmProductUsed();
 
-    // asdf
+    const currentBlock = await provider.getBlockNumber();
 
-    // const currentBlock = await provider.getBlockNumber();
+    const range = 1000;
+    const fromBlock = Math.max(currentBlock - range, 0);
+    const toBlock = currentBlock + range;
 
-    // const range = 1000;
-    // const fromBlock = Math.max(currentBlock - range, 0);
-    // const toBlock = currentBlock + range;
+    const allEvents = await escrowContract.queryFilter(
+      escrowContract.filters.FundsDistributed(),
+      fromBlock,
+      toBlock,
+    );
 
-    // const allEvents = await escrowContract.queryFilter(
-    //   escrowContract.filters.FundsDistributed(),
-    //   fromBlock,
-    //   toBlock,
-    // );
-
-    // if (allEvents.length) {
-    //   console.log(allEvents, '과거 이벤트 참조로 정산 함수 실행');
-    //   await this.giftRepo.update(id, { state: State.EXECUTED });
-    //   await this.escrowStateCheck(id);
-    // } else {
-    escrowContract.once('FundsDistributed', async () => {
-      console.log('정산 함수가 정상적으로 실행됨');
+    if (allEvents.length) {
+      console.log(allEvents, '과거 이벤트 참조로 정산 함수 실행');
       await this.giftRepo.update(id, { state: State.EXECUTED });
-      await this.escrowStateCheck(id);
-    });
-    // }
-
-    // asdf
+    } else {
+      escrowContract.once('FundsDistributed', async () => {
+        console.log('정산 함수가 정상적으로 실행됨');
+        await this.giftRepo.update(id, { state: State.EXECUTED });
+      });
+    }
 
     return { success: true };
   }
