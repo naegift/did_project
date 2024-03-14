@@ -35,17 +35,6 @@ const useWalletAndSubscribe = () => {
     }
   };
 
-  // 체인 변경 처리 로직
-  const handleChainChanged = async (chainId: string) => {
-    console.log(chainId);
-    if (chainId !== process.env.REACT_APP_TARGET_CHAINID?.toLowerCase()) {
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: process.env.REACT_APP_TARGET_CHAINID }],
-      });
-    }
-  };
-
   // 사용자 및 스트림 인스턴스 초기화 로직
   const initializeUserAndStream = async (signer: any): Promise<void> => {
     try {
@@ -83,8 +72,9 @@ const useWalletAndSubscribe = () => {
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
 
-    const handleChainChanged = async (chainId: string) => {
-      console.log(typeof chainId, chainId);
+    const handleChainChanged = async () => {
+      const chainId = await window.ethereum.request({ method: "eth_chainId" });
+      console.log(chainId);
 
       if (chainId !== process.env.REACT_APP_TARGET_CHAINID) {
         await window.ethereum.request({
@@ -99,8 +89,7 @@ const useWalletAndSubscribe = () => {
       }
     };
 
-    const chainId = await window.ethereum.request({ method: "eth_chainId" });
-    await handleChainChanged(chainId);
+    await handleChainChanged();
 
     window.ethereum.on("chainChanged", handleChainChanged);
 
