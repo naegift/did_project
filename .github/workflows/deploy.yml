@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Install npm packages
-        run: npm install --legacy-peer-deps
+        run: npm install
       - name: Build
         run: npm run build
       - name: Sync Bucket
