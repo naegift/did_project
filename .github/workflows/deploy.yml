@@ -1,24 +1,23 @@
 name: deploy
 on:
-  pull_request:
-    branches:
-      - main
   push:
-    branches:
-      - main
+    branches: [main]
 env:
   CI: false
 jobs:
-  build:
-    name: react build & deploy
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-20.04
     steps:
-      - name: checkout Github Action
-        uses: actions/checkout@v3
-      - name: install npm dependencies
-        working-directory: ./frontend
-        run: npm install
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+      - name: Checkout source code.
+        uses: actions/checkout@main
 
+      - name: Install npm packages
+        working-directory: ./frontend
+        run: npm install --legacy-peer-deps
       - name: Build
         working-directory: ./frontend
         run: npm run build
