@@ -91,7 +91,7 @@ const MyStoreList: React.FC = () => {
     getWalletAddress();
   }, []);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     try {
       const response = await axios.get<Data>(
         `${
@@ -106,9 +106,9 @@ const MyStoreList: React.FC = () => {
     } catch (error) {
       console.error("데이터를 불러오는 중 에러 발생:", error);
     }
-  }, [seller, page, order]);
+  };
 
-  const fetchGifts = useCallback(async () => {
+  const fetchGifts = async () => {
     try {
       const responseGift = await axios.get<DataGift>(
         `${
@@ -122,7 +122,7 @@ const MyStoreList: React.FC = () => {
     } catch (error) {
       console.error("Error fetching gifts:", error);
     }
-  }, [seller, page, order]);
+  };
 
   const orderChange = (selected: string) => {
     setOrder(selected);
