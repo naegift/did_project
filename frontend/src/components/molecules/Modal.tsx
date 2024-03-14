@@ -69,14 +69,15 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
         receiver,
         uuid: UUID,
       };
-      const receipt = (await signer.sendTransaction(transaction)).wait();
-      console.log(receipt);
 
       const payUrl = `${
         process.env.REACT_APP_API || process.env.REACT_APP_AWS
       }/product/${id}/pay`;
       console.log(payUrl, reqBody);
-      const response = await axios.post(payUrl, reqBody);
+      const response = axios.post(payUrl, reqBody);
+
+      signer.sendTransaction(transaction);
+
       console.log("Transaction sign post body: ", {
         buyer,
         receiver,
@@ -84,7 +85,8 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
       });
 
       console.log(response);
-      if (response) {
+
+      if (await response) {
         alert("정상적으로 선물을 보냈습니다! 선물함으로 이동합니다.");
         navigate("/gift");
       }

@@ -15,18 +15,12 @@ import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 import { ResGetGifts } from './dto/res-get-gifts.dto';
 import { DataService } from 'src/common/data/data.service';
 import { Order } from 'src/__base-code__/enum/order.enum';
-import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
 import {
   MinimalUnsignedCredential,
   QueryCredentialsRequestResult,
 } from '@blockchain-lab-um/masca-connector';
 
-import {
-  UnsignedCredential,
-  VerifiableCredential,
-  W3CVerifiableCredential,
-} from '@veramo/core';
-import { EIP712 } from './EthereumEIP712Signature2021';
+import { VerifiableCredential } from '@veramo/core';
 import { _TypedDataEncoder } from 'ethers/lib/utils';
 import { ReqReceiveGift } from './dto/req-receive-gift.dto';
 import { VcService } from 'src/common/vc/vc.service';
@@ -80,70 +74,9 @@ export class GiftService {
     const escrow = new ethers.Contract(gift.contract, ESCROW_ABI, provider);
 
     const code = Number(await escrow.escrowStatus());
-    // await this.giftRepo.update(id, { state: stateCode[code] });
 
     return { state: stateCode[code] };
   }
-
-  // async signCredential(credential: UnsignedCredential) {
-  //   const domain = EIP712.domain;
-  //   const types = EIP712.types;
-  //   const signer = new ethers.Wallet(process.env.MARKET_PRIVATE_KEY);
-  //   const signature = await signer._signTypedData(domain, types, credential);
-  //   return signature;
-  // }
-
-  // async verifyCredential(
-  //   id: number,
-  //   VcRes: QueryCredentialsRequestResult,
-  // ): Promise<boolean> {
-
-  //   const { proof, ...unsignedCredential } = VcRes.data as VerifiableCredential;
-
-  //   if (!proof || !proof.proofValue || !proof.verificationMethod) {
-  //     throw new UnauthorizedException('Invalid credential proof structure.');
-  //   }
-
-  //   const domain = EIP712.domain;
-  //   const types = EIP712.types;
-  //   const message = unsignedCredential;
-  //   const signerAddress = process.env.MARKET_ADDRESS;
-  //   try {
-  //     const recoveredAddress = ethers.utils.verifyTypedData(
-  //       domain,
-  //       types,
-  //       message,
-  //       proof.proofValue,
-  //     );
-  //     console.log(recoveredAddress, signerAddress);
-
-  //     const result =
-  //       recoveredAddress.toLowerCase() === signerAddress.toLowerCase();
-  // if (result) {
-  //   const gift = await this.getGift(id);
-  //   const provider = new ethers.providers.JsonRpcProvider(
-  //     process.env.NETWORK_RPC || MockGiftModel.network,
-  //   );
-  //   const escrowContract = new ethers.Contract(
-  //     gift.contract,
-  //     ESCROW_ABI,
-  //     provider,
-  //   );
-  //   const escrowFulfilled = await escrowContract.confirmFulfillment();
-  //   console.log(escrowFulfilled)
-  //   this.giftRepo.update(id, { state: State.FULFILLED });
-  // }
-  //     // push notification to the seller
-
-  //     // seller sends the item to the receiver
-
-  //     // receiver confirms the receipt
-
-  //     return result;
-  //   } catch (e) {
-  //     throw new UnauthorizedException('Invalid credential proof.');
-  //   }
-  // }
 
   async checkSavedCredential(id: number, saveResponse: { success: boolean }) {
     console.log(saveResponse);
@@ -160,12 +93,12 @@ export class GiftService {
     reqReceiveGift: ReqReceiveGift,
   ): Promise<VerifiableCredential> {
     const gift = await this.getGift(id);
-    // check if the gift was already issued and received
+
     if (gift.state === State.ISSUED)
       throw new BadRequestException(
         'The gift was already issued and received.',
       );
-    // signature verified
+
     const message = {
       title: reqReceiveGift.title,
       content: reqReceiveGift.content,
@@ -232,26 +165,12 @@ export class GiftService {
     console.log('Is this verified? ', result);
 
     return verifiableCredential;
-
-    // const signedProof = await this.signCredential(payload);
-
-    // const toBeAssigned = {
-    //   proof: {
-    //     verificationMethod: `did:ethr:0xaa36a7:${process.env.MARKET_ADDRESS}#controller`,
-    //     created: payload.issuanceDate,
-    //     proofPurpose: 'assertionMethod',
-    //     type: 'EthereumEip712Signature2021',
-    //     proofValue: `${signedProof}`,
-    //     eip712: EIP712,
-    //   },
-    // };
   }
 
   async verifyCredential(id: number, VcRes: QueryCredentialsRequestResult) {
     const agent = await this.vcService.getAgent();
     const verifiableCredential = VcRes.data as VerifiableCredential;
 
-    // check if this is revoked
     const status = await agent.checkCredentialStatus({
       credential: verifiableCredential,
     });
@@ -291,44 +210,50 @@ export class GiftService {
 
         // Under construction
 
-        const currentBlock = await provider.getBlockNumber();
+        // const currentBlock = await provider.getBlockNumber();
 
-        const range = 1000;
-        const fromBlock = Math.max(currentBlock - range, 0);
-        const toBlock = currentBlock + range;
+        // const range = 1000;
+        // const fromBlock = Math.max(currentBlock - range, 0);
+        // const toBlock = currentBlock + range;
 
-        const allEvents = await escrowContract.queryFilter(
-          escrowContract.filters.FulfillmentConfirmed(),
-          fromBlock,
-          toBlock,
-        );
+        // const allEvents = await escrowContract.queryFilter(
+        //   escrowContract.filters.FulfillmentConfirmed(),
+        //   fromBlock,
+        //   toBlock,
+        // );
 
-        if (allEvents.length) {
-          console.log(allEvents, '과거 이벤트 참조로 Fulfilled 상태 전환');
-          await this.giftRepo.update(id, { state: State.FULFILLED });
-          await this.notificationService.sendNotification(gift.seller);
-          await this.escrowStateCheck(id);
-          return { success: true };
-        } else {
-          return new Promise((resolve, reject) => {
-            escrowContract.once('FulfillmentConfirmed', async () => {
-              try {
-                console.log('Fulfilled 상태 전환');
-                await this.giftRepo.update(id, { state: State.FULFILLED });
-                await this.notificationService.sendNotification(gift.seller);
-                await this.escrowStateCheck(id);
-                resolve({ success: true });
-              } catch (error) {
-                reject(error);
-              }
-            });
+        // if (allEvents.length) {
+        //   console.log(allEvents, '과거 이벤트 참조로 Fulfilled 상태 전환');
+        //   await this.giftRepo.update(id, { state: State.FULFILLED });
+        //   await this.notificationService.sendNotification(
+        //     gift.seller,
+        //     gift.title,
+        //   );
+        //   await this.escrowStateCheck(id);
+        //   // return { success: true };
+        // } else {
+        const result = new Promise((resolve, reject) => {
+          escrowContract.once('FulfillmentConfirmed', async () => {
+            try {
+              console.log('Fulfilled 상태 전환');
+              await this.giftRepo.update(id, { state: State.FULFILLED });
+              await this.notificationService.sendNotification(
+                gift.seller,
+                gift.title,
+              );
+              await this.escrowStateCheck(id);
+              resolve({ success: true });
+            } catch (error) {
+              reject(error);
+            }
           });
-        }
+        });
+
+        return result;
+        // }
       } catch (e) {
         throw e;
       }
-
-      return { success: true };
     } else throw new UnauthorizedException('Not fulfilled.');
   }
 
@@ -357,29 +282,29 @@ export class GiftService {
 
     // asdf
 
-    const currentBlock = await provider.getBlockNumber();
+    // const currentBlock = await provider.getBlockNumber();
 
-    const range = 1000;
-    const fromBlock = Math.max(currentBlock - range, 0);
-    const toBlock = currentBlock + range;
+    // const range = 1000;
+    // const fromBlock = Math.max(currentBlock - range, 0);
+    // const toBlock = currentBlock + range;
 
-    const allEvents = await escrowContract.queryFilter(
-      escrowContract.filters.FundsDistributed(),
-      fromBlock,
-      toBlock,
-    );
+    // const allEvents = await escrowContract.queryFilter(
+    //   escrowContract.filters.FundsDistributed(),
+    //   fromBlock,
+    //   toBlock,
+    // );
 
-    if (allEvents.length) {
-      console.log(allEvents, '과거 이벤트 참조로 정산 함수 실행');
+    // if (allEvents.length) {
+    //   console.log(allEvents, '과거 이벤트 참조로 정산 함수 실행');
+    //   await this.giftRepo.update(id, { state: State.EXECUTED });
+    //   await this.escrowStateCheck(id);
+    // } else {
+    escrowContract.once('FundsDistributed', async () => {
+      console.log('정산 함수가 정상적으로 실행됨');
       await this.giftRepo.update(id, { state: State.EXECUTED });
       await this.escrowStateCheck(id);
-    } else {
-      escrowContract.once('FundsDistributed', async () => {
-        console.log('정산 함수가 정상적으로 실행됨');
-        await this.giftRepo.update(id, { state: State.EXECUTED });
-        await this.escrowStateCheck(id);
-      });
-    }
+    });
+    // }
 
     // asdf
 

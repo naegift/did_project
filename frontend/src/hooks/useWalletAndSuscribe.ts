@@ -50,9 +50,9 @@ const useWalletAndSubscribe = () => {
     const signer = provider.getSigner();
 
     const handleChainChanged = async (chainId: string) => {
-      console.log(chainId);
+      console.log(typeof chainId, chainId);
 
-      if (chainId !== process.env.REACT_APP_TARGET_CHAINID?.toLowerCase()) {
+      if (chainId !== process.env.REACT_APP_TARGET_CHAINID) {
         await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [
@@ -61,7 +61,7 @@ const useWalletAndSubscribe = () => {
             },
           ],
         });
-        // window.location.reload();
+        window.location.reload();
       }
     };
 
