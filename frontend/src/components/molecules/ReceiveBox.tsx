@@ -23,6 +23,10 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
   const [item, setItem] = useState<string>("선물받기 버튼을 눌러주세요");
   const [loading, setLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    console.log(btnState);
+  }, [btnState]);
+
   const states: {
     [key: string]: string;
   } = {
@@ -40,7 +44,7 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
     } else {
       console.error(`state: ${receivedItem.state}`);
     }
-  }, [receivedItem, states]);
+  }, [receivedItem]);
 
   const confirm = async () => {
     try {
@@ -154,6 +158,7 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
         success: saveVC.success,
       });
 
+      console.log("선물 받기 값 확인중...", successRes.data.success);
       if (successRes.data.success) {
         setBtnState("issued");
         setItem("사용 가능");

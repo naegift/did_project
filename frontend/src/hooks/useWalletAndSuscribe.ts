@@ -83,6 +83,22 @@ const useWalletAndSubscribe = () => {
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
 
+    const handleChainChanged = async (chainId: string) => {
+      console.log(typeof chainId, chainId);
+
+      if (chainId !== process.env.REACT_APP_TARGET_CHAINID) {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [
+            {
+              chainId: process.env.REACT_APP_TARGET_CHAINID,
+            },
+          ],
+        });
+        window.location.reload();
+      }
+    };
+
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
     await handleChainChanged(chainId);
 

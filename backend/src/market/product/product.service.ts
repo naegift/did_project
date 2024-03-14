@@ -119,27 +119,48 @@ export class ProductService {
       const eventPromise = new Promise(async (resolve, rej) => {
         console.log('이벤트 대기중');
 
-        const currentBlock = await provider.getBlockNumber();
+        // const currentBlock = await provider.getBlockNumber();
 
-        const range = 1000;
-        const fromBlock = Math.max(currentBlock - range, 0);
-        const toBlock = currentBlock + range;
+        // const range = 1000;
+        // const fromBlock = Math.max(currentBlock - range, 0);
+        // const toBlock = currentBlock + range;
 
-        const allEvents = await contract.queryFilter(
-          contract.filters.EscrowCreated(),
-          fromBlock,
-          toBlock,
-        );
+        // const allEvents = await contract.queryFilter(
+        //   contract.filters.EscrowCreated(),
+        //   fromBlock,
+        //   toBlock,
+        // );
 
-        const filteredEvents = allEvents.filter(
-          (event) => event.args.uuid === uuid,
-        );
+        // const filteredEvents = allEvents.filter(
+        //   (event) => event.args.uuid === uuid,
+        // );
 
-        if (filteredEvents.length) {
-          console.log('과거 이벤트 발견');
+        // if (filteredEvents.length) {
+        //   console.log('과거 이벤트 발견');
 
-          filteredEvents.forEach(async (event) => {
-            console.log(uuid, event.args.uuid, 'UUID 일치 확인');
+        //   filteredEvents.forEach(async (event) => {
+        //     console.log(uuid, event.args.uuid, 'UUID 일치 확인');
+        //     const product = await this.getProduct(id);
+        //     newGift = await this.giftRepo.save({
+        //       buyer,
+        //       receiver,
+        //       title: product.title,
+        //       content: product.content,
+        //       image: product.image,
+        //       price: product.price,
+        //       seller: product.seller,
+        //       state: State.ACTIVE,
+        //       contract: event.args.escrowAddress,
+        //     });
+        //     resolve(newGift);
+        //   });
+        // } else {
+        console.log('과거 이벤트 미발견, 이벤트 구독');
+
+        const handler = async (escrowAddress, escrowUUID) => {
+          console.log('이벤트 발생');
+          if (uuid === escrowUUID) {
+            console.log('UUID 일치');
             const product = await this.getProduct(id);
             newGift = await this.giftRepo.save({
               buyer,
@@ -150,32 +171,14 @@ export class ProductService {
               price: product.price,
               seller: product.seller,
               state: State.ACTIVE,
-              contract: event.args.escrowAddress,
+              contract: escrowAddress,
             });
+            contract.off('EscrowCreated', handler);
             resolve(newGift);
-          });
-        } else {
-          console.log('과거 이벤트 미발견, 이벤트 구독');
-          contract.once('EscrowCreated', async (escrowAddress, escrowUUID) => {
-            console.log('이벤트 발생');
-            if (uuid === escrowUUID) {
-              console.log('UUID 일치');
-              const product = await this.getProduct(id);
-              newGift = await this.giftRepo.save({
-                buyer,
-                receiver,
-                title: product.title,
-                content: product.content,
-                image: product.image,
-                price: product.price,
-                seller: product.seller,
-                state: State.ACTIVE,
-                contract: escrowAddress,
-              });
-              resolve(newGift);
-            }
-          });
-        }
+          }
+        };
+        contract.on('EscrowCreated', handler);
+        // }
       });
 
       const result: any = await eventPromise;
