@@ -20,7 +20,7 @@ interface MyVerifiedBoxProps {
 
 const MyVerifiedBox: React.FC<MyVerifiedBoxProps> = ({ gifts }) => {
   return (
-    <div className="w-full h-[100vh]" id="MyVerifiedBox">
+    <div className="w-full h-[100vh]">
       <table className="w-full ">
         <tr className="border-b-4 flex flex-row p-[20px] justify-between">
           <td className="text-center w-[20%]">아이템</td>
