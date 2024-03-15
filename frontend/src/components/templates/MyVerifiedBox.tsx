@@ -23,12 +23,12 @@ const MyVerifiedBox: React.FC<MyVerifiedBoxProps> = ({ gifts }) => {
     <div className="w-full h-[100vh]">
       <table className="w-full ">
         <tr className="border-b-4 flex flex-row p-[20px] justify-between">
-          <th className="text-center w-[20%]">아이템</th>
-          <th className="text-center w-[20%]">판매자</th>
-          <th className="text-center w-[20%]">구매자</th>
+          <th className="text-center w-[30%]">아이템</th>
+          <th className="text-center w-[10%] ">판매자</th>
+          <th className="text-center w-[10%]">구매자</th>
           <th className="text-center w-[20%]">수령인</th>
           <th className="text-center w-[10%]">상태</th>
-          <th className="text-center w-[10%]">날짜</th>
+          <th className="text-center w-[20%]">날짜</th>
         </tr>
 
         {gifts.map((gift) => (
@@ -36,25 +36,31 @@ const MyVerifiedBox: React.FC<MyVerifiedBoxProps> = ({ gifts }) => {
             className=" flex flex-row p-[20px] mt-2 justify-between border-b-[3px]"
             key={gift.id}
           >
-            <td className="flex flex-row gap-x-2 text-center w-[20%]">
+            <td className="flex flex-row gap-x-2 text-center w-[30%]">
               <img src={gift.image} alt={gift.title} />
               <p>{gift.title}</p>
             </td>
 
-            <td className="text-center w-[20%]">{gift.seller}1</td>
-            <td className="text-center w-[20%]">{gift.buyer}2</td>
-            <td className="text-center w-[20%]">{gift.receiver}</td>
+            <td className="text-center w-[10%] overflow-hidden text-ellipsis whitespace-nowrap">
+              {gift.seller}
+            </td>
+            <td className="text-center w-[15%] overflow-hidden text-ellipsis whitespace-nowrap ">
+              {gift.buyer}
+            </td>
+            <td className="text-center w-[15%] overflow-hidden text-ellipsis whitespace-nowrap ">
+              {gift.receiver}
+            </td>
 
             <td className="text-center w-[10%]"> {gift.state}</td>
-            <td className="text-center w-[10%]">{gift.updatedAt}</td>
+            <td className="text-center w-[20%]">{gift.updatedAt}</td>
           </tr>
         ))}
       </table>
       {/* {gifts.map((gift) => (
-        <div key={gift.id}>
+        <div >
           <h3>{gift.title}</h3>
           <p>{gift.content}</p>
-          <img src={gift.image} alt={gift.title} />
+          <img src="" alt={gift.title} />
           <p>Price: {gift.price}</p>
           <p>Seller: {gift.seller}</p>
           <p>Buyer: {gift.buyer}</p>
