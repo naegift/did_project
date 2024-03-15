@@ -12,6 +12,7 @@ import { itemIcon } from "../images/Icon";
 import { saleIcon } from "../images/Icon";
 import { useObserver } from "../hooks/useObserver";
 import { messageIcon } from "../images/Icon";
+import MyNotificationBox from "../components/templates/MyNotificationBox";
 
 export interface Data {
   nextPage: number;
@@ -61,6 +62,7 @@ const MyStoreList: React.FC = () => {
   const [copied, setCopied] = useState<boolean>(false);
   const [scrollPosition, setScrollPosition] = useState<number>(0);
   const [showBanner, setShowBanner] = useState<boolean>(true);
+  const [showModal, setShowModal] = useState(false);
   const [isFocused, setIsfocused] = useState(0);
   const refKeyword = useObserver(1, setIsfocused);
   const refCategory = useObserver(2, setIsfocused);
@@ -154,10 +156,18 @@ const MyStoreList: React.FC = () => {
     const handleScroll = () => {
       const position = window.pageYOffset;
       setScrollPosition(position);
-      if (position > 600) {
-        setShowBanner(false);
+      if (window.innerWidth < 640) {
+        if (position > 150) {
+          setShowBanner(false);
+        } else {
+          setShowBanner(true);
+        }
       } else {
-        setShowBanner(true);
+        if (position > 600) {
+          setShowBanner(false);
+        } else {
+          setShowBanner(true);
+        }
       }
     };
 
@@ -173,6 +183,7 @@ const MyStoreList: React.FC = () => {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+  const toggleModal = () => setShowModal(!showModal);
 
   return (
     <div className="mt-[97px]">
@@ -189,7 +200,7 @@ const MyStoreList: React.FC = () => {
           showBanner ? "opacity-0" : "opacity-100"
         }`}
       >
-        <div className="flex flex-col  w-[500px] h-[300px] sticky top-[200px]">
+        <div className="flex flex-col  w-[500px] h-[300px] sticky top-[200px] mobile:hidden">
           <div className="flex flex-row justify-around p-2 ">
             <img src={personIcon} alt="" className="w-[30px] h-[30px]" />
             <h1>소유자 주소</h1>
@@ -215,26 +226,43 @@ const MyStoreList: React.FC = () => {
             </div>
           )}
 
-          <div
-            className={`flex flex-row gap-10 pl-7 border p-2 ${
-              isFocused == 1 ? "bg-gray-500 text-white" : ""
+          <button
+            className={`flex flex-row gap-10 pl-7 border p-8 ${
+              isFocused == 1
+                ? "bg-gradient-to-r from-[#ec4609] to-[#FFA787] text-white transition-all duration-300"
+                : ""
             }`}
             onClick={() => scrollToComponent("myProductList")}
           >
-            <img src={itemIcon} alt="" className="w-7 h-7" />
+            <img src={itemIcon} alt="" className="w-9 h-9" />
             <h1>아이템 목록</h1>
-          </div>
-          <div
-            className={`flex flex-row gap-10 pl-7  border p-2 ${
-              isFocused == 2 ? "bg-gray-500 text-white" : ""
+          </button>
+          <button
+            className={`flex flex-row gap-10 pl-7  border p-8 ${
+              isFocused == 2
+                ? "bg-gradient-to-r from-[#ec4609] to-[#FFA787] text-white transition-all duration-500"
+                : ""
             }`}
             onClick={() => scrollToComponent("MyVerifiedBox")}
           >
-            <img src={saleIcon} alt="" className="w-7 h-7" />
-            <h1>활동</h1>
-          </div>
+            <img src={saleIcon} alt="" className="w-9 h-9" />
+            <h1 className="pt-2">활동</h1>
+          </button>
+          <button
+            className="flex flex-row gap-10 pl-7  border p-8"
+            onClick={toggleModal}
+          >
+            <img src={messageIcon} alt="" className="w-9 h-9" />
+            <h1 className="pt-2">메세지</h1>
+          </button>
+          {showModal && (
+            <MyNotificationBox
+              showModal={showModal}
+              toggleModal={toggleModal}
+            />
+          )}
         </div>
-        <div className="h-full w-[70%] ">
+        <div className="h-full w-[70%] mt-[20px]">
           <div id="myProductList">
             <div
               className="flex flex-row py-5 gap-5 px-20 mx-auto items-center"

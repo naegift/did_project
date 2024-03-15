@@ -18,7 +18,7 @@ interface MyProductListProps {
 const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
   return (
     <>
-      <div>
+      <div className="w-full mobile:w-[400px]">
         {products.map((product) => {
           const priceETH = formatEther(product.price);
           return (
@@ -26,7 +26,7 @@ const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
               <Link to={`/product/${product.id}`}>
                 <div className="flex flex-row justify-around border rounded-md mt-[20px] h-full hover:scale-90 transition duration-500">
                   <div className="p-[20px] flex flex-row">
-                    <span className="">No.{product.id}</span>
+                    <span className="mobile:hidden">No.{product.id}</span>
                   </div>
                   <img
                     src={product.image}
