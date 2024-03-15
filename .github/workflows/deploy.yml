@@ -1,7 +1,8 @@
 name: deploy
 on:
   push:
-    branches: [main]
+    branches:
+      - reference
 env:
   CI: false
 jobs:
@@ -35,7 +36,6 @@ jobs:
         run: |
           aws s3 sync \
           --region ap-northeast-2 \
-          frontend/build \
-          s3://naegiftdid \
+          build s3://naegiftdid \
           --delete
         working-directory: ./frontend
