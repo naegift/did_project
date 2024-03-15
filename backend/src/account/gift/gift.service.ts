@@ -226,6 +226,7 @@ export class GiftService {
             gift.title,
           );
         } else {
+          console.log('이벤트 대기중');
           const result = new Promise((resolve, reject) => {
             escrowContract.once('FulfillmentConfirmed', async () => {
               try {
@@ -287,6 +288,7 @@ export class GiftService {
       console.log(allEvents, '과거 이벤트 참조로 정산 함수 실행');
       await this.giftRepo.update(id, { state: State.EXECUTED });
     } else {
+      console.log('이벤트 대기중');
       escrowContract.once('FundsDistributed', async () => {
         console.log('정산 함수가 정상적으로 실행됨');
         await this.giftRepo.update(id, { state: State.EXECUTED });

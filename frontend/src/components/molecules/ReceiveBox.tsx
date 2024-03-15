@@ -169,7 +169,7 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
       }
     } catch (error) {
       console.error("선물받기에서 오류 발생:", error);
-      alert("서명 거부 시 선물받기를 할수없습니다ㅠㅠ ");
+      // alert("서명 거부 시 선물받기를 할수없습니다ㅠㅠ ");
     } finally {
       setLoading(false);
     }
