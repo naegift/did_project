@@ -11,6 +11,7 @@ import StoreBanner from "../components/molecules/StoreBanner";
 import { itemIcon } from "../images/Icon";
 import { saleIcon } from "../images/Icon";
 import { useObserver } from "../hooks/useObserver";
+import { messageIcon } from "../images/Icon";
 
 export interface Data {
   nextPage: number;
@@ -189,7 +190,7 @@ const MyStoreList: React.FC = () => {
         }`}
       >
         <div className="flex flex-col  w-[500px] h-[300px] sticky top-[200px]">
-          <div className="flex flex-row justify-around border p-2 ">
+          <div className="flex flex-row justify-around p-2 ">
             <img src={personIcon} alt="" className="w-[30px] h-[30px]" />
             <h1>소유자 주소</h1>
             <div className="overflow-hidden text-ellipsis whitespace-nowrap w-[170px]">
@@ -213,18 +214,19 @@ const MyStoreList: React.FC = () => {
               복사되었습니다.
             </div>
           )}
+
           <div
             className={`flex flex-row gap-10 pl-7 border p-2 ${
-              isFocused == 1 ? "bg-indigo-200" : ""
+              isFocused == 1 ? "bg-gray-500 text-white" : ""
             }`}
             onClick={() => scrollToComponent("myProductList")}
           >
             <img src={itemIcon} alt="" className="w-7 h-7" />
-            <h1>판매 목록</h1>
+            <h1>아이템 목록</h1>
           </div>
           <div
             className={`flex flex-row gap-10 pl-7  border p-2 ${
-              isFocused == 2 ? "bg-indigo-200" : ""
+              isFocused == 2 ? "bg-gray-500 text-white" : ""
             }`}
             onClick={() => scrollToComponent("MyVerifiedBox")}
           >
@@ -233,8 +235,11 @@ const MyStoreList: React.FC = () => {
           </div>
         </div>
         <div className="h-full w-[70%] ">
-          <label id="myProductList">
-            <div className="flex flex-row py-5 gap-5 px-20 mx-auto items-center">
+          <div id="myProductList">
+            <div
+              className="flex flex-row py-5 gap-5 px-20 mx-auto items-center"
+              ref={refKeyword}
+            >
               <Button
                 variant="basicBtn2"
                 size="md"
@@ -267,7 +272,7 @@ const MyStoreList: React.FC = () => {
                 activeClass="pagination-active text-black"
               />
             </div>
-          </label>
+          </div>
           <div className="mt-[400px]" id="MyVerifiedBox">
             <div ref={refCategory}>
               <div className="flex flex-row py-5 gap-5 px-20 mx-auto items-center">
@@ -287,7 +292,7 @@ const MyStoreList: React.FC = () => {
 
               <MyVerifiedBox gifts={gifts} />
               <div
-                className="w-full flex flex-row py-2 gap-5 justify-center items-center"
+                className="w-full h-full flex flex-row py-2 gap-5 justify-center items-center"
                 ref={refCategory}
               >
                 <Pagination
