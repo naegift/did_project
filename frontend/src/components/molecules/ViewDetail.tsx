@@ -6,12 +6,12 @@ const ViewDetail: React.FC = () => {
         <div
             className={cn(
                 "w-2/3 py-10 mx-auto px-48 flex flex-row gap-14 border-t border-b bg-slate-50",
-                "note:px-12",
+                "note:px-10 note:w-3/4",
                 "tablet:px-10 tablet:w-full",
                 "mobile:w-full mobile:flex mobile:flex-col mobile:gap-4"
             )}
         >
-            <div className=" mobile:font-bold ">안내 사항</div>
+            <div className=" mobile:font-bold">안내 사항</div>
             <ul className=" flex flex-col gap-1 list-disc mobile:gap-3 mobile:text-sm">
                 <li>
                     선물 받으실 계정의 주소를 정확하게 입력한 다음 결제를
