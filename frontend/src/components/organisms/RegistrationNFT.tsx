@@ -85,7 +85,7 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
         <span className="block absolute bottom-0 left-0 bg-gray-600 w-0 h-2 transition-all duration-500"></span>
       </div>
       <label className="mt-[20px] p-5 border">
-        <p>ETH</p>
+        <p>ETH222</p>
         <input
           className="border w-full"
           type="text"
