@@ -37,7 +37,7 @@ const MyProductList: React.FC<MyProductListProps> = ({ products }) => {
                     <h3 className="truncate">{product.title}</h3>
                   </div>
                   <div>
-                    <p>{priceETH} ETH22</p>
+                    <p>{priceETH} ETH</p>
                     <p className="truncate opacity-[50%] transition-transform hover:scale-125">
                       {product.price} WEI
                     </p>
