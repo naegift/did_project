@@ -1,8 +1,8 @@
 name: deploy
 on:
   push:
-    branches:
-      - reference
+    branches: [main]
+
 env:
   CI: false
 jobs:
