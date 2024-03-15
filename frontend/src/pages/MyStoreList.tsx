@@ -8,6 +8,9 @@ import Button from "../components/atoms/button";
 import { copyIcon } from "../images/Icon";
 import { personIcon } from "../images/Icon";
 import StoreBanner from "../components/molecules/StoreBanner";
+import { itemIcon } from "../images/Icon";
+import { saleIcon } from "../images/Icon";
+import { useObserver } from "../hooks/useObserver";
 
 export interface Data {
   nextPage: number;
@@ -57,6 +60,9 @@ const MyStoreList: React.FC = () => {
   const [copied, setCopied] = useState<boolean>(false);
   const [scrollPosition, setScrollPosition] = useState<number>(0);
   const [showBanner, setShowBanner] = useState<boolean>(true);
+  const [isFocused, setIsfocused] = useState(0);
+  const refKeyword = useObserver(1, setIsfocused);
+  const refCategory = useObserver(2, setIsfocused);
 
   const changePage = async (pageNumber: number) => {
     setPage(pageNumber);
@@ -160,6 +166,13 @@ const MyStoreList: React.FC = () => {
     };
   }, []);
 
+  const scrollToComponent = (products: string) => {
+    const element = document.getElementById(products);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="mt-[97px]">
       <div
@@ -200,10 +213,27 @@ const MyStoreList: React.FC = () => {
               복사되었습니다.
             </div>
           )}
-          <div>Total Items: </div>
+          <div
+            className={`flex flex-row gap-10 pl-7 border p-2 ${
+              isFocused == 1 ? "bg-indigo-200" : ""
+            }`}
+            onClick={() => scrollToComponent("myProductList")}
+          >
+            <img src={itemIcon} alt="" className="w-7 h-7" />
+            <h1>판매 목록</h1>
+          </div>
+          <div
+            className={`flex flex-row gap-10 pl-7  border p-2 ${
+              isFocused == 2 ? "bg-indigo-200" : ""
+            }`}
+            onClick={() => scrollToComponent("MyVerifiedBox")}
+          >
+            <img src={saleIcon} alt="" className="w-7 h-7" />
+            <h1>활동</h1>
+          </div>
         </div>
-        <div className="h-full w-[70%] " id="myProductList">
-          <label>
+        <div className="h-full w-[70%] ">
+          <label id="myProductList">
             <div className="flex flex-row py-5 gap-5 px-20 mx-auto items-center">
               <Button
                 variant="basicBtn2"
@@ -218,24 +248,28 @@ const MyStoreList: React.FC = () => {
                 onClick={() => orderChange("asc")}
               />
             </div>
+
+            <MyProductList products={product} userAddress={userAddress} />
+            <div
+              className="w-full flex flex-row py-2 gap-5 justify-center items-center"
+              ref={refKeyword}
+            >
+              <Pagination
+                activePage={page}
+                itemsCountPerPage={10}
+                totalItemsCount={totalPage * 10}
+                pageRangeDisplayed={5}
+                prevPageText={"‹"}
+                nextPageText={"›"}
+                onChange={(pageNumber) => changePage(pageNumber)}
+                innerClass="flex flex-row py-5 justify-center items-center gap-8"
+                itemClass="inline-block w-10 h-10 border rounded flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white hover:border-none"
+                activeClass="pagination-active text-black"
+              />
+            </div>
           </label>
-          <MyProductList products={product} userAddress={userAddress} />
-          <div className="w-full flex flex-row py-2 gap-5 justify-center items-center">
-            <Pagination
-              activePage={page}
-              itemsCountPerPage={10}
-              totalItemsCount={totalPage * 10}
-              pageRangeDisplayed={5}
-              prevPageText={"‹"}
-              nextPageText={"›"}
-              onChange={(pageNumber) => changePage(pageNumber)}
-              innerClass="flex flex-row py-5 justify-center items-center gap-8"
-              itemClass="inline-block w-10 h-10 border rounded flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white hover:border-none"
-              activeClass="pagination-active text-black"
-            />
-          </div>
-          <div className="mt-[100px]" id="MyVerifiedBox">
-            <label>
+          <div className="mt-[400px]" id="MyVerifiedBox">
+            <div ref={refCategory}>
               <div className="flex flex-row py-5 gap-5 px-20 mx-auto items-center">
                 <Button
                   variant="basicBtn2"
@@ -250,21 +284,25 @@ const MyStoreList: React.FC = () => {
                   onClick={() => orderChangeGift("asc")}
                 />
               </div>
-            </label>
-            <MyVerifiedBox gifts={gifts} />
-            <div className="w-full flex flex-row py-2 gap-5 justify-center items-center">
-              <Pagination
-                activePage={page}
-                itemsCountPerPage={10}
-                totalItemsCount={giftTotalPage * 10}
-                pageRangeDisplayed={5}
-                prevPageText={"‹"}
-                nextPageText={"›"}
-                onChange={(pageNumber) => handlePageChange(pageNumber)}
-                innerClass="flex flex-row py-5 justify-center items-center gap-8"
-                itemClass="inline-block w-10 h-10 border rounded flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white hover:border-none"
-                activeClass="pagination-active text-black"
-              />
+
+              <MyVerifiedBox gifts={gifts} />
+              <div
+                className="w-full flex flex-row py-2 gap-5 justify-center items-center"
+                ref={refCategory}
+              >
+                <Pagination
+                  activePage={page}
+                  itemsCountPerPage={10}
+                  totalItemsCount={giftTotalPage * 10}
+                  pageRangeDisplayed={5}
+                  prevPageText={"‹"}
+                  nextPageText={"›"}
+                  onChange={(pageNumber) => handlePageChange(pageNumber)}
+                  innerClass="flex flex-row py-5 justify-center items-center gap-8"
+                  itemClass="inline-block w-10 h-10 border rounded flex justify-center items-center rounded-3xl hover:bg-[#ff4400] hover:text-white hover:border-none"
+                  activeClass="pagination-active text-black"
+                />
+              </div>
             </div>
           </div>
         </div>
