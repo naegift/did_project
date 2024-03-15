@@ -38,4 +38,3 @@ jobs:
           --region us-east-1 \
           build s3://naegiftdid \
           --delete
-        working-directory: ./frontend
