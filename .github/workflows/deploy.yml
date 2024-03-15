@@ -15,7 +15,7 @@ jobs:
           node-version: "16.x"
       - name: Checkout source code.
         uses: actions/checkout@v2
-      - name: npm Install packages
+      - name: Install npm packages
         run: npm install --legacy-peer-deps
         working-directory: ./frontend
       - name: Build
