@@ -49,30 +49,6 @@ const MyVerifiedBox: React.FC<MyVerifiedBoxProps> = ({ gifts }) => {
             <td className="text-center w-[10%]">{gift.updatedAt}</td>
           </tr>
         ))}
-        <tr className=" flex flex-row p-[20px] mt-2 justify-between border-b-[3px]">
-          <td className="flex flex-row gap-x-2 text-center w-[20%]">
-            <img src="" alt="" />d<p>제목</p>
-          </td>
-
-          <td className="text-center w-[20%]">1</td>
-          <td className="text-center w-[20%]">2</td>
-          <td className="text-center w-[20%]">3</td>
-
-          <td className="text-center w-[10%]"> 4</td>
-          <td className="text-center w-[10%]">5</td>
-        </tr>
-        <tr className=" flex flex-row p-[20px] mt-2 justify-between border-b-[3px]">
-          <td className="flex flex-row gap-x-2 text-center w-[20%]">
-            <img src="" alt="" />d<p>제목</p>
-          </td>
-
-          <td className="text-center w-[20%]">1</td>
-          <td className="text-center w-[20%]">2</td>
-          <td className="text-center w-[20%]">3</td>
-
-          <td className="text-center w-[10%]"> 4</td>
-          <td className="text-center w-[10%]">5</td>
-        </tr>
       </table>
       {/* {gifts.map((gift) => (
         <div key={gift.id}>
