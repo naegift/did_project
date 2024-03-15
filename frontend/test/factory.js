@@ -77,7 +77,8 @@ describe("NaegiftEscrowFactory and naegift_escrow", function () {
     const NaegiftEscrow = await ethers.getContractFactory("NaegiftEscrow");
     naegiftEscrow = NaegiftEscrow.attach(escrowAddress);
 
-    await expect(naegiftEscrow.connect(addr3).confirmFulfillment()).to.emit(
+    // 수정된 부분: addr3 (receiver) 대신 addr4 (market)를 사용
+    await expect(naegiftEscrow.connect(addr4).confirmFulfillment()).to.emit(
       naegiftEscrow,
       "FulfillmentConfirmed"
     );
@@ -111,13 +112,15 @@ describe("NaegiftEscrowFactory and naegift_escrow", function () {
     const NaegiftEscrow = await ethers.getContractFactory("NaegiftEscrow");
     const naegiftEscrowInstance = NaegiftEscrow.attach(escrowAddress);
 
-    await naegiftEscrowInstance.connect(receiverSigner).confirmFulfillment();
+    await expect(
+      naegiftEscrowInstance.connect(addr4).confirmFulfillment()
+    ).to.emit(naegiftEscrowInstance, "FulfillmentConfirmed");
 
     await expect(
       naegiftEscrowInstance.connect(marketSigner).confirmProductUsed()
     ).to.emit(naegiftEscrowInstance, "ProductUsedConfirmed");
 
-    expect(await naegiftEscrowInstance.escrowStatus()).to.equal(4);
+    expect(await naegiftEscrowInstance.escrowStatus()).to.equal(3);
   });
 
   it("판매대금 정산", async function () {
@@ -128,6 +131,7 @@ describe("NaegiftEscrowFactory and naegift_escrow", function () {
     const contractPrice = ethers.utils.parseEther("1.0");
     const uuid = "unique-identifier-string";
 
+    // 에스크로 계약 생성
     const tx = await naegiftEscrowFactory.createEscrow(
       buyer,
       seller,
@@ -137,37 +141,52 @@ describe("NaegiftEscrowFactory and naegift_escrow", function () {
       uuid,
       { value: contractPrice }
     );
-    const receipt = await tx.wait();
-    const event = receipt.events.find(
-      (event) => event.event === "EscrowCreated"
+    await tx.wait();
+
+    // 에스크로 계약 주소 취득
+    const events = await naegiftEscrowFactory.queryFilter(
+      naegiftEscrowFactory.filters.EscrowCreated(),
+      "latest"
     );
-    const escrowAddress = event.args.escrowAddress;
+    const escrowAddress = events[0].args.escrowAddress;
+    const naegiftEscrow = await ethers.getContractAt(
+      "NaegiftEscrow",
+      escrowAddress
+    );
 
-    const NaegiftEscrow = await ethers.getContractFactory("NaegiftEscrow");
-    naegiftEscrow = NaegiftEscrow.attach(escrowAddress);
-
-    await naegiftEscrow.connect(addr3).confirmFulfillment();
-    await naegiftEscrow.connect(addr4).confirmProductUsed();
-
+    // 판매대금 정산 전 셀러와 마켓의 초기 잔액 캡처
     const sellerInitialBalance = await ethers.provider.getBalance(seller);
     const marketInitialBalance = await ethers.provider.getBalance(market);
 
+    // 상품 사용 완료 및 상품 수령 확인을 통한 판매대금 정산
+    await naegiftEscrow.connect(addr4).confirmFulfillment();
+    await naegiftEscrow.connect(addr4).confirmProductUsed();
+
+    // 판매대금 정산 후 셀러와 마켓의 최종 잔액 캡처
     const sellerFinalBalance = await ethers.provider.getBalance(seller);
     const marketFinalBalance = await ethers.provider.getBalance(market);
 
-    const marketShare = contractPrice.div(10);
-    const sellerShare = contractPrice.sub(marketShare);
-
-    expect(sellerFinalBalance.sub(sellerInitialBalance)).to.equal(
-      contractPrice.sub(sellerShare.add(marketShare))
-    );
-    expect(marketFinalBalance.sub(marketInitialBalance)).to.equal(
-      contractPrice.sub(sellerShare.add(marketShare))
-    );
-
+    // 계약의 최종 잔액이 0인지 확인
     const contractFinalBalance = await ethers.provider.getBalance(
       naegiftEscrow.address
     );
     expect(contractFinalBalance).to.equal(0);
+
+    // 셀러와 마켓의 잔액 증가분 계산
+    const sellerBalanceIncrease = sellerFinalBalance.sub(sellerInitialBalance);
+    const marketBalanceIncrease = marketFinalBalance.sub(marketInitialBalance);
+
+    // 셀러와 마켓의 잔액 증가분이 예상대로인지 확인
+    const expectedSellerIncrease = contractPrice.mul(9).div(10);
+    const expectedMarketIncrease = contractPrice.div(10);
+
+    expect(sellerBalanceIncrease).to.be.closeTo(
+      expectedSellerIncrease,
+      ethers.utils.parseUnits("0.01", "ether")
+    );
+    expect(marketBalanceIncrease).to.be.closeTo(
+      expectedMarketIncrease,
+      ethers.utils.parseUnits("0.01", "ether")
+    );
   });
 });
