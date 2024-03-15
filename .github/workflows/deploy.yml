@@ -25,16 +25,18 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_EC2_METADATA_DISABLED: true
         run: |
           aws --version
       - name: Sync Bucket
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_EC2_METADATA_DISABLED: true
         run: |
           aws s3 sync \
           --region us-east-1 \
           frontend/build s3://naegiftdid \
           --delete
+        env:
+          REACT_APP_AWS: ${{ secrets.REACT_APP_AWS }}
+          REACT_APP_MARKET_ADDRESS: ${{ secrets.REACT_APP_MARKET_ADDRESS }}
+          REACT_APP_PROXY_ADDRESS: ${{ secrets.REACT_APP_PROXY_ADDRESS }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          REACT_APP_TARGET_CHAINID: ${{ secrets.REACT_APP_TARGET_CHAINID }}
