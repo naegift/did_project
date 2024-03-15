@@ -76,7 +76,15 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
       console.log(payUrl, reqBody);
       const response = axios.post(payUrl, reqBody);
 
-      signer.sendTransaction(transaction);
+      signer
+        .sendTransaction(transaction)
+        .then((response) => {
+          // Handle the successful transaction here
+        })
+        .catch((error) => {
+          setLoading(false);
+          alert("거래가 취소되었습니다.");
+        });
 
       console.log("Transaction sign post body: ", {
         buyer,

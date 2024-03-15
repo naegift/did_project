@@ -39,6 +39,7 @@ export async function runEthers(
     return { message, signature };
   } catch (error) {
     console.error("Error running ethers:", error);
+    alert("서명이 거부되었습니다. 다시 시도해주세요.");
     throw error;
   }
 }
