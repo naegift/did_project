@@ -47,10 +47,6 @@ fBEiRK {
   bottom: 0;
 }
 
-.progress-bar-paused {
-  animation-play-state: paused;
-}
-
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
@@ -78,11 +74,11 @@ fBEiRK {
 }
 
 .slide-in-right {
-  animation: slideInRight 0.5s forwards;
-  transform: translate3d(0, 0, 0); /* GPU 가속 활성화 */
+  animation: slideInRight 0.3s forwards;
+  transform: translate3d(0, 0, 0);
 }
 
 .slide-out-right {
-  animation: slideOutRight 0.5s forwards;
-  transform: translate3d(0, 0, 0); /* GPU 가속 활성화 */
+  animation: slideOutRight 0.3s forwards;
+  transform: translate3d(0, 0, 0);
 }

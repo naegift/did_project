@@ -5,32 +5,14 @@ import "../../styles/notification.css";
 const NotificationContent = ({ data }: { data: any }) => {
   const [visible, setVisible] = useState(true);
   const [shouldRender, setShouldRender] = useState(true);
-  const [progressPaused, setProgressPaused] = useState(false);
-  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    startTimer();
-
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [timer]);
-
-  const startTimer = () => {
-    setProgressPaused(false);
-    const newTimer = setTimeout(() => {
+    const timer = setTimeout(() => {
       setVisible(false);
-      setTimeout(() => setShouldRender(false), 200);
     }, 5000);
-    setTimer(newTimer);
-  };
 
-  const stopTimer = () => {
-    if (timer) {
-      clearTimeout(timer);
-      setProgressPaused(true);
-    }
-  };
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleAnimationEnd = () => {
     if (!visible) {
@@ -45,16 +27,10 @@ const NotificationContent = ({ data }: { data: any }) => {
   const containerClasses = `notification-container ${
     visible ? "slide-in-right" : "slide-out-right"
   }`;
-  const progressBarClasses = `progress-bar ${
-    progressPaused ? "progress-bar-paused" : ""
-  }`;
+
+  const progressBarClasses = "progress-bar";
   return (
-    <div
-      className={containerClasses}
-      onMouseEnter={stopTimer}
-      onMouseLeave={startTimer}
-      onAnimationEnd={handleAnimationEnd}
-    >
+    <div className={containerClasses} onAnimationEnd={handleAnimationEnd}>
       <NotificationItem
         notificationTitle={notificationTitle}
         notificationBody={notificationBody}

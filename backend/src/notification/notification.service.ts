@@ -25,10 +25,11 @@ export class NotificationService {
       env: CONSTANTS.ENV.STAGING,
     });
     try {
+      const currentTimeStamp = Math.floor(Date.now() / 1000);
       const notificationResult = await market.channel.send([recipients], {
         notification: {
           title: '기프트 사용완료',
-          body: `${giftTitle} 기프트가 사용되었습니다.`,
+          body: `${giftTitle} 기프트가 사용되었습니다. \n [timestamp: ${currentTimeStamp}]`,
         },
       });
       const parsedData = JSON.parse(notificationResult.config.data);
