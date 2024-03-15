@@ -61,7 +61,7 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
           {!imagePreview && <span className="text-gray-500">Select Image</span>}
         </label>
       </label>
-      <div className="relative w-[300px] ml-[50px] mt-[100px]">
+      <div className="relative w-[80%] ml-[50px] mt-[100px]">
         <input
           className="text-base text-gray-800 w-full border-b border-gray-300 pb-2 pl-2 focus:outline-none "
           placeholder="Title"
@@ -85,9 +85,9 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
         <span className="block absolute bottom-0 left-0 bg-gray-600 w-0 h-2 transition-all duration-500"></span>
       </div>
       <label className="mt-[20px] p-5 border">
-        <p>ETH222</p>
+        <p>ETH</p>
         <input
-          className="border w-full"
+          className="text-base text-gray-800 w-full border-b border-gray-300 pb-2 pl-2 focus:outline-none"
           type="text"
           placeholder="ex) 0.00001"
           onChange={(e) => {
@@ -107,9 +107,9 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
       </label>
 
       <label className="p-5 border">
-        Content:
         <textarea
           className="border w-full h-[200px] resize-none"
+          placeholder="Content:"
           value={content}
           onChange={(e) => {
             setContent(e.target.value);
