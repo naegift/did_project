@@ -31,79 +31,78 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
   const protocol = window.location.href.split("//")[0] + "//";
 
   const runEthers = async () => {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const address = walletAddress;
-      const signer = provider.getSigner(address);
-      const UUID = uuid();
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const address = walletAddress;
+    const signer = provider.getSigner(address);
+    const UUID = uuid();
 
-      const buyer = address;
-      const seller = product.seller;
-      const receiver = receiverInput;
-      const market = process.env.REACT_APP_MARKET_ADDRESS;
-      console.log(market);
+    const buyer = address;
+    const seller = product.seller;
+    const receiver = receiverInput;
+    const market = process.env.REACT_APP_MARKET_ADDRESS;
+    console.log(market);
 
-      setLoading(true);
+    setLoading(true);
 
-      const contract = new ethers.Contract(
-        process.env.REACT_APP_PROXY_ADDRESS as any,
-        FACTORY_ABI,
-        provider
-      );
+    const contract = new ethers.Contract(
+      process.env.REACT_APP_PROXY_ADDRESS as any,
+      FACTORY_ABI,
+      provider
+    );
 
-      const transaction = {
-        to: process.env.REACT_APP_PROXY_ADDRESS,
-        data: contract.interface.encodeFunctionData("createEscrow", [
-          buyer,
-          seller,
-          receiver,
-          market,
-          ethers.utils.parseUnits(priceETH, "ether").toString(),
-          UUID,
-        ]),
-        value: ethers.utils.parseUnits(priceETH, "ether").toString(),
-        gasLimit: 3000000,
-      };
-      console.log(transaction);
-
-      const reqBody = {
+    const transaction = {
+      to: process.env.REACT_APP_PROXY_ADDRESS,
+      data: contract.interface.encodeFunctionData("createEscrow", [
         buyer,
+        seller,
         receiver,
-        uuid: UUID,
-      };
+        market,
+        ethers.utils.parseUnits(priceETH, "ether").toString(),
+        UUID,
+      ]),
+      value: ethers.utils.parseUnits(priceETH, "ether").toString(),
+      gasLimit: 3000000,
+    };
+    console.log(transaction);
 
-      const payUrl = `${protocol}${process.env.REACT_APP_AWS}/product/${id}/pay`;
-      console.log(payUrl, reqBody);
-      const response = axios.post(payUrl, reqBody);
+    const reqBody = {
+      buyer,
+      receiver,
+      uuid: UUID,
+    };
 
-      signer
-        .sendTransaction(transaction)
-        .then((response) => {
-          // Handle the successful transaction here
-        })
-        .catch((error) => {
-          setLoading(false);
-          alert("거래가 취소되었습니다.");
-        });
+    const payUrl = `${protocol}${process.env.REACT_APP_AWS}/product/${id}/pay`;
+    console.log(payUrl, reqBody);
+    const response = axios.post(payUrl, reqBody);
 
-      console.log("Transaction sign post body: ", {
-        buyer,
-        receiver,
-        uuid: UUID,
+    signer
+      .sendTransaction(transaction)
+      .then((response) => {
+        // Handle the successful transaction here
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert("거래가 취소되었습니다.");
       });
 
-      console.log(response);
+    console.log("Transaction sign post body: ", {
+      buyer,
+      receiver,
+      uuid: UUID,
+    });
 
-      if (await response) {
-        alert("정상적으로 선물을 보냈습니다! 선물함으로 이동합니다.");
-        navigate("/gift");
-      }
-    } catch (error) {
-      console.log("선물보내기에서 오류", error);
-      alert("선물을 보내지못했습니다ㅠㅠ");
-    } finally {
-      setLoading(false);
+    console.log(response);
+
+    if (await response) {
+      alert("정상적으로 선물을 보냈습니다! 선물함으로 이동합니다.");
+      navigate("/gift");
     }
+    // } catch (error) {
+    //   console.log("선물보내기에서 오류", error);
+    //   alert("선물을 보내지못했습니다ㅠㅠ");
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   const sendGift = async () => {
