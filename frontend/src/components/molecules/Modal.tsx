@@ -33,7 +33,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
   const runEthers = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const address = walletAddress;
-    const signer = provider.getSigner(address);
+    const signer = provider.getSigner();
     const UUID = uuid();
 
     const buyer = address;
@@ -85,7 +85,6 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
         alert("거래가 취소되었습니다.");
       });
 
-
     console.log("Transaction sign post body: ", {
       buyer,
       receiver,
@@ -97,7 +96,6 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     if (await response) {
       alert("정상적으로 선물을 보냈습니다! 선물함으로 이동합니다.");
       navigate("/gift");
-
     }
     // } catch (error) {
     //   console.log("선물보내기에서 오류", error);
