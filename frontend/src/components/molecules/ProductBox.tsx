@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { ethIcon } from "../../images/Icon";
 import { Product } from "../../pages/Main";
 import { viewImg1 } from "../../images/Product";
 import { formatEther } from "@ethersproject/units";
@@ -17,11 +17,11 @@ const ProductBox: React.FC<iProductBox> = ({ product }) => {
     <Link to={`/product/${product.id}`}>
       <div
         className={cn(
-          "p-4 shadow-xl rounded-md bg-slate-200 hover:scale-105 duration-200",
+          "drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)] rounded-md  hover:scale-105 duration-200",
           ""
         )}
       >
-        <div className="rounded-md">
+        <div className="rounded-tl-lg rounded-tr-lg">
           <img
             className={cn(
               "w-[220px] h-[225px] ",
@@ -36,8 +36,13 @@ const ProductBox: React.FC<iProductBox> = ({ product }) => {
             alt=""
           />
         </div>
-        <p className="py-2 font-extrabold">{product.title}</p>
-        <p className="text-[18px]">{priceETH} ETH</p>
+        <div className="">
+          <p className="py-2 pl-2 text-xl font-extrabold">{product.title}</p>
+          <div className="flex flex-row p-2">
+            <img src={ethIcon} alt="" className="w-[30px] h-[30px]" />
+            <p className="text-[18px] text-slate-400 pl-2">{priceETH}</p>
+          </div>
+        </div>
       </div>
     </Link>
   );

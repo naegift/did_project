@@ -66,7 +66,7 @@ const MyStoreList: React.FC = () => {
   const [isFocused, setIsfocused] = useState(0);
   const refKeyword = useObserver(1, setIsfocused);
   const refCategory = useObserver(2, setIsfocused);
-
+  const protocol = window.location.href.split("//")[0] + "//";
   const changePage = async (pageNumber: number) => {
     setPage(pageNumber);
   };
@@ -101,9 +101,7 @@ const MyStoreList: React.FC = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get<Data>(
-        `${
-          process.env.REACT_APP_AWS || process.env.REACT_APP_API
-        }/store?seller=${seller}&page=${page}&order=${order}`
+        `${protocol}${process.env.REACT_APP_AWS}/store?seller=${seller}&page=${page}&order=${order}`
       );
 
       setTotalPage(response.data.totalPages);
@@ -117,9 +115,7 @@ const MyStoreList: React.FC = () => {
   const fetchGifts = async () => {
     try {
       const responseGift = await axios.get<DataGift>(
-        `${
-          process.env.REACT_APP_AWS || process.env.REACT_APP_API
-        }/store/verified?seller=${seller}&page=${page}&order=${order}`
+        `${protocol}${process.env.REACT_APP_AWS}/store/verified?seller=${seller}&page=${page}&order=${order}`
       );
       setGifts(responseGift.data.gifts);
       setGiftTotalPage(responseGift.data.totalPages);
