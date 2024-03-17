@@ -32,13 +32,12 @@ const Main: React.FC = () => {
   const changePage = async (pageNumber: number) => {
     setPage(pageNumber);
   };
+  const protocol = window.location.href.split("//")[0] + "//";
 
   const mainData = async (page: number) => {
     try {
       const response = await axios.get<Data>(
-        `${
-          process.env.REACT_APP_AWS || process.env.REACT_APP_API
-        }/?page=${page}&order=${order}`
+        `${protocol}${process.env.REACT_APP_AWS}/?page=${page}&order=${order}`
       );
 
       setProduct(response.data.products);
@@ -51,9 +50,7 @@ const Main: React.FC = () => {
   const latestData = async () => {
     try {
       const latestRes = await axios.get<Data>(
-        `${
-          process.env.REACT_APP_AWS || process.env.REACT_APP_API
-        }/?page=1&order=desc`
+        `${protocol}${process.env.REACT_APP_AWS}/?page=1&order=desc`
       );
       console.log(latestRes.data.products);
       setLatestProduct(latestRes.data.products);

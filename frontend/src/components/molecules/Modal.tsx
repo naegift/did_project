@@ -28,6 +28,8 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
   const priceETH = formatEther(product.price);
   const navigate = useNavigate();
 
+  const protocol = window.location.href.split("//")[0] + "//";
+
   const runEthers = async () => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -70,9 +72,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
         uuid: UUID,
       };
 
-      const payUrl = `${
-        process.env.REACT_APP_API || process.env.REACT_APP_AWS
-      }/product/${id}/pay`;
+      const payUrl = `${protocol}${process.env.REACT_APP_AWS}/product/${id}/pay`;
       console.log(payUrl, reqBody);
       const response = axios.post(payUrl, reqBody);
 

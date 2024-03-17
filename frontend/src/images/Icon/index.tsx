@@ -13,6 +13,7 @@ import itemIcon from "./itemIcon.png";
 import personIcon from "./personIcon.png";
 import saleIcon from "./saleIcon.png";
 import messageIcon from "./messageIcon.png";
+import ethIcon from "./ethIcon.png";
 
 export {
   userIcon,
@@ -30,4 +31,5 @@ export {
   personIcon,
   saleIcon,
   messageIcon,
+  ethIcon,
 };

@@ -24,6 +24,7 @@ const WriteModal: React.FC<ModalProps> = ({
   price,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const protocol = window.location.href.split("//")[0] + "//";
   const navigate = useNavigate();
   const handleRegistration = async () => {
     onClose();
@@ -39,7 +40,7 @@ const WriteModal: React.FC<ModalProps> = ({
       formData.append("signature", signature);
 
       const response = await axios.post(
-        `${process.env.REACT_APP_API || process.env.REACT_APP_AWS}/product`,
+        `${protocol}${process.env.REACT_APP_AWS}/product`,
         formData,
         {
           headers: {
