@@ -6,6 +6,7 @@ import Modal from "./Modal";
 import { runEthers } from "../../utils/ethers";
 import { formatEther } from "@ethersproject/units";
 import { cn } from "../../utils/cn";
+import { useNavigate } from "react-router-dom";
 
 interface viewBoxData {
   product: Product;
@@ -18,6 +19,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isInputValid, setIsInputValid] = useState(false);
+  const navigate = useNavigate();
 
   const openModal = () => {
     if (window.innerWidth <= 1024) {
@@ -82,14 +84,14 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
           }
         );
         console.log("Product deleted successfully:", response.data);
-        window.location.href = `/store`;
+        navigate("/store");
       } else {
         console.error("Cannot delete other seller's product.");
-        window.location.href = `/`;
+        navigate("/");
       }
     } catch (error) {
       console.error("Error deleting product:", error);
-      window.location.href = `/`;
+      navigate("/");
     }
   };
 

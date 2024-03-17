@@ -4,6 +4,7 @@ import axios from "axios";
 import { runEthers } from "../../utils/ethers";
 import Loading from "../organisms/Loading";
 import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
 
 interface ModalProps {
   onClose: () => void;
@@ -23,6 +24,7 @@ const WriteModal: React.FC<ModalProps> = ({
   price,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const handleRegistration = async () => {
     onClose();
     setIsLoading(true);
@@ -45,21 +47,23 @@ const WriteModal: React.FC<ModalProps> = ({
           },
         }
       );
-
-      console.log("Product registered:", response.data);
-
       const productId = response.data.id;
-      console.log(file, title, content, price, signature);
-
-      window.location.href = `/product/${productId}`;
+      if (response.status === 404) {
+        alert("페이지를 찾을 수 없습니다.");
+        navigate("/");
+      } else {
+        navigate(`/product/${productId}`);
+      }
     } catch (error) {
       console.error("Error registering product:", error);
+      navigate("/");
     } finally {
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
     }
   };
+
   return (
     <div className="fixed inset-0 bg-black opacity-80">
       {isLoading && <Loading />}
