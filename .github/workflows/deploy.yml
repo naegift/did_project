@@ -23,7 +23,7 @@ jobs:
           REACT_APP_MARKET_ADDRESS=${{ secrets.REACT_APP_MARKET_ADDRESS }} \
           REACT_APP_PROXY_ADDRESS=${{ secrets.REACT_APP_PROXY_ADDRESS }} \
           REACT_APP_TARGET_CHAINID=${{ secrets.REACT_APP_TARGET_CHAINID }} \
-          echo "$REACT_APP_AWS" \
+          echo "${{ secrets.$REACT_APP_AWS }}" \
           npm run build
         working-directory: ./frontend
       - name: SHOW AWS CLI VERSION
