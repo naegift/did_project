@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import { useRecoilState } from "recoil";
 import { walletState } from "../recoil/walletState";
 import { streamIdState } from "../recoil/streamState";
+import { ENCRYPTION_TYPE } from "@pushprotocol/restapi/src/lib/constants";
 
 // 사용자 지갑과 구독을 관리하는 커스텀 훅
 const useWalletAndSubscribe = () => {
@@ -42,10 +43,14 @@ const useWalletAndSubscribe = () => {
         try {
             const initializedUser = await PushAPI.initialize(signer, {
                 env: CONSTANTS.ENV.PROD,
-                version: "eip191-aes256-gcm-hkdf-sha256",
             });
-            console.log(initializedUser);
-            setUser(initializedUser);
+
+            const PGP_V3 = "eip191-aes256-gcm-hkdf-sha256";
+            const encryptionUpdate = await initializedUser.encryption.update(
+                PGP_V3 as ENCRYPTION_TYPE
+            );
+            console.log(encryptionUpdate);
+            setUser(encryptionUpdate);
 
             const subscriptions =
                 await initializedUser.notification.subscriptions();
