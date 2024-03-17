@@ -92,8 +92,6 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
         uuid: UUID,
       });
 
-      console.log(response);
-
       if (await response) {
         alert("정상적으로 선물을 보냈습니다! 선물함으로 이동합니다.");
         navigate("/gift");
