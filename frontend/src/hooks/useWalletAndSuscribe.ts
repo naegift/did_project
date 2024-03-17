@@ -47,8 +47,9 @@ const useWalletAndSubscribe = () => {
         }
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
+        const wallets = await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner(wallets[0]);
+        console.log("signer", signer);
 
         const handleChainChanged = async (chainId: string) => {
             console.log(chainId);
@@ -80,6 +81,7 @@ const useWalletAndSubscribe = () => {
 
         const initializedUser = await PushAPI.initialize(signer, {
             env: CONSTANTS.ENV.STAGING,
+            version: "eip191-aes256-gcm-hkdf-sha256",
         });
         console.log(initializedUser);
         setUser(initializedUser);
