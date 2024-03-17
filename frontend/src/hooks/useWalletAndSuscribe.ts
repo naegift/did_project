@@ -42,6 +42,7 @@ const useWalletAndSubscribe = () => {
         try {
             const initializedUser = await PushAPI.initialize(signer, {
                 env: CONSTANTS.ENV.PROD,
+                version: "eip191-aes256-gcm-hkdf-sha256",
             });
             console.log(initializedUser);
             setUser(initializedUser);
