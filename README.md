@@ -22,13 +22,13 @@
 
 ## 기술 스택
 
-![기술 스택](https://github.com/naegift/did_project/assets/67108705/3faeeb8a-f4e9-40f4-a885-46e8a42523e8)
+![기술 스택](https://github.com/naegift/did_project/assets/67108705/154b44dd-2c34-4e37-9b90-d006fe8ab53a)
 
 ## 기술 설명
 
 ### DID
 
-![DID](https://github.com/naegift/did_project/assets/67108705/154b44dd-2c34-4e37-9b90-d006fe8ab53a)
+![DID](https://github.com/naegift/did_project/assets/67108705/3faeeb8a-f4e9-40f4-a885-46e8a42523e8)
 
 ### VC / Lifecycle
 
