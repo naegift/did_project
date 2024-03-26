@@ -64,36 +64,42 @@ const useWalletAndSubscribe = () => {
   // 지갑 연결
   const connectWallet = async () => {
     if (!window.ethereum) {
-      alert("메타마스크를 설치해주세요.");
+      console.error("메타마스크를 설치해주세요.");
       return;
     }
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
 
-    const handleChainChanged = async () => {
-      const chainId = await window.ethereum.request({ method: "eth_chainId" });
-      console.log(chainId);
-
-      if (chainId !== process.env.REACT_APP_TARGET_CHAINID) {
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [
-            {
-              chainId: process.env.REACT_APP_TARGET_CHAINID,
-            },
-          ],
+      const handleChainChanged = async () => {
+        const chainId = await window.ethereum.request({
+          method: "eth_chainId",
         });
-        window.location.reload();
-      }
-    };
+        console.log(chainId);
 
-    await handleChainChanged();
+        if (chainId !== process.env.REACT_APP_TARGET_CHAINID) {
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [
+              {
+                chainId: process.env.REACT_APP_TARGET_CHAINID,
+              },
+            ],
+          });
+          window.location.reload();
+        }
+      };
 
-    window.ethereum.on("chainChanged", handleChainChanged);
+      await handleChainChanged();
 
-    await initializeUserAndStream(signer);
+      window.ethereum.on("chainChanged", handleChainChanged);
+
+      await initializeUserAndStream(signer);
+    } catch (error) {
+      console.error("지갑 연결 중 오류 발생:", error);
+    }
   };
 
   // 계정 변경 감지 및 처리
