@@ -25,7 +25,7 @@ const ProductBox: React.FC<iProductBox> = ({ product }) => {
           <img
             className={cn(
               "rounded-tl-lg rounded-tr-lg",
-              "w-[220px] h-[225px] ",
+              "w-[350px] h-[270px] ",
               "tablet:w-[240px] tablet:h-[265px]",
               "mobile:w-[250px] mobile:h-[275px]"
             )}
@@ -41,7 +41,7 @@ const ProductBox: React.FC<iProductBox> = ({ product }) => {
           <p className="py-2 pl-2 text-xl font-extrabold  ">{product.title}</p>
           <div className="flex flex-row p-2">
             <img src={ethIcon} alt="" className="w-[30px] h-[30px]" />
-            <p className="text-[18px] text-slate-400 pl-2">{priceETH}</p>
+            <p className="text-[18px] text-slate-400 pl-2">{priceETH} ETH</p>
           </div>
         </div>
       </div>

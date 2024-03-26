@@ -50,7 +50,7 @@ const WriteModal: React.FC<ModalProps> = ({
       );
       const productId = response.data.id;
       if (response.status === 404) {
-        alert("페이지를 찾을 수 없습니다.");
+        alert("Page Not Found.");
         navigate("/");
       } else {
         navigate(`/product/${productId}`);
@@ -68,24 +68,19 @@ const WriteModal: React.FC<ModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black opacity-80">
       {isLoading && <Loading />}
-      <div className="w-full y-full flex justify-center flex-col items-center mt-[100px] gap-y-10">
+      <div className="w-full y-full flex justify-center flex-col items-center mt-[200px] gap-y-10">
         <p className="text-white">Title: {title}</p>
-        <p className="text-white text-wrap">Image: {file ? file.name : ""}</p>
-        <p className="text-white">Price: {price} eth</p>
+        <p className="text-white text-wrap">Item: {file ? file.name : ""}</p>
+        <p className="text-white">Price: {price} ETH</p>
         <p className="text-white text-wrap">Content: {content}</p>
       </div>
       <div className="flex flex-row  justify-center my-[50px] gap-x-5">
-        <Button
-          variant="iconTextBtn"
-          size="mdl"
-          label="뒤로"
-          onClick={onClose}
-        />
+        <Button variant="sendBtn2" size="mdl" label="Back" onClick={onClose} />
 
         <Button
           variant="sendBtn1"
           size="mdl"
-          label="등록"
+          label="Register"
           onClick={handleRegistration}
         />
       </div>

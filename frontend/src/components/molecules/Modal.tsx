@@ -82,7 +82,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
       })
       .catch((error) => {
         setLoading(false);
-        alert("거래가 취소되었습니다.");
+        alert("The transaction has been canceled");
       });
 
     console.log("Transaction sign post body: ", {
@@ -94,7 +94,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     console.log(response);
 
     if (await response) {
-      alert("정상적으로 선물을 보냈습니다! 선물함으로 이동합니다.");
+      alert("Your gift has been sent successfully! Moving to the gift box");
       navigate("/gift");
     }
     // } catch (error) {
@@ -109,7 +109,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     if (receiverInput.trim() !== "") {
       await runEthers();
     } else {
-      alert("받는 사람 지갑 주소를 입력해주세요.");
+      alert("Please enter the recipient's wallet address.");
     }
   };
 
@@ -125,10 +125,10 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
             </div>
             <div className="py-2 text-center">
               <h3 className="text-2xl py-3 text-gray-900 ">
-                {product.title} 선물 보내기
+                {product.title} Send a gift
               </h3>
 
-              <p className="py-3">금액 : {priceETH} ETH </p>
+              <p className="py-3">Price : {priceETH} ETH </p>
 
               <Inputs
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -136,7 +136,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
                 }
                 type="text"
                 size="xlg"
-                placeholder="받는 사람 지갑 주소를 입력해주세요"
+                placeholder="Please input the recipient's wallet address"
               />
             </div>
             <div className="px-4 py-3 flex justify-center ">
@@ -167,14 +167,14 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  <span className="font-bold">잠시만 기다려주세요..!</span>
+                  <span className="font-bold">Please wait a moment..!</span>
                 </div>
               ) : (
                 <Button
                   onClick={sendGift}
                   variant="sendBtn2"
                   size="lg"
-                  label="결제 후 선물보내기"
+                  label="After payment, send the gift."
                 />
               )}
             </div>

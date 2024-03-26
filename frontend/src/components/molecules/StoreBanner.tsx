@@ -32,7 +32,7 @@ const StoreBanner = () => {
             className="mobile:h-[30px] mobile:w-[30px]"
             onClick={() => scrollToComponent("myProductList")}
           />
-          <p className="">아이템</p>
+          <p className="">Items</p>
         </button>
         <button className="flex flex-col items-center">
           <img
@@ -41,7 +41,7 @@ const StoreBanner = () => {
             className="mobile:h-[30px] mobile:w-[30px]"
             onClick={() => scrollToComponent("MyVerifiedBox")}
           />
-          <p>활동</p>
+          <p>Activity</p>
         </button>
         <button className="flex flex-col items-center">
           <img
@@ -50,7 +50,7 @@ const StoreBanner = () => {
             className="mobile:h-[30px] mobile:w-[30px]"
             onClick={toggleModal}
           />
-          <p>메세지</p>
+          <p>Message</p>
         </button>
       </div>
 

@@ -27,7 +27,7 @@ const RegistSellNft: React.FC = () => {
       isNaN(Number(productData.price)) ||
       Number(productData.price) <= 0
     ) {
-      alert("모든 입력 필드를 채워주세요.");
+      alert("Please fill out all input fields.");
       return;
     }
     setModalOpen(true);
@@ -46,11 +46,11 @@ const RegistSellNft: React.FC = () => {
       <div className="flex flex-col justify-center w-[500px] mx-[auto] mt-6">
         <RegistrationNFT onChange={setProductData} />
         <div className="flex flex-row mx-[auto] p-4 gap-x-1.5">
-          <Button variant="iconTextBtn" size="mdl" label="취소" />
+          <Button variant="iconTextBtn" size="mdl" label="Cancel" />
           <Button
             variant="sendBtn1"
             size="mdl"
-            label="저장"
+            label="Save"
             onClick={openWriteModal}
           />
           {modalOpen && (

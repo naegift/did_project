@@ -21,9 +21,11 @@ const PayBox: React.FC<GiftListData> = ({ payItem }) => {
           {payItem.title}
         </p>
         <p>
-          선물 보낸 날짜 : <DateTime dateString={payItem.updatedAt} />
+          Date : <DateTime dateString={payItem.updatedAt} />
         </p>
-        <p>상태 : {payItem.state !== "active" ? "사용 완료" : "사용전"}</p>
+        <p>
+          State : {payItem.state !== "active" ? "Finish use" : "Before use"}
+        </p>
         <p className="mobile:truncate">To : {payItem.receiver}</p>
       </div>
     </>
