@@ -199,7 +199,7 @@ const MyStoreList: React.FC = () => {
         <div className="flex flex-col  w-[500px] h-[300px] sticky top-[200px] mobile:hidden">
           <div className="flex flex-row justify-around p-2 ">
             <img src={personIcon} alt="" className="w-[30px] h-[30px]" />
-            <h1>소유자 주소</h1>
+            <h1>Owner's Address</h1>
             <div className="overflow-hidden text-ellipsis whitespace-nowrap w-[170px]">
               {seller}
             </div>
@@ -231,7 +231,7 @@ const MyStoreList: React.FC = () => {
             onClick={() => scrollToComponent("myProductList")}
           >
             <img src={itemIcon} alt="" className="w-9 h-9" />
-            <h1>아이템 목록</h1>
+            <h1>Items</h1>
           </button>
           <button
             className={`flex flex-row gap-10 pl-7  border p-8 ${
@@ -242,14 +242,14 @@ const MyStoreList: React.FC = () => {
             onClick={() => scrollToComponent("MyVerifiedBox")}
           >
             <img src={saleIcon} alt="" className="w-9 h-9" />
-            <h1 className="pt-2">활동</h1>
+            <h1 className="pt-2">Activity</h1>
           </button>
           <button
             className="flex flex-row gap-10 pl-7  border p-8"
             onClick={toggleModal}
           >
             <img src={messageIcon} alt="" className="w-9 h-9" />
-            <h1 className="pt-2">메세지</h1>
+            <h1 className="pt-2">Message</h1>
           </button>
           {showModal && (
             <MyNotificationBox
@@ -268,13 +268,13 @@ const MyStoreList: React.FC = () => {
               <Button
                 variant="basicBtn2"
                 size="md"
-                label="최신순"
+                label="Latest"
                 onClick={() => orderChange("desc")}
               />
               <Button
                 variant="basicBtn2"
                 size="md"
-                label="과거순"
+                label="Past"
                 onClick={() => orderChange("asc")}
               />
             </div>
@@ -305,13 +305,13 @@ const MyStoreList: React.FC = () => {
                 <Button
                   variant="basicBtn2"
                   size="md"
-                  label="최신순"
+                  label="Latest"
                   onClick={() => orderChangeGift("desc")}
                 />
                 <Button
                   variant="basicBtn2"
                   size="md"
-                  label="과거순"
+                  label="Past"
                   onClick={() => orderChangeGift("asc")}
                 />
               </div>

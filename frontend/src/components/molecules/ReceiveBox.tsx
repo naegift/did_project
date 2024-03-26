@@ -20,7 +20,9 @@ interface GiftListData {
 const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
   const { walletAddress: address } = useRecoilValue(walletState);
   const [btnState, setBtnState] = useState<string>("active");
-  const [item, setItem] = useState<string>("선물받기 버튼을 눌러주세요");
+  const [item, setItem] = useState<string>(
+    "Please press the 'Receive Gift' button."
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const protocol = window.location.href.split("//")[0] + "//";
   useEffect(() => {
@@ -30,11 +32,11 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
   const states: {
     [key: string]: string;
   } = {
-    issued: "사용 가능",
-    active: "선물받기 버튼을 눌러주세요",
-    fulfilled: "상품 준비중",
-    productUsed: "사용 완료",
-    executed: "사용 완료",
+    issued: "Available",
+    active: "Please press the 'Receive Gift' button.",
+    fulfilled: "Preparing the product",
+    productUsed: "Used completed",
+    executed: "Used completed",
   };
 
   useEffect(() => {
@@ -54,8 +56,8 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
       console.log("confirmed result: ", confirmRes);
       if (confirmRes.data.success) {
         setBtnState("executed");
-        setItem("사용 완료");
-      } else alert("수령 확인에 실패했습니다.");
+        setItem("Used completed");
+      } else alert("Failed to confirm receipt.");
     } catch (error) {
       console.error("수령하기에서 오류 발생:", error);
     } finally {
@@ -100,13 +102,13 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
 
       if (verifyRes.data.success) {
         setBtnState("fulfilled");
-        setItem("상품 준비중");
+        setItem("Product preparing");
       } else {
-        alert("검증 로직 서버 에러.");
+        alert("Validation logic server error.");
       }
     } catch (error) {
       console.error("사용하기에서 오류 발생:", error);
-      alert("상품 사용하기에 실패했습니다.");
+      alert("Failed to use the product.");
     } finally {
       setLoading(false);
     }
@@ -150,13 +152,12 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
         success: saveVC.success,
       });
 
-      console.log("선물 받기 값 확인중...", successRes.data.success);
       if (successRes.data.success) {
         setBtnState("issued");
-        setItem("사용 가능");
+        setItem("Available");
       } else {
         alert(
-          "디지털 바우처 발급을 거절하셨습니다. 선물을 받으시려면 승인이 필요합니다."
+          "You have declined the issuance of the digital voucher. Approval is required to receive the gift."
         );
       }
     } catch (error) {
@@ -187,18 +188,18 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
     ) {
       verify();
     } else {
-      alert("선물 사용하기가 취소되었습니다.");
+      alert("The gift usage has been cancelled.");
     }
   };
 
   const fulfilledConfirmCheck = () => {
     if (
       window.confirm(
-        "선물 수령 후에는 취소가 불가능합니다. 수령 확인하시겠습니까?"
+        "After receiving the gift, it cannot be cancelled. Would you like to confirm receipt?"
       )
     ) {
       confirm();
-    } else alert("수령 확인이 취소되었습니다.");
+    } else alert("The confirmation of receipt has been cancelled.");
   };
 
   return (
@@ -214,9 +215,9 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
         <div className="flex flex-col gap-1 ">
           <p className="text-lg font-extrabold">{receivedItem.title}</p>
           <p>
-            선물 받은 날짜 : <DateTime dateString={receivedItem.updatedAt} />
+            Date received : <DateTime dateString={receivedItem.updatedAt} />
           </p>
-          <p>상태 : {item}</p>
+          <p>State : {item}</p>
           <p className="tablet:hidden">From : {receivedItem.buyer}</p>
         </div>
         {(receivedItem.state === "issued" ||
@@ -258,21 +259,21 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
                     onClick={issuedConfirmCheck}
                     variant="sendBtn1"
                     size="dd"
-                    label="사용하기"
+                    label="Use"
                   />
                 ) : btnState === "active" ? (
                   <Button
                     onClick={activeConfirmCheck}
                     variant="basicBtn"
                     size="dd"
-                    label="선물받기"
+                    label="Receive gift"
                   />
                 ) : btnState === "fulfilled" ? (
                   <Button
                     onClick={fulfilledConfirmCheck}
                     variant="sendBtn1"
                     size="dd"
-                    label="수령확인"
+                    label="Confirmation of receipt"
                   />
                 ) : null}
               </div>

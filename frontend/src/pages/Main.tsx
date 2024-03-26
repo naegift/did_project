@@ -80,12 +80,12 @@ const Main: React.FC = () => {
           "mobile:px-5 mobile:flex-col"
         )}
       >
-        <span className="text-xl font-extrabold">지금 올라온 NEW!</span>
+        <span className="text-2xl font-extrabold">New collections!</span>
       </div>
 
       <div
         className={cn(
-          "w-4/5 flex flex-row pb-20 pt-[50px] gap-7 px-20 mx-auto",
+          "w-4/5 flex flex-row pb-20 pt-[10px] gap-7 px-20 mx-auto",
           "note:w-full",
           "tablet:w-full tablet:flex-wrap tablet:px-16 tablet:gap-12",
           "mobile:flex-wrap mobile:px-6"
@@ -106,24 +106,24 @@ const Main: React.FC = () => {
       </div> */}
       <div
         className={cn(
-          "w-4/5 flex flex-row py-5  px-20 mx-auto items-center justify-between pr-[20%]",
+          "w-4/5 flex flex-row py-5  px-20 mx-auto items-center justify-between ",
           "note:w-full",
           "tablet:w-full tablet:px-14",
           "mobile:px-5 mobile:flex-col"
         )}
       >
-        <span className="text-xl font-extrabold">전체 상품 리스트</span>
+        <span className="text-2xl font-extrabold">All collections</span>
         <div className="flex flex-row gap-8">
           <Button
             variant="basicBtn2"
             size="md"
-            label="최신순"
+            label="Latest"
             onClick={() => orderChange("desc")}
           />
           <Button
             variant="basicBtn2"
             size="md"
-            label="과거순"
+            label="Past"
             onClick={() => orderChange("asc")}
           />
         </div>

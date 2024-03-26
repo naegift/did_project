@@ -48,14 +48,14 @@ const Header: React.FC = () => {
       {menu && <Menu menu={menu} setMenu={setMenu} />}
       <div className="flex flex-row gap-10 items-center">
         <Link to="/product" className="tablet:hidden mobile:hidden">
-          <Button variant="sendBtn2" size="mdl" label="상품등록하기" />
+          <Button variant="sendBtn2" size="mdl" label="Product" />
         </Link>
         <Link to="/store" className="tablet:hidden mobile:hidden">
           <Button variant="sendBtn2" size="mdl" label="SELLER" />
         </Link>
 
         <Link to="/gift" className="tablet:hidden mobile:hidden">
-          <Button variant="sendBtn2" size="mdl" label="선물함" />
+          <Button variant="sendBtn2" size="mdl" label="Gift Box" />
         </Link>
 
         {sellerWallets.walletAddress ? (

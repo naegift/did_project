@@ -58,7 +58,7 @@ const RegistrationNFT: React.FC<RegistrationNFTProps> = ({ onChange }) => {
             className="hidden"
             onChange={handleFileChange}
           />
-          {!imagePreview && <span className="text-gray-500">Select Image</span>}
+          {!imagePreview && <span className="text-gray-500">Select Items</span>}
         </label>
       </label>
       <div className="relative w-[80%] ml-[50px] mt-[100px]">
