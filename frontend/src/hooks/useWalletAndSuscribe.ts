@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
 import { ethers } from "ethers";
-import { useRecoilState /* useSetRecoilState */ } from "recoil";
+import { useRecoilState } from "recoil";
 import { walletState } from "../recoil/walletState";
 import { streamIdState } from "../recoil/streamState";
-/* import { pushAPIState } from "../recoil/pushAPIState";
- */
+
 // 사용자 지갑과 구독을 관리하는 커스텀 훅
 const useWalletAndSubscribe = () => {
   const [notificationData, setNotificationData] = useState<any[]>([]);
@@ -13,8 +12,7 @@ const useWalletAndSubscribe = () => {
   const [user, setUser] = useState<any | null>(null);
   const [sellerWallets, setSellerWallets] = useRecoilState(walletState);
   const [streamId, setStreamId] = useRecoilState(streamIdState);
-  /*   const setPushAPI = useSetRecoilState(pushAPIState);
-   */
+
   // 채널 주소
   const channelAddress = "0x3C51F308502c5fde8c7C1Fa39d35aA621838F7DF";
 
@@ -81,8 +79,7 @@ const useWalletAndSubscribe = () => {
     });
     console.log(initializedUser);
     setUser(initializedUser);
-    /*     setPushAPI(initializedUser);
-     */
+
     const subscriptions = await initializedUser.notification.subscriptions();
     const isSubscribed = subscriptions.some(
       (sub: any) => sub.channel.toLowerCase() === channelAddress.toLowerCase()
@@ -95,6 +92,11 @@ const useWalletAndSubscribe = () => {
 
     await initRealTimeNotificationStream(initializedUser);
   };
+
+  // 지갑 연결 및 스트림 초기화
+  useEffect(() => {
+    connectWallet();
+  }, []);
 
   // 계정 변경 감지 및 처리
   useEffect(() => {
@@ -130,17 +132,20 @@ const useWalletAndSubscribe = () => {
       }
     };
 
-    window.ethereum.on("accountsChanged", handleAccountsChanged);
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", handleAccountsChanged);
 
-    return () => {
-      window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
-    };
+      return () => {
+        window.ethereum.removeListener(
+          "accountsChanged",
+          handleAccountsChanged
+        );
+      };
+    } else {
+      console.error("메타마스크를 설치해주세요.");
+      // 메타마스크가 설치되어 있지 않음을 사용자에게 알리는 로직을 추가할 수 있습니다.
+    }
   }, [streamInstance, user]);
-
-  // 지갑 연결 및 스트림 초기화
-  useEffect(() => {
-    connectWallet();
-  }, []);
 
   // 컴포넌트 언마운트 시 스트림 인스턴스 연결 해제
   useEffect(() => {
