@@ -21,11 +21,11 @@ const ProductBox: React.FC<iProductBox> = ({ product }) => {
           ""
         )}
       >
-        <div className="">
+        <div className="w-full h-full ">
           <img
             className={cn(
               "rounded-tl-lg rounded-tr-lg",
-              "w-[350px] h-[270px] ",
+              "w-[350px] h-[250px]",
               "tablet:w-[240px] tablet:h-[265px]",
               "mobile:w-[250px] mobile:h-[275px]"
             )}
