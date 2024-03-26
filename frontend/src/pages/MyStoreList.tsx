@@ -258,8 +258,9 @@ const MyStoreList: React.FC = () => {
             />
           )}
         </div>
-        <div className="h-full w-[70%] mt-[20px]">
-          <div id="myProductList">
+
+        <div className="h-full w-[70%] mt-[20px]" id="myProductList">
+          <div>
             <div
               className="flex flex-row py-5 gap-5 px-20 mx-auto items-center"
               ref={refKeyword}
@@ -277,8 +278,9 @@ const MyStoreList: React.FC = () => {
                 onClick={() => orderChange("asc")}
               />
             </div>
-
-            <MyProductList products={product} userAddress={userAddress} />
+            <div className="h-full">
+              <MyProductList products={product} userAddress={userAddress} />
+            </div>
             <div
               className="w-full flex flex-row py-2 gap-5 justify-center items-center"
               ref={refKeyword}
@@ -297,7 +299,7 @@ const MyStoreList: React.FC = () => {
               />
             </div>
           </div>
-          <div className="mt-[400px]" id="MyVerifiedBox">
+          <div className="mt-[600px]" id="MyVerifiedBox">
             <div ref={refCategory}>
               <div className="flex flex-row py-5 gap-5 px-20 mx-auto items-center">
                 <Button

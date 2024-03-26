@@ -74,7 +74,7 @@ const Main: React.FC = () => {
 
       <div
         className={cn(
-          "w-4/5 flex flex-row gap-5 py-8 px-20 mx-auto items-center justify-between ",
+          "w-4/5 flex flex-row gap-5 py-8 px-20 mt-[50px] mx-auto items-center justify-between ",
           "note:w-full",
           "tablet:w-full tablet:px-14",
           "mobile:px-5 mobile:flex-col"
@@ -85,7 +85,7 @@ const Main: React.FC = () => {
 
       <div
         className={cn(
-          "w-4/5 flex flex-row pb-10 gap-7 px-20 mx-auto",
+          "w-4/5 flex flex-row pb-20 pt-[50px] gap-7 px-20 mx-auto",
           "note:w-full",
           "tablet:w-full tablet:flex-wrap tablet:px-16 tablet:gap-12",
           "mobile:flex-wrap mobile:px-6"
@@ -94,7 +94,7 @@ const Main: React.FC = () => {
         <ProductList products={latestProduct} />
       </div>
 
-      <div
+      {/* <div
         className={cn(
           "w-4/5 flex flex-row justify-evenly mx-auto gap-20 px-20 py-10",
           "tablet:flex-col tablet:gap-5 tablet:px-10",
@@ -103,10 +103,10 @@ const Main: React.FC = () => {
       >
         <img src={copy2} alt="" />
         <img src={copy1} alt="" />
-      </div>
+      </div> */}
       <div
         className={cn(
-          "w-4/5 flex flex-row py-5 gap-5 px-20 mx-auto items-center justify-between",
+          "w-4/5 flex flex-row py-5  px-20 mx-auto items-center justify-between pr-[20%]",
           "note:w-full",
           "tablet:w-full tablet:px-14",
           "mobile:px-5 mobile:flex-col"

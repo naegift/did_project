@@ -38,9 +38,7 @@ const ProductBox: React.FC<iProductBox> = ({ product }) => {
           />
         </div>
         <div className="">
-          <p className="py-2 pl-2 text-xl font-extrabold border-b-4 border-slate-300 ">
-            {product.title}
-          </p>
+          <p className="py-2 pl-2 text-xl font-extrabold  ">{product.title}</p>
           <div className="flex flex-row p-2">
             <img src={ethIcon} alt="" className="w-[30px] h-[30px]" />
             <p className="text-[18px] text-slate-400 pl-2">{priceETH}</p>
