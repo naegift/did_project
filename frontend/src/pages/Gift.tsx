@@ -32,8 +32,8 @@ const Gift: React.FC = () => {
     try {
       const url = `${protocol}${process.env.REACT_APP_AWS}/gift?receiver=${_walletAddress}&page=${page}&order=${receiveOrder}`;
       const response = await axios.get(url);
-      console.log(`response from ${url}`, response);
-      console.log(response.data.gifts);
+      // console.log(`response from ${url}`, response);
+      // console.log(response.data.gifts);
       setReceiveProduct(response.data.gifts);
       setReceiveTotalPage(response.data.totalPages);
     } catch (error) {
@@ -45,8 +45,8 @@ const Gift: React.FC = () => {
     try {
       const url = `${protocol}${process.env.REACT_APP_AWS}/gift?buyer=${_walletAddress}&page=${page}&order=${payOrder}`;
       const response = await axios.get(url);
-      console.log(`response from ${url}`, response);
-      console.log(response.data.gifts);
+      // console.log(`response from ${url}`, response);
+      // console.log(response.data.gifts);
       setPayProduct(response.data.gifts);
       setPayTotalPage(response.data.totalPages);
     } catch (error) {
@@ -64,7 +64,6 @@ const Gift: React.FC = () => {
   };
 
   const payPageChange = (pageNumber: number) => {
-    console.log(pageNumber);
     setPayPage(pageNumber);
   };
 

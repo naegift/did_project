@@ -25,7 +25,7 @@ const useWalletAndSubscribe = () => {
           console.log("받은 데이터:", data.message.notification);
           setNotificationData((oldData: any) => [...oldData, data]);
         });
-        console.log("스트림 초기화 완료:", newStream);
+        // console.log("스트림 초기화 완료:", newStream);
         newStream.connect();
         setStreamInstance(newStream);
         setStreamId(newStream.id);
@@ -77,7 +77,6 @@ const useWalletAndSubscribe = () => {
     const initializedUser = await PushAPI.initialize(signer, {
       env: CONSTANTS.ENV.STAGING,
     });
-    console.log(initializedUser);
     setUser(initializedUser);
 
     const subscriptions = await initializedUser.notification.subscriptions();
@@ -93,12 +92,10 @@ const useWalletAndSubscribe = () => {
     await initRealTimeNotificationStream(initializedUser);
   };
 
-  // 지갑 연결 및 스트림 초기화
   useEffect(() => {
     connectWallet();
   }, []);
 
-  // 계정 변경 감지 및 처리
   useEffect(() => {
     const handleAccountsChanged = async (accounts: string[]) => {
       if (accounts.length > 0) {

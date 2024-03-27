@@ -22,10 +22,10 @@ const MainSlider = () => {
     <div className="slider-container slick-slider pb-5 ">
       <Slider {...settings}>
         <div className="">
-          <img src={engBanner2} className="w-full h-[330px]" />
+          <img src={engBanner2} className="w-full" />
         </div>
         <div>
-          <img src={giftBanner4} className="w-full h-[330px]" />
+          <img src={giftBanner4} className="w-full " />
         </div>
         <div>
           <img src={ethBanner} className="w-full" />
