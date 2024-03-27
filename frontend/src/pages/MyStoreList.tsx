@@ -106,7 +106,6 @@ const MyStoreList: React.FC = () => {
 
       setTotalPage(response.data.totalPages);
       setProduct(response.data.products);
-      console.log(response.data);
     } catch (error) {
       console.error("데이터를 불러오는 중 에러 발생:", error);
     }
@@ -119,7 +118,6 @@ const MyStoreList: React.FC = () => {
       );
       setGifts(responseGift.data.gifts);
       setGiftTotalPage(responseGift.data.totalPages);
-      console.log("기프트", responseGift.data);
     } catch (error) {
       console.error("Error fetching gifts:", error);
     }

@@ -38,6 +38,7 @@ const RegistSellNft: React.FC = () => {
       setModalOpen(false);
     } catch (error) {
       console.error("Error registering product:", error);
+      alert("Error registering product");
     }
   };
 

@@ -2,11 +2,6 @@ import { useState, useEffect } from "react";
 import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
 import { ethers } from "ethers";
 
-// interface User {
-//   notification: {
-//     list: (type: "INBOX" | "SPAM") => Promise<any>;
-//   };
-// }
 const useUserAndNotifications = () => {
   const [isInitializing, setIsInitializing] = useState(true);
   const [user, setUserState] = useState<any | null>(null);
@@ -28,11 +23,11 @@ const useUserAndNotifications = () => {
         const initializedUser: any = await PushAPI.initialize(signer, {
           env: CONSTANTS.ENV.STAGING,
         });
-        console.log("사용자 초기화 완료:", initializedUser);
+        // console.log("사용자 초기화 완료:", initializedUser);
         setUserState(initializedUser);
 
         const notifications = await initializedUser.notification.list("INBOX");
-        console.log("알림 목록:", notifications);
+        // console.log("알림 목록:", notifications);
         setInboxNotifications(notifications);
       } catch (error) {
         console.error("사용자 초기화 중 오류 발생:", error);

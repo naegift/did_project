@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Pagination from "react-js-pagination";
 
-import { bannerImg2, copy1, copy2 } from "../images/Banner";
+import { bannerImg2 } from "../images/Banner";
 import ProductList from "../components/templates/ProductList";
 import Button from "../components/atoms/button";
 import { cn } from "../utils/cn";
@@ -52,7 +52,7 @@ const Main: React.FC = () => {
       const latestRes = await axios.get<Data>(
         `${protocol}${process.env.REACT_APP_AWS}/?page=1&order=desc`
       );
-      console.log(latestRes.data.products);
+      // console.log(latestRes.data.products);
       setLatestProduct(latestRes.data.products);
     } catch (error) {
       console.log(error);
