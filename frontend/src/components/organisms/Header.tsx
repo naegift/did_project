@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import useWalletAndSuscribe from "../../hooks/useWalletAndSuscribe";
 import { useRecoilState } from "recoil";
 import Button from "../atoms/button";
-import { logo } from "../../images";
+import { engLogo } from "../../images";
 import { menuIcon } from "../../images/Icon";
 import { walletState } from "../../recoil/walletState";
 import { cn } from "../../utils/cn";
@@ -39,7 +39,7 @@ const Header: React.FC = () => {
       <div>
         <Link to="/">
           <img
-            src={logo}
+            src={engLogo}
             alt=""
             className=" tablet:w-[120px] mobile:w-[150px]"
           />
@@ -60,7 +60,7 @@ const Header: React.FC = () => {
 
         {sellerWallets.walletAddress ? (
           <div className="flex items-center tablet:hidden mobile:hidden">
-            <span className="mr-2">환영합니다</span>
+            <span className="mr-2">Welcome</span>
           </div>
         ) : (
           <Button

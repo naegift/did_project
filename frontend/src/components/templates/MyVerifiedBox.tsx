@@ -23,14 +23,13 @@ const MyVerifiedBox: React.FC<MyVerifiedBoxProps> = ({ gifts }) => {
     <div className="w-full  mobile:w-[400px]">
       <table className="w-full ">
         <tr className="border-b-4 flex flex-row p-[20px] justify-between">
-          <th className="text-center w-[30%]">아이템</th>
-          <th className="text-center w-[10%] ">판매자</th>
-          <th className="text-center w-[10%]">구매자</th>
-          <th className="text-center w-[20%]">수령인</th>
-          <th className="text-center w-[10%]">상태</th>
-          <th className="text-center w-[20%]">날짜</th>
+          <th className="text-center w-[30%]">Items</th>
+          <th className="text-center w-[10%] ">Seller</th>
+          <th className="text-center w-[10%]">Buyer</th>
+          <th className="text-center w-[20%]">Recipient</th>
+          <th className="text-center w-[10%]">State</th>
+          <th className="text-center w-[20%]">Date</th>
         </tr>
-
         {gifts.map((gift) => (
           <tr
             className=" flex flex-row p-[20px] mt-2 justify-between border-b-[3px]"
