@@ -30,7 +30,7 @@ const states: {
 const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
   const { walletAddress: address } = useRecoilValue(walletState);
   const [btnState, setBtnState] = useState<string>("active");
-  const [item, setItem] = useState<string>(states.active);
+  const [item, setItem] = useState<string>(`Please Press 'Receive Gift'`);
   const [loading, setLoading] = useState<boolean>(false);
   const protocol = window.location.href.split("//")[0] + "//";
   useEffect(() => {
@@ -54,7 +54,7 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
       console.log("confirmed result: ", confirmRes);
       if (confirmRes.data.success) {
         setBtnState("executed");
-        setItem(states[receivedItem.state]);
+        setItem("Gift delivered, transaction completed.");
       } else alert("Failed to confirm receipt.");
     } catch (error) {
       console.error("수령하기에서 오류 발생:", error);
@@ -100,7 +100,7 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
 
       if (verifyRes.data.success) {
         setBtnState("fulfilled");
-        setItem(states[receivedItem.state]);
+        setItem("The seller is preparing the product.");
       } else {
         alert("Validation logic server error.");
       }
@@ -152,7 +152,7 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
 
       if (successRes.data.success) {
         setBtnState("issued");
-        setItem(states[receivedItem.state]);
+        setItem(`You can use the gift. Please press 'Use Gift'.`);
       } else {
         alert(
           "You have declined the issuance of the digital voucher. Approval is required to receive the gift."

@@ -145,7 +145,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
     >
       <div className="mobile:px-5">
         <img
-          className="w-[324px] h-[324px]"
+          className="w-[320px] h-[300px] object-cover rounded-lg"
           src={imageFile ? URL.createObjectURL(imageFile) : updatedData.image}
           alt=""
         />
