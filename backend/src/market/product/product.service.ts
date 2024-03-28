@@ -13,7 +13,7 @@ import { Repository } from 'typeorm';
 import { ethers } from 'ethers';
 import { ReqPayProduct } from './dto/req-pay-product.dto';
 import { ResPayProduct } from './dto/res-pay-product.dto';
-import { FACTORY_ABI } from 'src/__base-code__/abi/factory.abi';
+import { ESCROW_ABI } from 'src/__base-code__/abi/escrow.abi';
 import { GiftModel } from 'src/__base-code__/entity/gift.entity';
 import { MockGiftModel } from 'src/__base-code__/mock/entity/gift.mock';
 import { ImageService } from 'src/common/image/image.service';
@@ -112,7 +112,7 @@ export class ProductService {
       );
       const contract = new ethers.Contract(
         process.env.PROXY_CONTRACT || MockGiftModel.proxyAddress,
-        FACTORY_ABI,
+        ESCROW_ABI,
         provider,
       );
       console.log('생성 전');
@@ -156,8 +156,7 @@ export class ProductService {
           });
         } else {
           console.log('과거 이벤트 미발견, 이벤트 구독');
-
-          const handler = async (escrowAddress, escrowUUID) => {
+          const handler = async (escrowUUID) => {
             console.log('이벤트 발생');
             if (uuid === escrowUUID) {
               console.log('UUID 일치');
@@ -171,7 +170,7 @@ export class ProductService {
                 price: product.price,
                 seller: product.seller,
                 state: State.ACTIVE,
-                contract: escrowAddress,
+                uuid: escrowUUID,
               });
               contract.off('EscrowCreated', handler);
               resolve(newGift);

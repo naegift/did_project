@@ -71,7 +71,7 @@ export class GiftService {
     const provider = new ethers.providers.JsonRpcProvider(
       process.env.NETWORK_RPC || MockGiftModel.network,
     );
-    const escrow = new ethers.Contract(gift.contract, ESCROW_ABI, provider);
+    const escrow = new ethers.Contract(gift.uuid, ESCROW_ABI, provider);
 
     const code = Number(await escrow.escrowStatus());
 
@@ -131,7 +131,7 @@ export class GiftService {
         id: `did:ethr:${process.env.TARGET_CHAINID}:${gift.receiver}`,
         type: 'DigitalVoucher',
         giftID: gift.id,
-        contract: gift.contract,
+        contract: gift.uuid,
         buyer: gift.buyer,
         receiver: gift.receiver,
         title: gift.title,
@@ -187,7 +187,7 @@ export class GiftService {
     if (verificationResult.verified) {
       const gift = await this.getGift(id);
 
-      console.log(gift.contract);
+      console.log(gift.uuid);
 
       try {
         const provider = new ethers.providers.JsonRpcProvider(
@@ -199,7 +199,7 @@ export class GiftService {
         const signer = new ethers.Wallet(privateKey, provider);
 
         const escrowContract = new ethers.Contract(
-          gift.contract,
+          gift.uuid,
           ESCROW_ABI,
           signer,
         );
@@ -264,11 +264,7 @@ export class GiftService {
     if (!privateKey) throw new Error('No private key.');
     const signer = new ethers.Wallet(privateKey, provider);
 
-    const escrowContract = new ethers.Contract(
-      gift.contract,
-      ESCROW_ABI,
-      signer,
-    );
+    const escrowContract = new ethers.Contract(gift.uuid, ESCROW_ABI, signer);
 
     await escrowContract.confirmProductUsed();
 
@@ -303,7 +299,7 @@ export class GiftService {
     const provider = new ethers.providers.JsonRpcProvider(
       process.env.NETWORK_RPC || MockGiftModel.network,
     );
-    const escrow = new ethers.Contract(gift.contract, ESCROW_ABI, provider);
+    const escrow = new ethers.Contract(gift.uuid, ESCROW_ABI, provider);
 
     const result = await escrow.contractState();
     console.log('Contract state: ', result);

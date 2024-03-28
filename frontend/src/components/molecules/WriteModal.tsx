@@ -40,7 +40,7 @@ const WriteModal: React.FC<ModalProps> = ({
       formData.append("signature", signature);
 
       const response = await axios.post(
-        `${protocol}${process.env.REACT_APP_AWS}/product`,
+        `${process.env.REACT_APP_API}/product`,
         formData,
         {
           headers: {

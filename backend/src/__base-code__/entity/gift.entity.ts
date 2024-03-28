@@ -5,7 +5,7 @@ import { State } from '../enum/state.enum';
 @Entity()
 export class GiftModel extends ProductModel {
   @Column()
-  contract: string;
+  uuid: string;
 
   @Column()
   buyer: string;

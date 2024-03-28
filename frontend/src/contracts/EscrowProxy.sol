@@ -1,29 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "./EscrowFactory.sol";
+import "./Escrow.sol";
 
 contract NaegiftEscrowProxy {
     address public latestEscrow;
-    address public factoryImplementation;
+    address public escrowImplementation;
 
-    event FactoryImplementationUpdated(address newImplementation);
+    event escrowImplementationUpdated(address newImplementation);
 
-    constructor(address _factoryImplementation) {
-        updateFactoryImplementation(_factoryImplementation);
+    constructor(address _escrowImplementation) {
+        updateescrowImplementation(_escrowImplementation);
     }
 
-    function updateFactoryImplementation(address _newFactoryImplementation) public {
-        factoryImplementation = _newFactoryImplementation;
-        emit FactoryImplementationUpdated(_newFactoryImplementation);
+    function updateescrowImplementation(address _newescrowImplementation) public {
+        escrowImplementation = _newescrowImplementation;
+        emit escrowImplementationUpdated(_newescrowImplementation);
     }
 
     fallback() external payable {
-        _delegate(factoryImplementation);
+        _delegate(escrowImplementation);
     }
 
     receive() external payable {
-        _delegate(factoryImplementation);
+        _delegate(escrowImplementation);
     }
 
     function _delegate(address _implementation) internal {

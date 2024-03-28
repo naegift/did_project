@@ -9,7 +9,7 @@ import Inputs from "../atoms/inputs";
 import Button from "../atoms/button";
 import { closeBtn } from "../../images/Icon";
 import { Product } from "../../pages/View";
-import { FACTORY_ABI } from "../../abi/factory";
+import { ESCROW_ABI } from "../../abi/escrow";
 import { useRecoilValue } from "recoil";
 import { walletState } from "../../recoil/walletState";
 import { formatEther } from "@ethersproject/units";
@@ -40,25 +40,26 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     const seller = product.seller;
     const receiver = receiverInput;
     const market = process.env.REACT_APP_MARKET_ADDRESS;
+    console.log(process.env.REACT_APP_MARKET_ADDRESS);
     console.log(market);
 
     setLoading(true);
 
     const contract = new ethers.Contract(
       process.env.REACT_APP_PROXY_ADDRESS as any,
-      FACTORY_ABI,
+      ESCROW_ABI,
       provider
     );
 
     const transaction = {
       to: process.env.REACT_APP_PROXY_ADDRESS,
       data: contract.interface.encodeFunctionData("createEscrow", [
+        UUID,
         buyer,
         seller,
         receiver,
         market,
         ethers.utils.parseUnits(priceETH, "ether").toString(),
-        UUID,
       ]),
       value: ethers.utils.parseUnits(priceETH, "ether").toString(),
       gasLimit: 3000000,
@@ -71,7 +72,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
       uuid: UUID,
     };
 
-    const payUrl = `${protocol}${process.env.REACT_APP_AWS}/product/${id}/pay`;
+    const payUrl = `${process.env.REACT_APP_API}/product/${id}/pay`;
     console.log(payUrl, reqBody);
     const response = axios.post(payUrl, reqBody);
 
