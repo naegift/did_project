@@ -49,5 +49,3 @@
 ### Architecture
 
 ![Architecture](https://github.com/naegift/did_project/assets/67108705/5430edcd-0940-4b37-9eff-b5235399a944)
-
-.
