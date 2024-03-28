@@ -23,9 +23,7 @@ const PayBox: React.FC<GiftListData> = ({ payItem }) => {
         <p>
           Date : <DateTime dateString={payItem.updatedAt} />
         </p>
-        <p>
-          State : {payItem.state !== "active" ? "Finish use" : "Before use"}
-        </p>
+        <p>State : {payItem.state !== "active" ? "Used" : "Not Used"}</p>
         <p className="mobile:truncate">To : {payItem.receiver}</p>
       </div>
     </>

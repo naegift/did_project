@@ -22,7 +22,7 @@ const CoinInput: React.FC<CoinPriceInput> = ({ onChange }) => {
   const inputProps: InputProps = {
     variant: "default",
     size: "xlg",
-    placeholder: "시작가를 입력해주세요 ex) 0.00001",
+    placeholder: "Enter the price ex) 0.00001",
     value: value,
     onChange: handleChange,
   };

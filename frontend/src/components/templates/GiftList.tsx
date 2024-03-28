@@ -65,7 +65,7 @@ const GiftList: React.FC<GiftData> = ({
       >
         <span className="tablet:border tablet:flex-1"></span>
         <span className=" mobile:text-sm">
-          "The received gift can be viewed on desktop."
+          "The received gift can be viewed on the desktop environment."
         </span>
         <span className="tablet:border tablet:flex-1"></span>
       </div>
@@ -80,12 +80,12 @@ const GiftList: React.FC<GiftData> = ({
           <div
             className={cn("flex justify-between items-center ", "tablet:py-3")}
           >
-            <h2 className="text-xl mobile:text-base">🎁 Gift history sent</h2>
+            <h2 className="text-xl mobile:text-base">🎁 Gifts Sent</h2>
             <div className="flex flex-row gap-5 mobile:hidden">
               <Button
                 variant="basicBtn2"
                 size="md"
-                label="Lates"
+                label="Latest"
                 onClick={() => payOrderChange("desc")}
               />
               <Button
@@ -103,7 +103,9 @@ const GiftList: React.FC<GiftData> = ({
               ))
             ) : (
               <p className=" tablet:text-center mobile:text-center">
-                {payProducts.length === 0 ? "There are no gifts sent." : ""}
+                {payProducts.length === 0
+                  ? "You didn't send any gift. Try Gifting!"
+                  : ""}
               </p>
             )}
           </div>
@@ -128,7 +130,7 @@ const GiftList: React.FC<GiftData> = ({
           )}
         >
           <div className="flex justify-between items-center tablet:flex-col tablet:gap-5">
-            <h2 className="text-xl">🎁 The history of received gifts</h2>
+            <h2 className="text-xl">🎁 Gifts Received</h2>
             <div className="flex flex-row gap-5">
               <Button
                 variant="basicBtn2"
@@ -151,9 +153,7 @@ const GiftList: React.FC<GiftData> = ({
               ))
             ) : (
               <p className=" tablet:text-center">
-                {receiveProducts.length === 0
-                  ? "There are no received gifts."
-                  : ""}
+                {receiveProducts.length === 0 ? "No gifts in the inbox." : ""}
               </p>
             )}
           </div>
