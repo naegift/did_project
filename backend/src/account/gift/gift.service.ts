@@ -142,7 +142,7 @@ export class GiftService {
       },
       credentialStatus: {
         type: 'StatusList2021Entry',
-        id: `http://localhost:4000/gift/${gift.id}/credentialStatus`,
+        id: `${process.env.HOST}/gift/${gift.id}/credentialStatus`,
       },
       '@context': ['https://www.w3.org/2018/credentials/v1'],
       proofFormat: 'EthereumEip712Signature2021',
