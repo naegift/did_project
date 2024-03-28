@@ -35,7 +35,7 @@ const View: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get<Product>(
-          `${protocol}${process.env.REACT_APP_AWS}/product/${id}`
+          `${process.env.REACT_APP_API}/product/${id}`
         );
         setProduct(response.data);
         setLoading(false);
@@ -47,11 +47,13 @@ const View: React.FC = () => {
     const fetchWalletAddress = async () => {
       if (window.ethereum) {
         try {
-          await window.ethereum.enable();
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const signer = provider.getSigner();
-          const address = await signer.getAddress();
-          setUserWalletAddress(address);
+          // MetaMask에 계정 접근을 요청합니다.
+          const accounts = await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          // 첫 번째 계정을 사용합니다.
+          const account = accounts[0];
+          setUserWalletAddress(account);
         } catch (error) {
           console.error(
             "MetaMask 또는 유사한 웹3 지갑이 설치되어 있지 않습니다."

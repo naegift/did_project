@@ -9,7 +9,7 @@ import Inputs from "../atoms/inputs";
 import Button from "../atoms/button";
 import { closeBtn } from "../../images/Icon";
 import { Product } from "../../pages/View";
-import { FACTORY_ABI } from "../../abi/factory";
+import { ESCROW_ABI } from "../../abi/escrow";
 import { useRecoilValue } from "recoil";
 import { walletState } from "../../recoil/walletState";
 import { formatEther } from "@ethersproject/units";
@@ -40,25 +40,26 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     const seller = product.seller;
     const receiver = receiverInput;
     const market = process.env.REACT_APP_MARKET_ADDRESS;
+    console.log(process.env.REACT_APP_MARKET_ADDRESS);
     console.log(market);
 
     setLoading(true);
 
     const contract = new ethers.Contract(
       process.env.REACT_APP_PROXY_ADDRESS as any,
-      FACTORY_ABI,
+      ESCROW_ABI,
       provider
     );
 
     const transaction = {
       to: process.env.REACT_APP_PROXY_ADDRESS,
       data: contract.interface.encodeFunctionData("createEscrow", [
+        UUID,
         buyer,
         seller,
         receiver,
         market,
         ethers.utils.parseUnits(priceETH, "ether").toString(),
-        UUID,
       ]),
       value: ethers.utils.parseUnits(priceETH, "ether").toString(),
       gasLimit: 3000000,
@@ -71,7 +72,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
       uuid: UUID,
     };
 
-    const payUrl = `${protocol}${process.env.REACT_APP_AWS}/product/${id}/pay`;
+    const payUrl = `${process.env.REACT_APP_API}/product/${id}/pay`;
     console.log(payUrl, reqBody);
     const response = axios.post(payUrl, reqBody);
 
@@ -94,7 +95,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     console.log(response);
 
     if (await response) {
-      alert("Your gift has been sent successfully! Moving to the gift box");
+      alert("Your gift has been sent successfully! Moving to the gift box.");
       navigate("/gift");
     }
     // } catch (error) {
@@ -125,7 +126,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
             </div>
             <div className="py-2 text-center">
               <h3 className="text-2xl py-3 text-gray-900 ">
-                {product.title} Send a gift
+                Sending {product.title}...
               </h3>
 
               <p className="py-3">Price : {priceETH} ETH </p>
@@ -136,7 +137,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
                 }
                 type="text"
                 size="xlg"
-                placeholder="Please input the recipient's wallet address"
+                placeholder="Please enter the recipient's wallet address!"
               />
             </div>
             <div className="px-4 py-3 flex justify-center ">
@@ -174,7 +175,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
                   onClick={sendGift}
                   variant="sendBtn2"
                   size="lg"
-                  label="After payment, send the gift."
+                  label="Pay with MetaMask"
                 />
               )}
             </div>

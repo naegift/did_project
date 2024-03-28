@@ -9,7 +9,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_factoryImplementation",
+						"name": "_escrowImplementation",
 						"type": "address"
 					}
 				],
@@ -26,7 +26,7 @@
 						"type": "address"
 					}
 				],
-				"name": "FactoryImplementationUpdated",
+				"name": "escrowImplementationUpdated",
 				"type": "event"
 			},
 			{
@@ -35,7 +35,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "factoryImplementation",
+				"name": "escrowImplementation",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -63,11 +63,11 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_newFactoryImplementation",
+						"name": "_newescrowImplementation",
 						"type": "address"
 					}
 				],
-				"name": "updateFactoryImplementation",
+				"name": "updateescrowImplementation",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -90,7 +90,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"EscrowProxy.sol": "NaegiftEscrowProxy"
+			"frontend/src/contracts/EscrowProxy.sol": "NaegiftEscrowProxy"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -104,28 +104,20 @@
 		"remappings": []
 	},
 	"sources": {
-		"Escrow.sol": {
-			"keccak256": "0xd9e61351eecd7b9ec5e3b80e022e8c4caf73f18dff5d96479767919b1741aa34",
+		"frontend/src/contracts/Escrow.sol": {
+			"keccak256": "0x302738319d66b41a9ee3536d8c04dccfabc2a974d86f973a8e06642f9ae37596",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f6c142eb92553c624bbf6778210cc04b62b1e07f4becb7db50f6d34b2fc09340",
-				"dweb:/ipfs/QmVtcHXsrZTHkEkavFSSbQrn7eKRmkWDHCYbKNobXu1nQS"
+				"bzz-raw://7bd870c9b7b20c4dc3e06cc348ae1e3518ed45879f1d6c030bf5023d968726ed",
+				"dweb:/ipfs/QmY2GK3NAwhaBcLBfynJ1j5hnSJZJB4H8mVTPsN4wxNu3y"
 			]
 		},
-		"EscrowFactory.sol": {
-			"keccak256": "0x72e31a3279235b3baa567546b6d17a408ad0582b876f0b6eb68c3ec255ed18a7",
+		"frontend/src/contracts/EscrowProxy.sol": {
+			"keccak256": "0x9ec8a5077a23cbd27f31d0db1c4b3eb23f1747b5c94f0c5d58397470c5efa8f2",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e75bd667235044717bd02f05ba41a5bbd38a5e8307124515626b807c1e61888c",
-				"dweb:/ipfs/QmcVbJ69N8YN37LoR1zEooLWMtLz578KpDYgVDPeC3rdqW"
-			]
-		},
-		"EscrowProxy.sol": {
-			"keccak256": "0x4baf9ba306742c9e63334b7b7b3346baecd23bdba28a32aaccb2f1cfde8d94a8",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://b1dbc265bca2224d94e342ddf7801644c004fc5750843f36dbc6c64f074b68ba",
-				"dweb:/ipfs/QmNiPFKWvT1pdXG1T4GFrYbzUB3vLqoCQfL6vWeEfvqkqf"
+				"bzz-raw://17057385b01c4e1f7325827edfc13dda4a3b00ad426b64417a0632a3dec49b12",
+				"dweb:/ipfs/QmX7EPUsMZFqgsf5SXqm7239zevr8dY1tmSTSB1J7trepg"
 			]
 		}
 	},

@@ -24,7 +24,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
 
   const openModal = () => {
     if (window.innerWidth <= 1024) {
-      alert("선물하기는 데스크탑에서 진행해주세요!");
+      alert("Please proceed with gifting on the desktop environment.");
     } else {
       setModalOpen(true);
     }
@@ -47,7 +47,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
       }
 
       const response = await axios.put(
-        `${protocol}${process.env.REACT_APP_AWS}/product/${productId}`,
+        `${process.env.REACT_APP_API}/product/${productId}`,
         formData,
         {
           headers: {
@@ -66,7 +66,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
       const { signature } = await runEthers("delete", "delete", "delete");
       if (product.seller === userWalletAddress) {
         const response = await axios.delete(
-          `${protocol}${process.env.REACT_APP_AWS}/product/${productId}`,
+          `${process.env.REACT_APP_API}/product/${productId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -159,7 +159,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
                 <Button
                   variant="basicBtn2"
                   size="mm"
-                  label="완료"
+                  label="complete"
                   onClick={handleCompleteButtonClick}
                   disabled={!isInputValid}
                   style={{
@@ -170,14 +170,14 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
                 <Button
                   variant="iconBtn"
                   size="mm"
-                  label="수정"
+                  label="edit"
                   onClick={handleEditButtonClick}
                 />
               )}
               <Button
                 variant="basicBtn2"
                 size="mm"
-                label="삭제"
+                label="delete"
                 onClick={handleDeleteButtonClick}
               />
             </>
@@ -189,7 +189,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
         {isEditMode ? (
           <div className="flex flex-col gap-y-5">
             <div>
-              <p>제목</p>
+              <p>Title</p>
               <input
                 type="text"
                 name="title"
@@ -209,7 +209,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
               />
             </div>
             <div>
-              <p>내용</p>
+              <p>Content</p>
               <textarea
                 name="content"
                 value={updatedData.content}
@@ -224,7 +224,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
             <p className="text-2xl py-3 border-b mobile:text-xl">
               {formatEther(updatedData.price).toString()} ETH
             </p>
-            <span className="inline-block py-3">상품 설명</span>
+            <span className="inline-block py-3">Description</span>
             <p className="py-5">{updatedData.content}</p>
           </>
         )}
@@ -242,7 +242,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
               onClick={openModal}
               variant="sendBtn2"
               size="lg"
-              label="선물하기"
+              label="Send Gift"
             />
           )}
         </div>

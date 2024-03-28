@@ -6,39 +6,27 @@
 	"output": {
 		"abi": [
 			{
+				"anonymous": false,
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "_buyer",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "_seller",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "_receiver",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "_market",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_contractPrice",
-						"type": "uint256"
+						"indexed": false,
+						"internalType": "string",
+						"name": "uuid",
+						"type": "string"
 					}
 				],
-				"stateMutability": "payable",
-				"type": "constructor"
+				"name": "EscrowCreated",
+				"type": "event"
 			},
 			{
 				"anonymous": false,
 				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "uuid",
+						"type": "string"
+					},
 					{
 						"indexed": true,
 						"internalType": "address",
@@ -52,6 +40,12 @@
 			{
 				"anonymous": false,
 				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "uuid",
+						"type": "string"
+					},
 					{
 						"indexed": true,
 						"internalType": "address",
@@ -84,6 +78,12 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "uuid",
+						"type": "string"
+					},
+					{
 						"indexed": true,
 						"internalType": "address",
 						"name": "receiver",
@@ -94,60 +94,77 @@
 				"type": "event"
 			},
 			{
-				"inputs": [],
-				"name": "buyer",
-				"outputs": [
+				"inputs": [
 					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
+						"internalType": "string",
+						"name": "uuid",
+						"type": "string"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "confirmFulfillment",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
-				"inputs": [],
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "uuid",
+						"type": "string"
+					}
+				],
 				"name": "confirmProductUsed",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "contractPrice",
-				"outputs": [
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "uuid",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "_buyer",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_seller",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_market",
+						"type": "address"
+					},
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_contractPrice",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
+				"name": "createEscrow",
+				"outputs": [],
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "contractState",
-				"outputs": [
+				"inputs": [
 					{
-						"internalType": "enum NaegiftEscrow.ContractStateChoices",
-						"name": "",
-						"type": "uint8"
+						"internalType": "string",
+						"name": "uuid",
+						"type": "string"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "escrowStatus",
 				"outputs": [
 					{
@@ -160,39 +177,44 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "market",
-				"outputs": [
+				"inputs": [
 					{
-						"internalType": "address",
+						"internalType": "string",
 						"name": "",
-						"type": "address"
+						"type": "string"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "receiver",
+				"name": "escrows",
 				"outputs": [
 					{
 						"internalType": "address",
-						"name": "",
+						"name": "buyer",
 						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "seller",
-				"outputs": [
+					},
 					{
 						"internalType": "address",
-						"name": "",
+						"name": "seller",
 						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "market",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "contractPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum NaegiftEscrow.ContractStateChoices",
+						"name": "state",
+						"type": "uint8"
 					}
 				],
 				"stateMutability": "view",
@@ -216,7 +238,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"Escrow.sol": "NaegiftEscrow"
+			"frontend/src/contracts/Escrow.sol": "NaegiftEscrow"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -230,12 +252,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"Escrow.sol": {
-			"keccak256": "0xd9e61351eecd7b9ec5e3b80e022e8c4caf73f18dff5d96479767919b1741aa34",
+		"frontend/src/contracts/Escrow.sol": {
+			"keccak256": "0x302738319d66b41a9ee3536d8c04dccfabc2a974d86f973a8e06642f9ae37596",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f6c142eb92553c624bbf6778210cc04b62b1e07f4becb7db50f6d34b2fc09340",
-				"dweb:/ipfs/QmVtcHXsrZTHkEkavFSSbQrn7eKRmkWDHCYbKNobXu1nQS"
+				"bzz-raw://7bd870c9b7b20c4dc3e06cc348ae1e3518ed45879f1d6c030bf5023d968726ed",
+				"dweb:/ipfs/QmY2GK3NAwhaBcLBfynJ1j5hnSJZJB4H8mVTPsN4wxNu3y"
 			]
 		}
 	},

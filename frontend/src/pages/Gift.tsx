@@ -30,7 +30,7 @@ const Gift: React.FC = () => {
   const protocol = window.location.href.split("//")[0] + "//";
   const recevieGiftData = async (_walletAddress: string, page: number) => {
     try {
-      const url = `${protocol}${process.env.REACT_APP_AWS}/gift?receiver=${_walletAddress}&page=${page}&order=${receiveOrder}`;
+      const url = `${process.env.REACT_APP_API}/gift?receiver=${_walletAddress}&page=${page}&order=${receiveOrder}`;
       const response = await axios.get(url);
       // console.log(`response from ${url}`, response);
       // console.log(response.data.gifts);
@@ -43,7 +43,7 @@ const Gift: React.FC = () => {
 
   const payGiftData = async (_walletAddress: string, page: number) => {
     try {
-      const url = `${protocol}${process.env.REACT_APP_AWS}/gift?buyer=${_walletAddress}&page=${page}&order=${payOrder}`;
+      const url = `${process.env.REACT_APP_API}/gift?buyer=${_walletAddress}&page=${page}&order=${payOrder}`;
       const response = await axios.get(url);
       // console.log(`response from ${url}`, response);
       // console.log(response.data.gifts);

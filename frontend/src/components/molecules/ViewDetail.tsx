@@ -2,34 +2,42 @@ import React from "react";
 import { cn } from "../../utils/cn";
 
 const ViewDetail: React.FC = () => {
-    return (
-        <div
-            className={cn(
-                "w-2/3 py-10 mx-auto px-48 flex flex-row gap-14 border-t border-b bg-slate-50",
-                "note:px-10 note:w-3/4",
-                "tablet:px-10 tablet:w-full",
-                "mobile:w-full mobile:flex mobile:flex-col mobile:gap-4"
-            )}
-        >
-            <div className=" mobile:font-bold">안내 사항</div>
-            <ul className=" flex flex-col gap-1 list-disc mobile:gap-3 mobile:text-sm">
-                <li>
-                    선물 받으실 계정의 주소를 정확하게 입력한 다음 결제를
-                    진행해주세요.
-                </li>
-                <li>
-                    결제 진행 시 네트워크 환경에 따라 시간이 걸릴 수 있습니다.
-                </li>
-                <li>보내신 선물은 선물함에서 확인이 가능합니다.</li>
-                <li>본 상품은 예시 이미지로서 실제 상품과 다를 수 있습니다.</li>
-                <li>발송상품의 경우 유효기간 연장 및 환불 대상이 아닙니다</li>
-                <li>
-                    통신판매중개자로 거래 당사자가 아니므로, 판매자가 등록한
-                    상품정보 및 거래 등에 대해 책임을 지지 않습니다.
-                </li>
-            </ul>
-        </div>
-    );
+  return (
+    <div
+      className={cn(
+        "w-2/3 py-10 mx-auto px-48 flex flex-row gap-14 border-t border-b bg-slate-50",
+        "note:px-10 note:w-3/4",
+        "tablet:px-10 tablet:w-full",
+        "mobile:w-full mobile:flex mobile:flex-col mobile:gap-4"
+      )}
+    >
+      <div className=" mobile:font-bold">Instructions</div>
+      <ul className=" flex flex-col gap-1 list-disc mobile:gap-3 mobile:text-sm">
+        <li>
+          Please enter the address of the account to receive the gift
+          accurately, then proceed with the payment.
+        </li>
+        <li>
+          When proceeding with payment, it may take time depending on the
+          network environment.
+        </li>
+        <li>The gift you sent can be checked in the gift box.</li>
+        <li>
+          This product is an example image and may differ from the actual
+          product.
+        </li>
+        <li>
+          For dispatched products, the validity period cannot be extended, and
+          they are not eligible for a refund.
+        </li>
+        <li>
+          As a telecommunication sales intermediary, we are not the party to the
+          transaction, so we are not responsible for the product information
+          registered by the seller or the transaction itself.
+        </li>
+      </ul>
+    </div>
+  );
 };
 
 export default ViewDetail;

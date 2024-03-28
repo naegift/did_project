@@ -17,27 +17,25 @@ interface GiftListData {
   receivedItem: Product;
 }
 
+const states: {
+  [key: string]: string;
+} = {
+  issued: "VC Issued",
+  active: "Claimable",
+  fulfilled: "Preparing the product",
+  productUsed: "Used",
+  executed: "Settled",
+};
+
 const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
   const { walletAddress: address } = useRecoilValue(walletState);
   const [btnState, setBtnState] = useState<string>("active");
-  const [item, setItem] = useState<string>(
-    "Please press the 'Receive Gift' button."
-  );
+  const [item, setItem] = useState<string>(states.active);
   const [loading, setLoading] = useState<boolean>(false);
   const protocol = window.location.href.split("//")[0] + "//";
   useEffect(() => {
     console.log(btnState);
   }, [btnState]);
-
-  const states: {
-    [key: string]: string;
-  } = {
-    issued: "Available",
-    active: "Please press the 'Receive Gift' button.",
-    fulfilled: "Preparing the product",
-    productUsed: "Used completed",
-    executed: "Used completed",
-  };
 
   useEffect(() => {
     if (receivedItem.state in states) {
@@ -51,12 +49,12 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
   const confirm = async () => {
     try {
       setLoading(true);
-      const confirmUrl = `${protocol}${process.env.REACT_APP_AWS}/gift/${receivedItem.id}/confirm`;
+      const confirmUrl = `${process.env.REACT_APP_API}/gift/${receivedItem.id}/confirm`;
       const confirmRes = await axios.patch(confirmUrl);
       console.log("confirmed result: ", confirmRes);
       if (confirmRes.data.success) {
         setBtnState("executed");
-        setItem("Used completed");
+        setItem(states[receivedItem.state]);
       } else alert("Failed to confirm receipt.");
     } catch (error) {
       console.error("수령하기에서 오류 발생:", error);
@@ -95,14 +93,14 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
       console.log("verification at the front", verifyTest);
 
       const verifyRes = await axios.patch(
-        `${protocol}${process.env.REACT_APP_AWS}/gift/${receivedItem.id}/use`,
+        `${process.env.REACT_APP_API}/gift/${receivedItem.id}/use`,
         targetVc
       );
       console.log("verified result: ", verifyRes);
 
       if (verifyRes.data.success) {
         setBtnState("fulfilled");
-        setItem("Product preparing");
+        setItem(states[receivedItem.state]);
       } else {
         alert("Validation logic server error.");
       }
@@ -135,7 +133,7 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
         receivedItem.price
       );
       const response = await axios.patch(
-        `${protocol}${process.env.REACT_APP_AWS}/gift/${receivedItem.id}/receive`,
+        `${process.env.REACT_APP_API}/gift/${receivedItem.id}/receive`,
         {
           signature,
           title: message.title,
@@ -147,14 +145,14 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
       const saveVC = await mascaApi.saveCredential(response.data);
       console.log("VC saved: ", saveVC);
 
-      const issueVcUrl = `${protocol}${process.env.REACT_APP_AWS}/gift/${receivedItem.id}/issue`;
+      const issueVcUrl = `${process.env.REACT_APP_API}/gift/${receivedItem.id}/issue`;
       const successRes = await axios.post(issueVcUrl, {
         success: saveVC.success,
       });
 
       if (successRes.data.success) {
         setBtnState("issued");
-        setItem("Available");
+        setItem(states[receivedItem.state]);
       } else {
         alert(
           "You have declined the issuance of the digital voucher. Approval is required to receive the gift."
@@ -171,31 +169,31 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
   const activeConfirmCheck = () => {
     if (
       window.confirm(
-        "선물받기는 한번만 가능합니다. 서명 거부시 선물을 받을 수 없습니다. 네트워크 환경을 확인 후 눌러주세요."
+        "Receiving a gift is only possible once. You cannot receive the gift if you refuse to sign. Please check your network environment before pressing."
       )
     ) {
       receiveGift();
     } else {
-      alert("선물받기가 취소되었습니다.");
+      alert("VC Issuance has been cancelled.");
     }
   };
 
   const issuedConfirmCheck = () => {
     if (
       window.confirm(
-        "선물을 사용하실 땐 서명이 반드시 필요합니다. 서명 거부시 선물을 사용할 수 없습니다. 네트워크 환경을 확인 후 눌러주세요."
+        "A signature is required when using a gift. You cannot use the gift if you refuse to sign. Please check your network environment before pressing."
       )
     ) {
       verify();
     } else {
-      alert("The gift usage has been cancelled.");
+      alert("VC Verification has been cancelled.");
     }
   };
 
   const fulfilledConfirmCheck = () => {
     if (
       window.confirm(
-        "After receiving the gift, it cannot be cancelled. Would you like to confirm receipt?"
+        "Once confirmed, it cannot be cancelled. Would you like to confirm receipt?"
       )
     ) {
       confirm();
@@ -259,21 +257,21 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
                     onClick={issuedConfirmCheck}
                     variant="sendBtn1"
                     size="dd"
-                    label="Use"
+                    label="Use Gift"
                   />
                 ) : btnState === "active" ? (
                   <Button
                     onClick={activeConfirmCheck}
                     variant="basicBtn"
                     size="dd"
-                    label="Receive gift"
+                    label="Receive Gift"
                   />
                 ) : btnState === "fulfilled" ? (
                   <Button
                     onClick={fulfilledConfirmCheck}
                     variant="sendBtn1"
                     size="dd"
-                    label="Confirmation of receipt"
+                    label="Confirm Receipt"
                   />
                 ) : null}
               </div>

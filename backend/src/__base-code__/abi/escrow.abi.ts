@@ -1,38 +1,26 @@
 export const ESCROW_ABI = [
   {
+    anonymous: false,
     inputs: [
       {
-        internalType: 'address',
-        name: '_buyer',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_seller',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_receiver',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_market',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_contractPrice',
-        type: 'uint256',
+        indexed: false,
+        internalType: 'string',
+        name: 'uuid',
+        type: 'string',
       },
     ],
-    stateMutability: 'payable',
-    type: 'constructor',
+    name: 'EscrowCreated',
+    type: 'event',
   },
   {
     anonymous: false,
     inputs: [
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'uuid',
+        type: 'string',
+      },
       {
         indexed: true,
         internalType: 'address',
@@ -46,6 +34,12 @@ export const ESCROW_ABI = [
   {
     anonymous: false,
     inputs: [
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'uuid',
+        type: 'string',
+      },
       {
         indexed: true,
         internalType: 'address',
@@ -78,6 +72,12 @@ export const ESCROW_ABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: 'string',
+        name: 'uuid',
+        type: 'string',
+      },
+      {
         indexed: true,
         internalType: 'address',
         name: 'receiver',
@@ -88,60 +88,77 @@ export const ESCROW_ABI = [
     type: 'event',
   },
   {
-    inputs: [],
-    name: 'buyer',
-    outputs: [
+    inputs: [
       {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        internalType: 'string',
+        name: 'uuid',
+        type: 'string',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'confirmFulfillment',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'uuid',
+        type: 'string',
+      },
+    ],
     name: 'confirmProductUsed',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'contractPrice',
-    outputs: [
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'uuid',
+        type: 'string',
+      },
+      {
+        internalType: 'address',
+        name: '_buyer',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_seller',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_receiver',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_market',
+        type: 'address',
+      },
       {
         internalType: 'uint256',
-        name: '',
+        name: '_contractPrice',
         type: 'uint256',
       },
     ],
-    stateMutability: 'view',
+    name: 'createEscrow',
+    outputs: [],
+    stateMutability: 'payable',
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'contractState',
-    outputs: [
+    inputs: [
       {
-        internalType: 'enum NaegiftEscrow.ContractStateChoices',
-        name: '',
-        type: 'uint8',
+        internalType: 'string',
+        name: 'uuid',
+        type: 'string',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'escrowStatus',
     outputs: [
       {
@@ -154,39 +171,44 @@ export const ESCROW_ABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'market',
-    outputs: [
+    inputs: [
       {
-        internalType: 'address',
+        internalType: 'string',
         name: '',
-        type: 'address',
+        type: 'string',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'receiver',
+    name: 'escrows',
     outputs: [
       {
         internalType: 'address',
-        name: '',
+        name: 'buyer',
         type: 'address',
       },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'seller',
-    outputs: [
       {
         internalType: 'address',
-        name: '',
+        name: 'seller',
         type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'receiver',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'market',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'contractPrice',
+        type: 'uint256',
+      },
+      {
+        internalType: 'enum NaegiftEscrow.ContractStateChoices',
+        name: 'state',
+        type: 'uint8',
       },
     ],
     stateMutability: 'view',

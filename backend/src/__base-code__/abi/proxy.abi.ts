@@ -3,7 +3,7 @@ export const PROXY_ABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_factoryImplementation',
+        name: '_escrowImplementation',
         type: 'address',
       },
     ],
@@ -20,7 +20,7 @@ export const PROXY_ABI = [
         type: 'address',
       },
     ],
-    name: 'FactoryImplementationUpdated',
+    name: 'escrowImplementationUpdated',
     type: 'event',
   },
   {
@@ -31,11 +31,11 @@ export const PROXY_ABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_newFactoryImplementation',
+        name: '_newescrowImplementation',
         type: 'address',
       },
     ],
-    name: 'updateFactoryImplementation',
+    name: 'updateescrowImplementation',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -46,7 +46,7 @@ export const PROXY_ABI = [
   },
   {
     inputs: [],
-    name: 'factoryImplementation',
+    name: 'escrowImplementation',
     outputs: [
       {
         internalType: 'address',
