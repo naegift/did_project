@@ -22,8 +22,8 @@ const NotificationContent = ({ data }: { data: any }) => {
 
   if (!shouldRender) return null;
 
-  const notificationTitle = data.message.payload.title || "알림";
-  const notificationBody = data.message.payload.body || "내용이 없습니다.";
+  const notificationTitle = data.message.payload.title || "Notification";
+  const notificationBody = data.message.payload.body || "There is no content.";
   const containerClasses = `notification-container ${
     visible ? "slide-in-right" : "slide-out-right"
   }`;

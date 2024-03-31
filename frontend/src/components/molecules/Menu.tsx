@@ -55,14 +55,14 @@ const Menu: React.FC<HeaderProps> = ({ setMenu, menu }) => {
         onClick={linkClick}
       >
         <Link to="/product">
-          <Button variant="sendBtn2" size="mdl" label="상품등록하기" />
+          <Button variant="sendBtn2" size="mdl" label="Product" />
         </Link>
         <Link to="/store">
           <Button variant="sendBtn2" size="mdl" label="SELLER" />
         </Link>
 
         <Link to="/gift">
-          <Button variant="sendBtn2" size="mdl" label="선물함" />
+          <Button variant="sendBtn2" size="mdl" label="Gift Box" />
         </Link>
       </div>
     </div>
