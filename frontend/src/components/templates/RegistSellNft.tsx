@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import RegistrationNFT from "../organisms/RegistrationNFT";
 import Button from "../atoms/button";
 import WriteModal from "../molecules/WriteModal";
+import Swal from "sweetalert2";
 
 const RegistSellNft: React.FC = () => {
   const [productData, setProductData] = useState<{
@@ -27,7 +28,10 @@ const RegistSellNft: React.FC = () => {
       isNaN(Number(productData.price)) ||
       Number(productData.price) <= 0
     ) {
-      alert("Please fill out all input fields.");
+      Swal.fire({
+        icon: "error",
+        title: "Please fill out all input fields.",
+      });
       return;
     }
     setModalOpen(true);
@@ -38,7 +42,10 @@ const RegistSellNft: React.FC = () => {
       setModalOpen(false);
     } catch (error) {
       console.error("Error registering product:", error);
-      alert("Error registering product");
+      Swal.fire({
+        icon: "error",
+        title: "Error registering product:",
+      });
     }
   };
 

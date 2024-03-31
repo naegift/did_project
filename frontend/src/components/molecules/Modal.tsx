@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { v4 as uuid } from "uuid";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
-
+import Swal from "sweetalert2";
 import Inputs from "../atoms/inputs";
 import Button from "../atoms/button";
 import { closeBtn } from "../../images/Icon";
@@ -95,7 +95,13 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
     console.log(response);
 
     if (await response) {
-      alert("Your gift has been sent successfully! Moving to the gift box.");
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your gift has been sent successfully! Moving to the gift box.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       navigate("/gift");
     }
     // } catch (error) {

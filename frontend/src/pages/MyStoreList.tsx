@@ -216,7 +216,7 @@ const MyStoreList: React.FC = () => {
                 copied ? "opacity-90" : "opacity-0"
               }  bg-green-300 text-white p-2 rounded-md`}
             >
-              복사되었습니다.
+              Copy.
             </div>
           )}
 

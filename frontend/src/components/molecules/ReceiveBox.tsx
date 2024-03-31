@@ -12,6 +12,7 @@ import Button from "../atoms/button";
 import DateTime from "./DateTime";
 import { runEthers } from "../../utils/ethers";
 import { cn } from "../../utils/cn";
+import Swal from "sweetalert2";
 
 interface GiftListData {
   receivedItem: Product;
@@ -106,7 +107,11 @@ const ReceiveBox: React.FC<GiftListData> = ({ receivedItem }) => {
       }
     } catch (error) {
       console.error("사용하기에서 오류 발생:", error);
-      alert("Failed to use the product.");
+
+      Swal.fire({
+        icon: "error",
+        title: "Failed to use the product.",
+      });
     } finally {
       setLoading(false);
     }
