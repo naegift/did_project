@@ -47,7 +47,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
       }
 
       const response = await axios.put(
-        `${process.env.REACT_APP_API}/product/${productId}`,
+        `${process.env.REACT_APP_AWS}/product/${productId}`,
         formData,
         {
           headers: {
@@ -66,7 +66,7 @@ const ViewBox: React.FC<viewBoxData> = ({ product, userWalletAddress }) => {
       const { signature } = await runEthers("delete", "delete", "delete");
       if (product.seller === userWalletAddress) {
         const response = await axios.delete(
-          `${process.env.REACT_APP_API}/product/${productId}`,
+          `${process.env.REACT_APP_AWS}/product/${productId}`,
           {
             headers: {
               "Content-Type": "application/json",

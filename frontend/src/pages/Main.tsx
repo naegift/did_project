@@ -50,7 +50,7 @@ const Main: React.FC = () => {
   const latestData = async () => {
     try {
       const latestRes = await axios.get<Data>(
-        `${process.env.REACT_APP_API}/?page=1&order=desc`
+        `${process.env.REACT_APP_AWS}/?page=1&order=desc`
       );
       // console.log(latestRes.data.products);
       setLatestProduct(latestRes.data.products);
