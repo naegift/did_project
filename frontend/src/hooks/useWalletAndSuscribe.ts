@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
+// import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
 import { ethers } from "ethers";
 import { useRecoilState } from "recoil";
 import { walletState } from "../recoil/walletState";
@@ -18,21 +18,21 @@ const useWalletAndSubscribe = () => {
 
   // 실시간 알림 스트림 초기화
   const initRealTimeNotificationStream = async (user: any) => {
-    if (!streamInstance && sellerWallets.walletAddress && user) {
-      try {
-        const newStream = await user.initStream([CONSTANTS.STREAM.NOTIF]);
-        newStream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
-          console.log("받은 데이터:", data.message.notification);
-          setNotificationData((oldData: any) => [...oldData, data]);
-        });
-        // console.log("스트림 초기화 완료:", newStream);
-        newStream.connect();
-        setStreamInstance(newStream);
-        setStreamId(newStream.id);
-      } catch (error) {
-        console.error("스트림 초기화 중 오류 발생:", error);
-      }
-    }
+    // if (!streamInstance && sellerWallets.walletAddress && user) {
+    //   try {
+    //     const newStream = await user.initStream([CONSTANTS.STREAM.NOTIF]);
+    //     newStream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
+    //       console.log("받은 데이터:", data.message.notification);
+    //       setNotificationData((oldData: any) => [...oldData, data]);
+    //     });
+    //     // console.log("스트림 초기화 완료:", newStream);
+    //     newStream.connect();
+    //     setStreamInstance(newStream);
+    //     setStreamId(newStream.id);
+    //   } catch (error) {
+    //     console.error("스트림 초기화 중 오류 발생:", error);
+    //   }
+    // }
   };
 
   // 지갑 연결
@@ -74,22 +74,22 @@ const useWalletAndSubscribe = () => {
       handleChainChanged(chainId);
     });
 
-    const initializedUser = await PushAPI.initialize(signer, {
-      env: CONSTANTS.ENV.STAGING,
-    });
-    setUser(initializedUser);
+    // const initializedUser = await PushAPI.initialize(signer, {
+    //   env: CONSTANTS.ENV.STAGING,
+    // });
+    // setUser(initializedUser);
 
-    const subscriptions = await initializedUser.notification.subscriptions();
-    const isSubscribed = subscriptions.some(
-      (sub: any) => sub.channel.toLowerCase() === channelAddress.toLowerCase()
-    );
-    if (!isSubscribed) {
-      await initializedUser.notification.subscribe(
-        `eip155:11155111:${channelAddress}`
-      );
-    }
+    // const subscriptions = await initializedUser.notification.subscriptions();
+    // const isSubscribed = subscriptions.some(
+    //   (sub: any) => sub.channel.toLowerCase() === channelAddress.toLowerCase()
+    // );
+    // if (!isSubscribed) {
+    //   await initializedUser.notification.subscribe(
+    //     `eip155:11155111:${channelAddress}`
+    //   );
+    // }
 
-    await initRealTimeNotificationStream(initializedUser);
+    // await initRealTimeNotificationStream(initializedUser);
   };
 
   useEffect(() => {
@@ -103,10 +103,10 @@ const useWalletAndSubscribe = () => {
           window.ethereum
         ).getSigner();
         const preserved = accounts.map((e) => ethers.utils.getAddress(e));
-        const newUser = await PushAPI.initialize(newSigner, {
-          env: CONSTANTS.ENV.PROD,
-        });
-        setUser(newUser);
+        // const newUser = await PushAPI.initialize(newSigner, {
+        //   env: CONSTANTS.ENV.PROD,
+        // });
+        // setUser(newUser);
         setSellerWallets({
           walletAddress: preserved[0],
           isSubscribed: true,
@@ -118,7 +118,7 @@ const useWalletAndSubscribe = () => {
           setStreamInstance(null);
         }
 
-        await initRealTimeNotificationStream(newUser);
+        // await initRealTimeNotificationStream(newUser);
       } else {
         setUser(null);
         setSellerWallets({ walletAddress: "", isSubscribed: false });
