@@ -35,7 +35,7 @@ const View: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get<Product>(
-          `${protocol}${process.env.REACT_APP_AWS}/product/${id}`
+          `${process.env.REACT_APP_AWS}/product/${id}`
         );
         setProduct(response.data);
         setLoading(false);

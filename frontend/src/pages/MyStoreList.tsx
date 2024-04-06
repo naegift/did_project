@@ -101,7 +101,7 @@ const MyStoreList: React.FC = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get<Data>(
-        `${protocol}${process.env.REACT_APP_AWS}/store?seller=${seller}&page=${page}&order=${order}`
+        `${process.env.REACT_APP_AWS}/store?seller=${seller}&page=${page}&order=${order}`
       );
 
       setTotalPage(response.data.totalPages);
@@ -114,7 +114,7 @@ const MyStoreList: React.FC = () => {
   const fetchGifts = async () => {
     try {
       const responseGift = await axios.get<DataGift>(
-        `${protocol}${process.env.REACT_APP_AWS}/store/verified?seller=${seller}&page=${page}&order=${order}`
+        `${process.env.REACT_APP_AWS}/store/verified?seller=${seller}&page=${page}&order=${order}`
       );
       setGifts(responseGift.data.gifts);
       setGiftTotalPage(responseGift.data.totalPages);
