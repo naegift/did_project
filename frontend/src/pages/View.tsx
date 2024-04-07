@@ -35,7 +35,7 @@ const View: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get<Product>(
-          `${process.env.REACT_APP_AWS}/product/${id}`
+          `${protocol}${process.env.REACT_APP_AWS}/product/${id}`
         );
         setProduct(response.data);
         setLoading(false);
@@ -47,11 +47,9 @@ const View: React.FC = () => {
     const fetchWalletAddress = async () => {
       if (window.ethereum) {
         try {
-          // MetaMask에 계정 접근을 요청합니다.
           const accounts = await window.ethereum.request({
             method: "eth_requestAccounts",
           });
-          // 첫 번째 계정을 사용합니다.
           const account = accounts[0];
           setUserWalletAddress(account);
         } catch (error) {
