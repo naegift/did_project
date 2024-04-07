@@ -43,6 +43,7 @@ const View: React.FC = () => {
         console.log(error);
       }
     };
+    console.log(`${protocol}${process.env.REACT_APP_AWS}`);
 
     const fetchWalletAddress = async () => {
       if (window.ethereum) {
