@@ -47,6 +47,8 @@ const Main: React.FC = () => {
     }
   };
 
+  console.log(`${protocol}${process.env.REACT_APP_AWS}`);
+
   const latestData = async () => {
     try {
       const latestRes = await axios.get<Data>(

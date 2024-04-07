@@ -178,7 +178,7 @@ const MyStoreList: React.FC = () => {
     }
   };
   const toggleModal = () => setShowModal(!showModal);
-
+  console.log(`${protocol}${process.env.REACT_APP_AWS}`);
   return (
     <div className="mt-[97px]">
       <div
