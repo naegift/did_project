@@ -72,7 +72,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
       uuid: UUID,
     };
 
-    const payUrl = `${process.env.REACT_APP_AWS}/product/${id}/pay`;
+    const payUrl = `${protocol}${process.env.REACT_APP_AWS}/product/${id}/pay`;
     console.log(payUrl, reqBody);
     const response = axios.post(payUrl, reqBody);
 
@@ -91,8 +91,6 @@ const Modal: React.FC<ModalProps> = ({ onClose, product }) => {
       receiver,
       uuid: UUID,
     });
-
-    console.log(response);
 
     if (await response) {
       Swal.fire({
