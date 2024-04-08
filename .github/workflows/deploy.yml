@@ -19,7 +19,7 @@ jobs:
         working-directory: ./frontend
       - name: Build
         run: |
-          REACT_APP_API=${{ secrets.REACT_APP_API }} \
+          REACT_APP_API=${{ secrets.REACT_APP_AWS }} \
           REACT_APP_MARKET_ADDRESS=${{ secrets.REACT_APP_MARKET_ADDRESS }} \
           REACT_APP_PROXY_ADDRESS=${{ secrets.REACT_APP_PROXY_ADDRESS }} \
           REACT_APP_TARGET_CHAINID=${{ secrets.REACT_APP_TARGET_CHAINID }} \
