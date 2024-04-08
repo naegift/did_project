@@ -33,7 +33,7 @@ const Main: React.FC = () => {
     setPage(pageNumber);
   };
   const protocol = window.location.href.split("//")[0] + "//";
-
+  console.log("주소", `${protocol}${process.env.REACT_APP_AWS}`);
   const mainData = async (page: number) => {
     try {
       const response = await axios.get<Data>(
@@ -47,14 +47,11 @@ const Main: React.FC = () => {
     }
   };
 
-  console.log(`${protocol}${process.env.REACT_APP_AWS}`);
-
   const latestData = async () => {
     try {
       const latestRes = await axios.get<Data>(
         `${protocol}${process.env.REACT_APP_AWS}/?page=1&order=desc`
       );
-      // console.log(latestRes.data.products);
       setLatestProduct(latestRes.data.products);
     } catch (error) {
       console.log(error);
@@ -95,17 +92,6 @@ const Main: React.FC = () => {
       >
         <ProductList products={latestProduct} />
       </div>
-
-      {/* <div
-        className={cn(
-          "w-4/5 flex flex-row justify-evenly mx-auto gap-20 px-20 py-10",
-          "tablet:flex-col tablet:gap-5 tablet:px-10",
-          "mobile:flex-col mobile:gap-5  mobile:px-0 mobile:py-2"
-        )}
-      >
-        <img src={copy2} alt="" />
-        <img src={copy1} alt="" />
-      </div> */}
       <div
         className={cn(
           "w-4/5 flex flex-row py-5  px-20 mx-auto items-center justify-between ",
